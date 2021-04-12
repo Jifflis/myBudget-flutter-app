@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mybudget/constant/custom_colors.dart';
 import 'package:mybudget/routes.dart';
 import 'package:oktoast/oktoast.dart';
 
