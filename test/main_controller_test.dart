@@ -6,6 +6,6 @@ void main() {
     MainController controller = MainController();
     int testValue = 1;
     controller.selectedBottomIndex.value = testValue;
-    expect(controller.selectedBottomIndex.value, 2);
+    expect(controller.selectedBottomIndex.value, testValue);
   });
 }
