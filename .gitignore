@@ -1,10 +1,10 @@
-# .dart_tool/
-# .github/
-# .idea/
-# build/
-# .packages
-# mybudget.iml
-# pubspec.lock
+.dart_tool/
+.github/
+.idea/
+build/
+.packages
+mybudget.iml
+pubspec.lock
 
 
 # Flutter/Dart/Pub related
