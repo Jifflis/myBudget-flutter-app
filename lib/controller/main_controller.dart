@@ -13,5 +13,5 @@ class MainController extends GetxController{
   }
 
   RxInt get selectedBottomIndex =>_selectedBottomIndex;
-
+  //sample
 }
