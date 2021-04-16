@@ -1,8 +1,5 @@
-.dart_tool/
-.github/
 .idea/
 build/
-.packages
 mybudget.iml
 pubspec.lock
 
@@ -15,7 +12,6 @@ pubspec.lock
 .packages
 .pub-cache/
 .pub/
-/build/
 **/ios/Flutter/.last_build_id
 
 
