@@ -1,3 +1,8 @@
+.idea/
+build/
+mybudget.iml
+pubspec.lock
+
 
 # Flutter/Dart/Pub related
 **/doc/api/
@@ -7,7 +12,6 @@
 .packages
 .pub-cache/
 .pub/
-/build/
 **/ios/Flutter/.last_build_id
 
 

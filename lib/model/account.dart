@@ -1,4 +1,3 @@
-
 class Account {
   Account({
     this.accountId,
