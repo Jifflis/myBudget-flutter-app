@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mybudget/screen/introduction_screen.dart';
 
 import 'screen/home_screen.dart';
 import 'screen/main_screen.dart';
@@ -14,6 +15,7 @@ class Routes {
   ///
   ///
   static const String SCREEN_MAIN = '/';
+  static const String SCREEN_INTRODUCTION = '/introduction_screen';
   static const String SCREEN_HOME = '/home_screen';
   static const String SCREEN_SETTINGS = '/settings_screen';
   static const String SCREEN_TRANSACTIONS = '/transaction_screen';
@@ -23,6 +25,9 @@ class Routes {
   ///
   ///
   static final GlobalKey<NavigatorState> rootNavigatorKey =
+      GlobalKey<NavigatorState>();
+
+  static final GlobalKey<NavigatorState> intorNavitorKey =
       GlobalKey<NavigatorState>();
 
   static final GlobalKey<NavigatorState> homeNavigatorKey =
@@ -38,6 +43,8 @@ class Routes {
   ///
   ///
   static NavigatorState get rootNavigator => rootNavigatorKey.currentState;
+
+  static NavigatorState get intorNavitor => intorNavitorKey.currentState;
 
   static NavigatorState get homeNavigator => homeNavigatorKey.currentState;
 
@@ -61,6 +68,10 @@ class Routes {
     switch (settings.name) {
       case SCREEN_MAIN:
         screen = MainScreen();
+        break;
+
+      case SCREEN_INTRODUCTION:
+        screen = IntroductionScreen();
         break;
 
       case SCREEN_HOME:
