@@ -25,7 +25,10 @@ class MainScreen extends StatelessWidget {
     return Obx(
       () => Scaffold(
         body: _navigationScreens[controller.selectedBottomIndex.value],
-        bottomNavigationBar: _buildBottomNavigation(context, controller),
+        bottomNavigationBar: _buildBottomNavigation(
+          context,
+          controller,
+        ),
       ),
     );
   }
