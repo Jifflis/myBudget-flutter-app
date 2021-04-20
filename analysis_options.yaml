@@ -1,0 +1,21 @@
+linter:
+  rules:
+  # Error rules
+  - always_use_package_imports
+  - avoid_empty_else
+  - avoid_print
+  - avoid_relative_lib_imports
+  - avoid_returning_null_for_future
+  - avoid_type_to_string
+  - avoid_types_as_parameter_names
+  # Styles rules
+  - always_specify_types
+  - annotate_overrides
+  - avoid_annotating_with_dynamic
+  - only_throw_errors
+  - always_declare_return_types
+  - avoid_returning_this
+  - avoid_setters_without_getters
+  - flutter_style_todos
+  - prefer_constructors_over_static_methods
+  - prefer_contains
