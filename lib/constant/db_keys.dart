@@ -1,39 +1,39 @@
 class DBKey{
-  static String USER = 'user';
-  static String USER_ID = 'user_id';
-  static String NAME = 'name';
-  static String EMAIL = 'email';
-  static String PASSWORD = 'password';
-  static String CREATED_AT = 'created_at';
-  static String UPDATED_AT = 'updated_at';
+  static const String USER = 'user';
+  static const String USER_ID = 'user_id';
+  static const  String NAME = 'name';
+  static const  String EMAIL = 'email';
+  static const  String PASSWORD = 'password';
+  static const  String CREATED_AT = 'created_at';
+  static const  String UPDATED_AT = 'updated_at';
 
-  static String ACCOUNT = 'account';
-  static String ACCOUNT_ID = 'account_id';
-  static String TITLE = 'title';
-  static String BUDGET = 'budget';
-  static String EXPENSE = 'expense';
-  static String BALANCE = 'balance';
-  static String ADJUSTED = 'adjusted';
+  static const  String ACCOUNT = 'account';
+  static const  String ACCOUNT_ID = 'account_id';
+  static const  String TITLE = 'title';
+  static const  String BUDGET = 'budget';
+  static const  String EXPENSE = 'expense';
+  static const  String BALANCE = 'balance';
+  static const  String ADJUSTED = 'adjusted';
 
-  static String LEDGER = 'ledger';
-  static String LEDGER_ID = 'ledger_id';
-  static String BEGINNING_BALANCE = 'beginning_balance';
-  static String ENDING_BALANCE = 'ending_balance';
-  static String STATUS = 'status';
-  static String MONTH = 'month';
-  static String YEAR = 'year';
+  static const  String LEDGER = 'ledger';
+  static const  String LEDGER_ID = 'ledger_id';
+  static const  String BEGINNING_BALANCE = 'beginning_balance';
+  static const  String ENDING_BALANCE = 'ending_balance';
+  static const  String STATUS = 'status';
+  static const  String MONTH = 'month';
+  static const  String YEAR = 'year';
 
-  static String TRANSACTION = 'transactions';
-  static String TRANSACTION_ID = 'transaction_id';
-  static String AMOUNT = 'amount';
-  static String REMARKS = 'remarks';
+  static const  String TRANSACTION = 'transactions';
+  static const  String TRANSACTION_ID = 'transaction_id';
+  static const  String AMOUNT = 'amount';
+  static const  String REMARKS = 'remarks';
 
-  static String CURRENCY = 'currency';
-  static String CURRENCY_ID = 'currency_id';
-  static String SYMBOL = 'symbol';
+  static const  String CURRENCY = 'currency';
+  static const  String CURRENCY_ID = 'currency_id';
+  static const  String SYMBOL = 'symbol';
 
-  static String SETTINGS = 'settings';
-  static String SETTINGS_ID = 'settings_id';
-  static String FIRST_INSTALL = 'first_install';
-  static String REFRESH_DATE = 'refresh_date';
+  static const  String SETTINGS = 'settings';
+  static const  String SETTINGS_ID = 'settings_id';
+  static const  String FIRST_INSTALL = 'first_install';
+  static const  String REFRESH_DATE = 'refresh_date';
 }
