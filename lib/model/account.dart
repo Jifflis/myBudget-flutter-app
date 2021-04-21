@@ -31,8 +31,8 @@ class Account {
     expense = json['expense'];
     balance = json['balance'];
     adjusted = json['adjusted'];
-    createdAt = json['created_at'];
-    updatedAT = json['updated_at'];
+    createdAt = DateTime.parse(json['created_at']);
+    updatedAT = DateTime.parse(json['updated_at']);
   }
 
   Map<String,dynamic> toJson(){
@@ -43,8 +43,8 @@ class Account {
     map['expense'] = expense;
     map['balance'] = balance;
     map['adjusted'] = adjusted;
-    map['created_at'] = createdAt;
-    map['updated_at'] = updatedAT;
+    map['created_at'] = createdAt.toString();
+    map['updated_at'] = updatedAT.toString();
     return map;
   }
 
