@@ -1,10 +1,8 @@
-# .dart_tool/
-# .github/
-# .idea/
-# build/
-# .packages
-# mybudget.iml
-# pubspec.lock
+
+.idea/
+build/
+mybudget.iml
+pubspec.lock
 
 
 # Flutter/Dart/Pub related
@@ -15,7 +13,6 @@
 .packages
 .pub-cache/
 .pub/
-/build/
 **/ios/Flutter/.last_build_id
 
 

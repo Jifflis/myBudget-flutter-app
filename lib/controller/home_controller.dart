@@ -74,6 +74,8 @@ class HomeController extends GetxController {
     MonthlyBudgetModel(
       month: 'February',
       year: '2021',
+      budget: 40000,
+      balance: 10000,
       budgetList: [
         BudgetModelSample(
           title: 'Motorcycle Bill',
