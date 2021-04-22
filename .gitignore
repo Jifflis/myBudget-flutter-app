@@ -5,6 +5,7 @@ mybudget.iml
 pubspec.lock
 
 
+
 # Flutter/Dart/Pub related
 **/doc/api/
 .dart_tool/
