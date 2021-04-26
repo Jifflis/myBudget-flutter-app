@@ -27,9 +27,6 @@ class Routes {
   static final GlobalKey<NavigatorState> rootNavigatorKey =
       GlobalKey<NavigatorState>();
 
-  static final GlobalKey<NavigatorState> intorNavitorKey =
-      GlobalKey<NavigatorState>();
-
   static final GlobalKey<NavigatorState> homeNavigatorKey =
       GlobalKey<NavigatorState>();
 
@@ -43,8 +40,6 @@ class Routes {
   ///
   ///
   static NavigatorState get rootNavigator => rootNavigatorKey.currentState;
-
-  static NavigatorState get intorNavitor => intorNavitorKey.currentState;
 
   static NavigatorState get homeNavigator => homeNavigatorKey.currentState;
 
