@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:get/get.dart';
 
-class MainController extends GetxController{
+import 'base_controller.dart';
+
+class MainController extends BaseController{
   final RxInt _selectedBottomIndex = 0.obs;
 
   StreamController<int> onTabPageChange = StreamController<int>.broadcast();

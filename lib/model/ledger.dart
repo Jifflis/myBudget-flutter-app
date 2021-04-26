@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'account.dart';
 
 class MonthlyBudgetModel {
-  final List<BudgetModelSample> budgetList;
+  final List<Account> budgetList;
   final String month;
   final String year;
 

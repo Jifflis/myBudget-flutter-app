@@ -3,7 +3,11 @@ import 'package:get/get.dart';
 import 'package:mybudget/routes.dart';
 import 'package:oktoast/oktoast.dart';
 
-void main() {
+import 'resources/local_db.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await LocalDB.instance().initialize();
   runApp(MyApp());
 }
 
