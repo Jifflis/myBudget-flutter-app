@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:mybudget/model/currency.dart';
 
 class IntroductionController extends GetxController {
-  List<Currency> currencyList = [
+  List<Currency> currencyList = <Currency>[
     Currency(currency: 'PHP'),
     Currency(currency: 'AED'),
     Currency(currency: 'AFN'),
