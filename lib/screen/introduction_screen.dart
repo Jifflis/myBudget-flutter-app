@@ -48,26 +48,26 @@ class IntroductionScreen extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context) {
-    IntroductionController controller = Get.put(IntroductionController());
+    final IntroductionController controller = Get.put(IntroductionController());
 
     return Container(
       height: MediaQuery.of(context).size.height,
       color: Colors.purple[800],
       child: SafeArea(
         child: Container(
-          margin: EdgeInsets.only(top: 8),
+          margin: const EdgeInsets.only(top: 8),
           height: MediaQuery.of(context).size.height,
           width: double.infinity,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(40), topRight: Radius.circular(40))),
           child: Column(
-            children: [
+            children: <Widget>[
               _buildWelcomeMessage(),
               _buildLabel(),
               _buildDropDown((Currency value) {
-                FocusScope.of(context).requestFocus(new FocusNode());
+                FocusScope.of(context).requestFocus(FocusNode());
                 controller.selectedCurrency = value;
               }),
               _buildButton(),
@@ -80,10 +80,10 @@ class IntroductionScreen extends StatelessWidget {
 
   Widget _buildLabel() {
     return Container(
-      margin: EdgeInsets.only(left: 40),
-      child: Align(
+      margin: const EdgeInsets.only(left: 40),
+      child: const Align(
         alignment: Alignment.centerLeft,
-        child: new Text(
+        child: Text(
           'Set Currency',
           style: TextStyle(color: Colors.grey),
         ),
@@ -94,8 +94,8 @@ class IntroductionScreen extends StatelessWidget {
   //Welcome Message
   Widget _buildWelcomeMessage() {
     return Container(
-      margin: EdgeInsets.all(60),
-      child: Text(
+      margin: const EdgeInsets.all(60),
+      child: const Text(
         'Welcome!',
         style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
       ),
@@ -105,17 +105,17 @@ class IntroductionScreen extends StatelessWidget {
   Widget _buildDropDown(Function onChanged) {
     return GetBuilder<IntroductionController>(
       builder: (IntroductionController controller) => Container(
-        margin: EdgeInsets.fromLTRB(40, 5, 40, 80),
-        decoration: BoxDecoration(color: Colors.white, boxShadow: [
+        margin: const EdgeInsets.fromLTRB(40, 5, 40, 80),
+        decoration: BoxDecoration(color: Colors.white, boxShadow: <BoxShadow>[
           BoxShadow(
             color: Colors.grey[300].withOpacity(0.5),
             spreadRadius: 1,
             blurRadius: 5,
-            offset: Offset(0, 4), // changes position of shadow
+            offset: const Offset(0, 4), // changes position of shadow
           ),
         ]),
         // margin: EdgeInsets.all(40),
-        padding: EdgeInsets.only(left: 15, right: 15),
+        padding: const EdgeInsets.only(left: 15, right: 15),
         width: double.infinity,
         child: DropdownButtonHideUnderline(
           child: DropdownButton<Currency>(
@@ -137,7 +137,7 @@ class IntroductionScreen extends StatelessWidget {
 
   Widget _buildButton() {
     return Container(
-      margin: EdgeInsets.fromLTRB(40, 10, 40, 0),
+      margin: const EdgeInsets.fromLTRB(40, 10, 40, 0),
       child: ButtonTheme(
         minWidth: double.infinity,
         height: 50,
@@ -145,11 +145,13 @@ class IntroductionScreen extends StatelessWidget {
           onPressed: () {
             // showDialog();
           },
-          child: Text('Ok',style: TextStyle(color: Colors.white),),
+          child: const Text(
+            'Ok',
+            style: TextStyle(color: Colors.white),
+          ),
           style: TextButton.styleFrom(
-          backgroundColor: Colors.purple[800],
-            minimumSize: Size(200,45)
-        ),
+              backgroundColor: Colors.purple[800],
+              minimumSize: const Size(200, 45)),
         ),
       ),
     );

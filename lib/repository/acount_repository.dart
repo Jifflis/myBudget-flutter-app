@@ -23,9 +23,6 @@ class AccountRepository{
   }
 
   Future<void> save(Account account)async{
-    // TODO save to server
-    //await apiProvider.post('url');
-
     await localProvider.upsert<Account>(account);
   }
 

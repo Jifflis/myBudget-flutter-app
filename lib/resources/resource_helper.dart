@@ -2,6 +2,8 @@ import '../model/account.dart';
 import 'resource_definition.dart';
 
 class ResourceHelper {
+  String tag ='resource_helper';
+
   static final List<ResourceDefinition> _resources = <ResourceDefinition>[
     ResourceDefinition(
       type: Account,
@@ -11,6 +13,7 @@ class ResourceHelper {
     )
   ];
 
+  // ignore: avoid_classes_with_only_static_members
   static ResourceDefinition get<T>() => _resources
       .singleWhere((ResourceDefinition resource) => resource.type == T);
 }

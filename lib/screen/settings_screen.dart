@@ -13,7 +13,7 @@ class SettingsScreen extends StatelessWidget {
             onTap: (){
               Routes.pushNamed(Routes.SCREEN_INTRODUCTION);
             },
-            child: Text('Settings Screen'),
+            child: const Text('Settings Screen'),
           ),
         ],
       ),
