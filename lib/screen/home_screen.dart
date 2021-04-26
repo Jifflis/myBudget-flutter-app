@@ -10,11 +10,11 @@ import '../model/ledger.dart';
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    HomeController controller = Get.put(HomeController());
+    final HomeController controller = Get.put(HomeController());
     return PageView(
       scrollDirection: Axis.horizontal,
       reverse: true,
-      children: [
+      children: <Widget>[
         for (int i = 0; i < controller.monthlyBudgetList.length; i++)
           HomePageTemplate(
             monthlyBudgetModel: controller.monthlyBudgetList[i],
@@ -25,44 +25,45 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-
 /// Homepage Template
 ///
 ///
 class HomePageTemplate extends StatelessWidget {
+  const HomePageTemplate({
+    Key key,
+    @required this.monthlyBudgetModel,
+    @required this.index,
+  }) : super(key: key);
+
   final MonthlyBudgetModel monthlyBudgetModel;
   final int index;
-
-  const HomePageTemplate(
-      {Key key, @required this.monthlyBudgetModel, @required this.index,})
-      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(
-        _getLeadingIcon(index),
-        _getTitle(index, monthlyBudgetModel),
-        _getActionIcon(index),
+      appBar: _buildAppBar(
+        _buildLeading(index),
+        _buildTitle(index, monthlyBudgetModel),
+        _buildAction(index),
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,
         color: Colors.purple[800],
         child: SafeArea(
           child: Container(
-            margin: EdgeInsets.only(top: 8),
+            margin: const EdgeInsets.only(top: 8),
             height: MediaQuery.of(context).size.height,
             width: double.infinity,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(40),
                     topRight: Radius.circular(40))),
             child: Column(
-              children: [
-                _headerSection(monthlyBudgetModel),
-                _divider(),
-                _items(),
+              children: <Widget>[
+                _buildHeader(monthlyBudgetModel),
+                _buildDivider(),
+                _buildItems(),
               ],
             ),
           ),
@@ -71,43 +72,47 @@ class HomePageTemplate extends StatelessWidget {
     );
   }
 
-
   /// set app bar
   ///
   ///
-  Widget appBar(Icon leading, String title, Icon action) {
+  Widget _buildAppBar(Icon leading, String title, Widget action) {
     return AppBar(
       backgroundColor: Colors.purple[800],
       title: Text(title),
       leading: leading,
-      actions: [action],
+      actions: <Widget>[action],
       elevation: 0,
+      centerTitle: true,
     );
   }
-
 
   /// get appbar action icon
   ///
   ///
-  Widget _getActionIcon(int index) {
+  Widget _buildAction(int index) {
     return index == 0
-        ? Icon(
-            Icons.add_circle,
-            color: Colors.purple[100],
-            size: 38,
+        ? Padding(
+            padding: const EdgeInsets.only(right: 17),
+            child: Icon(
+              Icons.add_circle,
+              color: Colors.purple[100],
+              size: 38,
+            ),
           )
-        : Icon(
-            Icons.double_arrow_rounded,
-            color: Colors.black,
-            size: 38,
+        : const Padding(
+            padding: EdgeInsets.only(right: 17),
+            child: Icon(
+              Icons.double_arrow_rounded,
+              color: Colors.black,
+              size: 38,
+            ),
           );
   }
-
 
   ///get appbar leading icon
   ///
   ///
-  Widget _getLeadingIcon(int index) {
+  Widget _buildLeading(int index) {
     return index == 0
         ? Icon(
             Icons.ac_unit,
@@ -117,93 +122,89 @@ class HomePageTemplate extends StatelessWidget {
         : null;
   }
 
-
   /// get appbar title
   ///
   ///
-  String _getTitle(int index, MonthlyBudgetModel model) {
+  String _buildTitle(int index, MonthlyBudgetModel model) {
     return index == 0 ? 'myBudget' : '${model.month} ${model.year}';
   }
-
 
   ///  divider with drop down shadow
   ///
   ///
-  Widget _divider() => Container(
+  Widget _buildDivider() => Container(
         height: 1,
         width: double.infinity,
         decoration: BoxDecoration(
           color: CustomColors.gray9,
-          boxShadow: [
+          boxShadow: <BoxShadow>[
             BoxShadow(
               color: Colors.grey.withOpacity(0.5),
               spreadRadius: .5,
               blurRadius: 4,
-              offset: Offset(0, 1), // changes position of shadow
+              offset: const Offset(0, 1), // changes position of shadow
             ),
           ],
         ),
       );
 
-
   /// header section
   ///
   ///
-  Widget _headerSection(MonthlyBudgetModel model) => Column(
+  Widget _buildHeader(MonthlyBudgetModel model) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Text(
             '${amountFormatter(model.budget)}  / ${amountFormatter(model.expense)}',
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 5),
-          Text(
+          const SizedBox(height: 5),
+          const Text(
             'Budget / Expense',
             style: TextStyle(fontSize: 12),
           ),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
+            children: <Widget>[
+              const Text(
                 'Php',
                 style: TextStyle(fontSize: 12),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 12,
               ),
               Text(
-                '${amountFormatter(model.balance)}',
-                style: TextStyle(
+                amountFormatter(model.balance),
+                style: const TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ],
           ),
-          SizedBox(height: 5),
-          Text(
+          const SizedBox(height: 5),
+          const Text(
             'Balance',
             style: TextStyle(fontSize: 12),
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
         ],
       );
-
 
   /// Details section
   ///
   ///
-  Widget _items() => Expanded(
+  Widget _buildItems() => Expanded(
         child: Container(
           padding: EdgeInsets.zero,
           margin: EdgeInsets.zero,
           child: ListView.builder(
-              itemBuilder: (context, index) {
+              itemBuilder: (BuildContext context, int index) {
                 return BudgetItem(
                   index: index,
                   budget: monthlyBudgetModel.budgetList[index],
@@ -215,37 +216,38 @@ class HomePageTemplate extends StatelessWidget {
       );
 }
 
-
 /// Budget Item
 ///
 ///
 class BudgetItem extends StatelessWidget {
-  final int index;
-  final bool isLoading;
-  final Account budget;
-
   const BudgetItem(
       {Key key, @required this.index, @required this.budget, this.isLoading})
       : super(key: key);
 
+  final int index;
+  final bool isLoading;
+  final Account budget;
+
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
+      children: <Widget>[
+        if(index==0)
+          const SizedBox(height: 17,),
         Container(
-          padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 5.0),
+          padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 5.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _leading(),
-              SizedBox(width: 10),
-              _content(),
+            children: <Widget>[
+              _buildLeading(),
+              const SizedBox(width: 10),
+              _buildContent(),
             ],
           ),
         ),
         Container(
-          padding: EdgeInsets.only(left: 20, right: 20),
-          child: Divider(),
+          padding: const EdgeInsets.only(left: 20, right: 20),
+          child: const Divider(),
         ),
       ],
     );
@@ -253,29 +255,26 @@ class BudgetItem extends StatelessWidget {
     //testing
   }
 
-
   /// leading
   ///
   ///
-  Widget _leading() => Container(
+  Widget _buildLeading() => Container(
         height: 60,
         width: 60,
         decoration: BoxDecoration(
             color: Colors.grey[200], borderRadius: BorderRadius.circular(20)),
       );
 
-
   /// title
   ///
   ///
-  Widget _title() => Row(
+  Widget _buildTitle() => Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          //TITLE
+        children: <Widget>[
           Expanded(
             flex: 3,
             child: Container(
-              child: Text('${budget.title}',
+              child: Text(budget.title,
                   style: TextStyle(
                       color: Colors.purple[800],
                       fontSize: 16,
@@ -286,7 +285,7 @@ class BudgetItem extends StatelessWidget {
           Expanded(
             flex: 1,
             child: Container(
-              child: Text(
+              child: const Text(
                 'View',
                 textAlign: TextAlign.right,
                 style: TextStyle(
@@ -296,30 +295,29 @@ class BudgetItem extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
         ],
       );
-
 
   /// subtitle
   ///
   ///
-  Widget _subTitle() => Column(
+  Widget _buildSubtitle() => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <Widget>[
           Text(
             'Budget: ₱ ${amountFormatter(budget.budget)}',
-            style: TextStyle(fontSize: 12),
+            style: const TextStyle(fontSize: 12),
           ),
           //EXP
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
+            children: <Widget>[
               Container(
                 child: Text(
                   'Exp: ₱ ${amountFormatter(budget.expense)}',
-                  style: TextStyle(fontSize: 12),
+                  style: const TextStyle(fontSize: 12),
                 ),
               ),
               Container(
@@ -336,16 +334,15 @@ class BudgetItem extends StatelessWidget {
         ],
       );
 
-
   /// content
   ///
   ///
-  Widget _content() => Expanded(
+  Widget _buildContent() => Expanded(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _title(),
-            _subTitle(),
+          children: <Widget>[
+            _buildTitle(),
+            _buildSubtitle(),
           ],
         ),
       );

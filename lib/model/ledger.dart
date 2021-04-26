@@ -3,14 +3,6 @@ import 'package:flutter/material.dart';
 import 'account.dart';
 
 class MonthlyBudgetModel {
-  final List<Account> budgetList;
-  final String month;
-  final String year;
-
-  double budget;
-  double expense;
-  double balance;
-
   MonthlyBudgetModel({
     @required this.month,
     @required this.year,
@@ -19,4 +11,12 @@ class MonthlyBudgetModel {
     this.balance,
     this.expense,
   });
+
+  final List<Account> budgetList;
+  final String month;
+  final String year;
+
+  double budget;
+  double expense;
+  double balance;
 }

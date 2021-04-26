@@ -48,7 +48,7 @@ class LocalProvider {
   }) async {
     final ResourceDefinition def = ResourceHelper.get<T>();
 
-    List<Map<String, dynamic>> map = await db.query(def.name,
+    final List<Map<String, dynamic>> map = await db.query(def.name,
         columns: columns, where: where, whereArgs: whereArgs, having: having);
 
     if (map == null || map.isEmpty) {
@@ -73,7 +73,7 @@ class LocalProvider {
   }) async {
     final ResourceDefinition def = ResourceHelper.get<T>();
 
-    List<Map<String, dynamic>> map = await db.query(def.name,
+    final List<Map<String, dynamic>> map = await db.query(def.name,
         distinct: distinct,
         columns: columns,
         where: where,

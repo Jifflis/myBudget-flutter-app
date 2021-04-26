@@ -6,8 +6,8 @@ class TransactionsScreen extends StatelessWidget {
     return Container(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('Transactions Screen'),
+        children: const <Widget>[
+           Text('Transactions Screen'),
         ],
       ),
     );

@@ -5,7 +5,7 @@ import 'package:oktoast/oktoast.dart';
 
 import 'resources/local_db.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await LocalDB.instance().initialize();
   runApp(MyApp());

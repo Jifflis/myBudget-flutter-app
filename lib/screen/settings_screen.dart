@@ -8,12 +8,12 @@ class SettingsScreen extends StatelessWidget {
     return Container(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
+        children: <Widget>[
           GestureDetector(
             onTap: (){
               Routes.pushNamed(Routes.SCREEN_INTRODUCTION);
             },
-            child: Text('Settings Screen'),
+            child: const Text('Settings Screen'),
           ),
         ],
       ),

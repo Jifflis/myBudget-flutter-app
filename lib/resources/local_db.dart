@@ -13,9 +13,7 @@ class LocalDB {
   ///
   ///
   static LocalDB instance() {
-    if (_instance == null) {
-      _instance = LocalDB._();
-    }
+    _instance ??= LocalDB._();
     return _instance;
   }
 
