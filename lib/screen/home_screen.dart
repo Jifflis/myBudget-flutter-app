@@ -222,7 +222,7 @@ class HomePageTemplate extends StatelessWidget {
 class BudgetItem extends StatelessWidget {
   final int index;
   final bool isLoading;
-  final BudgetModelSample budget;
+  final Account budget;
 
   const BudgetItem(
       {Key key, @required this.index, @required this.budget, this.isLoading})

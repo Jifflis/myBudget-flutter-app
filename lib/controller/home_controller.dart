@@ -12,27 +12,27 @@ class HomeController extends GetxController {
       budget: 40000,
       balance: 10000,
       budgetList: [
-        BudgetModelSample(
+        Account(
           title: 'Appartment Rental',
           budget: 5000.0,
           expense: 3000.0,
         ),
-        BudgetModelSample(
+        Account(
           title: 'Food',
           budget: 4000.0,
           expense: 3000.0,
         ),
-        BudgetModelSample(
+        Account(
           title: 'Motorcycle Bill',
           budget: 5000.0,
           expense: 3000.0,
         ),
-        BudgetModelSample(
+        Account(
           title: 'Others',
           budget: 5000.0,
           expense: 3000.0,
         ),
-        BudgetModelSample(
+        Account(
           title: 'Appartment Rental',
           budget: 5000.0,
           expense: 3000.0,
@@ -47,22 +47,22 @@ class HomeController extends GetxController {
       budget: 40000,
       balance: 1000,
       budgetList: [
-        BudgetModelSample(
+        Account(
           title: 'Appartment Rental',
           budget: 5000.0,
           expense: 3000.0,
         ),
-        BudgetModelSample(
+        Account(
           title: 'Food',
           budget: 4000.0,
           expense: 3000.0,
         ),
-        BudgetModelSample(
+        Account(
           title: 'Motorcycle Bill',
           budget: 5000.0,
           expense: 3000.0,
         ),
-        BudgetModelSample(
+        Account(
           title: 'Appartment Rental',
           budget: 5000.0,
           expense: 3000.0,
@@ -77,17 +77,17 @@ class HomeController extends GetxController {
       budget: 40000,
       balance: 10000,
       budgetList: [
-        BudgetModelSample(
+        Account(
           title: 'Motorcycle Bill',
           budget: 5000.0,
           expense: 3000.0,
         ),
-        BudgetModelSample(
+        Account(
           title: 'Others',
           budget: 5000.0,
           expense: 3000.0,
         ),
-        BudgetModelSample(
+        Account(
           title: 'Appartment Rental',
           budget: 5000.0,
           expense: 3000.0,
