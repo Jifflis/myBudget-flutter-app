@@ -141,13 +141,15 @@ class IntroductionScreen extends StatelessWidget {
       child: ButtonTheme(
         minWidth: double.infinity,
         height: 50,
-        child: FlatButton(
+        child: TextButton(
           onPressed: () {
             // showDialog();
           },
-          color: Colors.purple[800],
-          textColor: Colors.white,
-          child: Text('Ok'),
+          child: Text('Ok',style: TextStyle(color: Colors.white),),
+          style: TextButton.styleFrom(
+          backgroundColor: Colors.purple[800],
+            minimumSize: Size(200,45)
+        ),
         ),
       ),
     );
