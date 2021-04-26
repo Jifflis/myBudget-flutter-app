@@ -141,7 +141,7 @@ class IntroductionScreen extends StatelessWidget {
       child: ButtonTheme(
         minWidth: double.infinity,
         height: 50,
-        child: RaisedButton(
+        child: FlatButton(
           onPressed: () {
             // showDialog();
           },
