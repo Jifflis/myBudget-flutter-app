@@ -19,8 +19,8 @@ class MyApp extends StatelessWidget {
           // closer together (more dense) than on mobile platforms.
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        navigatorKey: Routes.intorNavitorKey,
-        initialRoute: Routes.SCREEN_INTRODUCTION,
+        navigatorKey: Routes.rootNavigatorKey,
+        initialRoute: Routes.SCREEN_MAIN,
         onGenerateRoute: Routes.onGenerateRoute,
       ),
     );

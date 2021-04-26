@@ -8,9 +8,6 @@ import '../routes.dart';
 class MainScreen extends StatelessWidget {
   final List<Widget> _navigationScreens = <Widget>[
     SubNavigator(
-        navigatorKey: Routes.intorNavitorKey,
-        initialRoute: Routes.SCREEN_INTRODUCTION),
-    SubNavigator(
         navigatorKey: Routes.homeNavigatorKey,
         initialRoute: Routes.SCREEN_HOME),
     SubNavigator(

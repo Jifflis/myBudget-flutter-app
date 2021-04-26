@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mybudget/controller/currenct_controller.dart';
+import 'package:mybudget/controller/introduction_controller.dart';
 import 'package:mybudget/model/currency.dart';
 
 class IntroductionScreen extends StatelessWidget {
@@ -11,7 +11,7 @@ class IntroductionScreen extends StatelessWidget {
           _getLeadingIcon(),
           _getTitle(),
         ),
-        body: IntroductionBody());
+        body: _buildBody(context));
   }
 
   /// set app bar
@@ -46,28 +46,10 @@ class IntroductionScreen extends StatelessWidget {
   String _getTitle() {
     return 'myBudget';
   }
-}
 
-class IntroductionBody extends StatefulWidget {
-  @override
-  _IntroductionBodyState createState() => _IntroductionBodyState();
-}
+  Widget _buildBody(BuildContext context) {
+    IntroductionController controller = Get.put(IntroductionController());
 
-class _IntroductionBodyState extends State<IntroductionBody> {
-  final enteredOTP = TextEditingController();
-  String currencyValue = 'PH';
-
-  //Currenct
-  static const PH = 'PH';
-  static const EURO = 'EURO';
-
-  List<DropdownMenuItem<String>> _currencyItems = [
-    DropdownMenuItem(value: PH, child: Text(PH)),
-    DropdownMenuItem(value: EURO, child: Text(EURO))
-  ];
-
-  @override
-  Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height,
       color: Colors.purple[800],
@@ -82,15 +64,13 @@ class _IntroductionBodyState extends State<IntroductionBody> {
                   topLeft: Radius.circular(40), topRight: Radius.circular(40))),
           child: Column(
             children: [
-              _welcomeMessage('Welcome!'),
-              _textLabel('Set Currency'),
-              dropDownDesign(_currencyItems, currencyValue, (value) {
+              _buildWelcomeMessage(),
+              _buildLabel(),
+              _buildDropDown((Currency value) {
                 FocusScope.of(context).requestFocus(new FocusNode());
-                setState(() {
-                  currencyValue = value;
-                });
+                controller.selectedCurrency = value;
               }),
-              buttonOk(),
+              _buildButton(),
             ],
           ),
         ),
@@ -98,53 +78,64 @@ class _IntroductionBodyState extends State<IntroductionBody> {
     );
   }
 
-  //label
-  Widget _textLabel(String label) {
+  Widget _buildLabel() {
     return Container(
       margin: EdgeInsets.only(left: 40),
       child: Align(
-          alignment: Alignment.centerLeft,
-          child: new Text(label, style: TextStyle(color: Colors.grey))),
+        alignment: Alignment.centerLeft,
+        child: new Text(
+          'Set Currency',
+          style: TextStyle(color: Colors.grey),
+        ),
+      ),
     );
   }
 
   //Welcome Message
-  Widget _welcomeMessage(String text) {
+  Widget _buildWelcomeMessage() {
     return Container(
       margin: EdgeInsets.all(60),
       child: Text(
-        text,
+        'Welcome!',
         style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
       ),
     );
   }
 
-  Widget dropDownDesign(
-      List<DropdownMenuItem<String>> items, String value, Function onChanged) {
-    return Container(
-      margin: EdgeInsets.fromLTRB(40, 5, 40, 80),
-      decoration: BoxDecoration(color: Colors.white, boxShadow: [
-        BoxShadow(
-          color: Colors.grey[300].withOpacity(0.5),
-          spreadRadius: 1,
-          blurRadius: 5,
-          offset: Offset(0, 4), // changes position of shadow
-        ),
-      ]),
-      // margin: EdgeInsets.all(40),
-      padding: EdgeInsets.only(left: 15, right: 15),
-      width: double.infinity,
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton(
-          value: value,
-          onChanged: onChanged,
-          items: items,
+  Widget _buildDropDown(Function onChanged) {
+    return GetBuilder<IntroductionController>(
+      builder: (IntroductionController controller) => Container(
+        margin: EdgeInsets.fromLTRB(40, 5, 40, 80),
+        decoration: BoxDecoration(color: Colors.white, boxShadow: [
+          BoxShadow(
+            color: Colors.grey[300].withOpacity(0.5),
+            spreadRadius: 1,
+            blurRadius: 5,
+            offset: Offset(0, 4), // changes position of shadow
+          ),
+        ]),
+        // margin: EdgeInsets.all(40),
+        padding: EdgeInsets.only(left: 15, right: 15),
+        width: double.infinity,
+        child: DropdownButtonHideUnderline(
+          child: DropdownButton<Currency>(
+            value: controller.selectedCurrency,
+            onChanged: onChanged,
+            items: controller.currencyList
+                .map(
+                  (Currency currency) => DropdownMenuItem<Currency>(
+                    value: currency,
+                    child: Text(currency.currency),
+                  ),
+                )
+                .toList(),
+          ),
         ),
       ),
     );
   }
 
-  Widget buttonOk() {
+  Widget _buildButton() {
     return Container(
       margin: EdgeInsets.fromLTRB(40, 10, 40, 0),
       child: ButtonTheme(

@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:mybudget/model/currency.dart';
 
-class CurrencyController extends GetxController {
+class IntroductionController extends GetxController {
   List<Currency> currencyList = [
     Currency(currency: 'PHP'),
     Currency(currency: 'AED'),
@@ -184,4 +184,20 @@ class CurrencyController extends GetxController {
     Currency(currency: 'ZMW'),
     Currency(currency: 'ZWL'),
   ];
+
+  Currency _selectedCurrency;
+
+  @override
+  void onInit(){
+    _selectedCurrency = currencyList[0];
+    super.onInit();
+  }
+
+  Currency get selectedCurrency=>_selectedCurrency;
+
+  set selectedCurrency(Currency currency){
+    _selectedCurrency = currency;
+    update();
+  }
+
 }

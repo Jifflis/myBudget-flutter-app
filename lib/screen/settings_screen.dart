@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../routes.dart';
+
 class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -7,7 +9,12 @@ class SettingsScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('Settings Screen'),
+          GestureDetector(
+            onTap: (){
+              Routes.pushNamed(Routes.SCREEN_INTRODUCTION);
+            },
+            child: Text('Settings Screen'),
+          ),
         ],
       ),
     );
