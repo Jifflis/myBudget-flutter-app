@@ -36,7 +36,7 @@ class Account {
   }
 
   Map<String,dynamic> toJson(){
-    Map<String,dynamic> map = <String,dynamic>{};
+    const Map<String,dynamic> map = <String,dynamic>{};
     map['account_id'] = accountId;
     map['title'] = title;
     map['budget'] = budget;

@@ -3,7 +3,7 @@ import 'package:mybudget/model/account.dart';
 import 'package:mybudget/model/ledger.dart';
 
 class HomeController extends GetxController {
-  List<MonthlyBudgetModel> monthlyBudgetList = [
+  List<MonthlyBudgetModel> monthlyBudgetList = <MonthlyBudgetModel>[
     //BUDGET 1
     MonthlyBudgetModel(
       month: 'April',
@@ -11,7 +11,7 @@ class HomeController extends GetxController {
       expense: 12003,
       budget: 40000,
       balance: 10000,
-      budgetList: [
+      budgetList: <Account>[
         Account(
           title: 'Appartment Rental',
           budget: 5000.0,
@@ -46,7 +46,7 @@ class HomeController extends GetxController {
       expense: 19000,
       budget: 40000,
       balance: 1000,
-      budgetList: [
+      budgetList: <Account>[
         Account(
           title: 'Appartment Rental',
           budget: 5000.0,
@@ -76,7 +76,7 @@ class HomeController extends GetxController {
       year: '2021',
       budget: 40000,
       balance: 10000,
-      budgetList: [
+      budgetList:<Account>[
         Account(
           title: 'Motorcycle Bill',
           budget: 5000.0,
