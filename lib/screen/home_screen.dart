@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mybudget/controller/home_controller.dart';
+import 'package:mybudget/routes.dart';
 import 'package:mybudget/util/number_util.dart';
 
 import '../constant/custom_colors.dart';
@@ -93,11 +94,16 @@ class HomePageTemplate extends StatelessWidget {
     return index == 0
         ? Padding(
             padding: const EdgeInsets.only(right: 17),
-            child: Icon(
-              Icons.add_circle,
-              color: Colors.purple[100],
-              size: 38,
-            ),
+            child: IconButton(
+                icon: Icon(
+                  Icons.add_circle,
+                  color: Colors.purple[100],
+                  size: 38,
+                ),
+                onPressed: () {
+                  Routes.pushNamed(Routes.SCREEN_ADD_BUDGET,
+                      navigator: Routes.homeNavigator);
+                }),
           )
         : const Padding(
             padding: EdgeInsets.only(right: 17),
@@ -232,8 +238,10 @@ class BudgetItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        if(index==0)
-          const SizedBox(height: 17,),
+        if (index == 0)
+          const SizedBox(
+            height: 17,
+          ),
         Container(
           padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 5.0),
           child: Row(

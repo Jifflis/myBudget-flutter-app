@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mybudget/screen/add_budget_screen.dart';
 import 'package:mybudget/screen/introduction_screen.dart';
 
 import 'screen/home_screen.dart';
@@ -19,6 +20,7 @@ class Routes {
   static const String SCREEN_HOME = '/home_screen';
   static const String SCREEN_SETTINGS = '/settings_screen';
   static const String SCREEN_TRANSACTIONS = '/transaction_screen';
+  static const String SCREEN_ADD_BUDGET = '/add_budget_screen';
 
   //navigator key ------------------------------------------------------------
   /// set navigators key.
@@ -79,6 +81,10 @@ class Routes {
 
       case SCREEN_SETTINGS:
         screen = SettingsScreen();
+        break;
+
+      case SCREEN_ADD_BUDGET:
+        screen = AddBudgetScreen();
         break;
     }
 
