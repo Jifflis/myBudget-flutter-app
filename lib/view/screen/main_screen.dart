@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mybudget/constant/custom_colors.dart';
 
-import '../controller/main_controller.dart';
-import '../routes.dart';
+import '../../constant/custom_colors.dart';
+import '../../controller/main_controller.dart';
+import '../../routes.dart';
 
 class MainScreen extends StatelessWidget {
   final List<Widget> _navigationScreens = <Widget>[

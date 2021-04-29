@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mybudget/controller/home_controller.dart';
-import 'package:mybudget/routes.dart';
-import 'package:mybudget/util/number_util.dart';
 
-import '../constant/custom_colors.dart';
-import '../model/account.dart';
-import '../model/ledger.dart';
+import '../../constant/custom_colors.dart';
+import '../../controller/home_controller.dart';
+import '../../model/account.dart';
+import '../../model/ledger.dart';
+import '../../routes.dart';
+import '../../util/number_util.dart';
 
 class HomeScreen extends StatelessWidget {
   @override

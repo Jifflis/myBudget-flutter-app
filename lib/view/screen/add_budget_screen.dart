@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widget/budget_button.dart';
 
 class AddBudgetScreen extends StatelessWidget {
   @override
@@ -17,40 +18,41 @@ class AddBudgetScreen extends StatelessWidget {
         height: MediaQuery.of(context).size.height,
         color: Colors.purple[800],
         child: Container(
-            padding: const EdgeInsets.fromLTRB(40, 0.0, 40, 10),
-            height: MediaQuery.of(context).size.height,
-            width: double.infinity,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(40),
-                topRight: Radius.circular(40),
-              ),
+          padding: const EdgeInsets.fromLTRB(40, 0.0, 40, 10),
+          height: MediaQuery.of(context).size.height,
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(40),
+              topRight: Radius.circular(40),
             ),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  const SizedBox(height: 58),
-                  _fieldLabel('Account name'),
-                  const SizedBox(height: 15),
-                  _textField('Enter account name'),
-                  const SizedBox(height: 30),
-                  _fieldLabel('Budget amount'),
-                  const SizedBox(height: 15),
-                  _textField('Enter budget amount'),
-                  const SizedBox(height: 30),
-                  Row(
-                    children: <Widget>[
-                      _fieldLabel('Auto deduct'),
-                      Checkbox(value: false, onChanged: (bool value) {}),
-                    ],
-                  ),
-                  const SizedBox(height: 30),
-                  _submit(),
-                ],
-              ),
-            )),
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                const SizedBox(height: 58),
+                _fieldLabel('Account name'),
+                const SizedBox(height: 15),
+                _textField('Enter account name'),
+                const SizedBox(height: 30),
+                _fieldLabel('Budget amount'),
+                const SizedBox(height: 15),
+                _textField('Enter budget amount'),
+                const SizedBox(height: 30),
+                Row(
+                  children: <Widget>[
+                    _fieldLabel('Auto deduct'),
+                    Checkbox(value: false, onChanged: (bool value) {}),
+                  ],
+                ),
+                const SizedBox(height: 30),
+                BudgetButton(() {}, 'Save'),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -102,26 +104,6 @@ class AddBudgetScreen extends StatelessWidget {
               offset: Offset(0, 2),
             )
           ]),
-    );
-  }
-
-  Widget _submit() {
-    return Container(
-      width: double.infinity,
-      height: 50,
-      child: ElevatedButton(
-          style: ButtonStyle(
-            backgroundColor:
-                MaterialStateProperty.all<Color>(Colors.purple[800]),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20))),
-          ),
-          child: const Text(
-            'Save',
-            style: TextStyle(color: Colors.white),
-          ),
-          onPressed: () {}),
     );
   }
 }

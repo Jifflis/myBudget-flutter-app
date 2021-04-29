@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mybudget/screen/add_budget_screen.dart';
-import 'package:mybudget/screen/introduction_screen.dart';
 
-import 'screen/home_screen.dart';
-import 'screen/main_screen.dart';
-import 'screen/settings_screen.dart';
-import 'screen/transactions_screen.dart';
+import 'view/screen/add_budget_screen.dart';
+import 'view/screen/home_screen.dart';
+import 'view/screen/introduction_screen.dart';
+import 'view/screen/main_screen.dart';
+import 'view/screen/settings_screen.dart';
+import 'view/screen/transactions_screen.dart';
 
 class Routes {
   Routes._();
