@@ -2,13 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mybudget/controller/account_controller.dart';
 
-import '../controller/home_controller.dart';
-import '../controller/home_controller.dart';
 import '../model/account.dart';
-import '../model/account.dart';
-import '../model/account.dart';
-import '../model/account.dart';
-import '../model/ledger.dart';
 
 class Add_Transaction_Screen extends StatelessWidget {
   @override

@@ -101,7 +101,7 @@ class HomePageTemplate extends StatelessWidget {
                   size: 38,
                 ),
                 onPressed: () {
-                  Routes.pushNamed(Routes.SCREEN_ADD_TRANSACTION,
+                  Routes.pushNamed(Routes.SCREEN_VIEW_TRANSACTION,
                       navigator: Routes.homeNavigator);
                 }),
           )
