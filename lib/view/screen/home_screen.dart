@@ -44,6 +44,15 @@ class HomePageTemplate extends TemplateScreen {
   final int index;
 
   @override
+  String get title => _buildTitle(index, monthlyBudgetModel);
+
+  @override
+  List<Widget> get appBarActions => <Widget>[_buildAction(index)];
+
+  @override
+  Widget get leading => _buildLeading(index);
+
+  @override
   Widget buildBody(BuildContext context) {
     return Column(
       children: <Widget>[
@@ -53,15 +62,6 @@ class HomePageTemplate extends TemplateScreen {
       ],
     );
   }
-
-  @override
-  String get title => _buildTitle(index, monthlyBudgetModel);
-
-  @override
-  List<Widget> get appBarActions => <Widget>[_buildAction(index)];
-
-  @override
-  Widget get leading => _buildLeading(index);
 
   /// get appbar action icon
   ///
