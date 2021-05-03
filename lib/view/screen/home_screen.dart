@@ -267,13 +267,17 @@ class BudgetItem extends StatelessWidget {
           Expanded(
             flex: 1,
             child: Container(
-              child: const Text(
-                'View',
-                textAlign: TextAlign.right,
-                style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    fontStyle: FontStyle.italic),
+              child: InkWell(
+                onTap: () => Routes.pushNamed(Routes.SCREEN_VIEW_BUDGET,
+                    navigator: Routes.homeNavigator, arguments: budget),
+                child: const Text(
+                  'View',
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic),
+                ),
               ),
             ),
           ),
