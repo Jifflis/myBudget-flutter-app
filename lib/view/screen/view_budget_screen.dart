@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/instance_manager.dart';
+import 'package:mybudget/controller/view_budget_controller.dart';
 import 'package:mybudget/model/account.dart';
+import 'package:mybudget/view/widget/budget_button.dart';
+import 'package:mybudget/view/widget/budget_field_label.dart';
+import 'package:mybudget/view/widget/budget_text_field.dart';
 
 class ViewBudgetScreen extends StatelessWidget {
   final TextEditingController accountNameController = TextEditingController();
@@ -13,6 +19,8 @@ class ViewBudgetScreen extends StatelessWidget {
     final Account budget = ModalRoute.of(context).settings.arguments as Account;
     accountNameController.text = budget.title;
     budgetAmountController.text = budget.budget.toStringAsFixed(2);
+
+    final ViewBudgetController _controller = Get.put(ViewBudgetController());
 
     return Scaffold(
       appBar: AppBar(
@@ -39,118 +47,55 @@ class ViewBudgetScreen extends StatelessWidget {
               ),
             ),
             child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  const SizedBox(height: 28),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      _textButton(label: 'Edit', function: () {}),
-                      const SizedBox(width: 10),
-                      _textButton(label: 'Delete', function: () {}),
-                    ],
-                  ),
-                  const SizedBox(height: 30),
-                  _fieldLabel('Account name'),
-                  const SizedBox(height: 15),
-                  _textField('Enter account name',
-                      controller: accountNameController),
-                  const SizedBox(height: 30),
-                  _fieldLabel('Budget amount'),
-                  const SizedBox(height: 15),
-                  _textField('Enter budget amount',
-                      controller: budgetAmountController),
-                  const SizedBox(height: 30),
-                  Row(
-                    children: <Widget>[
-                      _fieldLabel('Auto deduct'),
-                      Checkbox(value: false, onChanged: (bool value) {}),
-                    ],
-                  ),
-                  const SizedBox(height: 30),
-                  _button(label: 'Add Transaction', function: () {}),
-                  const SizedBox(height: 30),
-                  _button(label: 'View Transaction', function: () {}),
-                ],
-              ),
-            )),
+                child: GetBuilder<ViewBudgetController>(
+              init: _controller,
+              builder: (_) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const SizedBox(height: 28),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        _textButton(
+                            label: _controller.isEnabled ? 'Update' : 'Edit',
+                            function: () {
+                              _controller.isEnabled = !_controller.isEnabled;
+                            }),
+                        const SizedBox(width: 10),
+                        _textButton(label: 'Delete', function: () {}),
+                      ],
+                    ),
+                    const SizedBox(height: 30),
+                    const BudgetFieldLabel(label: 'Account name'),
+                    const SizedBox(height: 15),
+                    BudgetTextField(
+                        isEnabled: _controller.isEnabled,
+                        hintText: 'Enter account name',
+                        controller: accountNameController),
+                    const SizedBox(height: 30),
+                    const BudgetFieldLabel(label: 'Budget amount'),
+                    const SizedBox(height: 15),
+                    BudgetTextField(
+                        isEnabled: _controller.isEnabled,
+                        hintText: 'Enter budget amount',
+                        controller: budgetAmountController),
+                    const SizedBox(height: 30),
+                    Row(
+                      children: <Widget>[
+                        const BudgetFieldLabel(label: 'Auto deduct'),
+                        Checkbox(value: false, onChanged: (bool value) {}),
+                      ],
+                    ),
+                    const SizedBox(height: 30),
+                    BudgetButton(() {}, 'Add Transaction'),
+                    const SizedBox(height: 30),
+                    BudgetButton(() {}, 'View Transaction'),
+                  ],
+                );
+              },
+            ))),
       ),
-    );
-  }
-
-  /// LABEL
-  ///
-  ///
-  Widget _fieldLabel(String label) {
-    return Text(
-      label,
-      style: const TextStyle(
-        fontSize: 16,
-        color: Colors.black87,
-        fontWeight: FontWeight.bold,
-      ),
-    );
-  }
-
-  /// TEXT FIELD
-  ///
-  ///
-  Widget _textField(String hintText,
-      {@required TextEditingController controller}) {
-    return Container(
-      child: TextField(
-        controller: controller,
-        decoration: InputDecoration(
-            fillColor: Colors.white,
-            filled: true,
-            contentPadding: const EdgeInsets.all(10),
-            hintText: hintText,
-            hintStyle: const TextStyle(fontStyle: FontStyle.italic),
-            focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.purple, width: 2),
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-            ),
-            enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.purple),
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-            ),
-            border: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-            )),
-      ),
-      decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-              color: Colors.grey,
-              blurRadius: 3,
-              offset: Offset(0, 2),
-            )
-          ]),
-    );
-  }
-
-  /// BUTTON
-  ///
-  ///
-  Widget _button({@required String label, @required Function function}) {
-    return Container(
-      width: double.infinity,
-      height: 50,
-      child: ElevatedButton(
-          style: ButtonStyle(
-            backgroundColor:
-                MaterialStateProperty.all<Color>(Colors.purple[800]),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20))),
-          ),
-          child: Text(
-            label,
-            style: const TextStyle(color: Colors.white),
-          ),
-          onPressed: function),
     );
   }
 
