@@ -6,16 +6,19 @@ class BudgetTextField extends StatelessWidget {
     this.hintText,
     this.controller,
     this.validator,
+    this.isEnabled,
   }) : super(key: key);
 
   final String hintText;
   final TextEditingController controller;
   final Function(String) validator;
+  final bool isEnabled;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: TextFormField(
+        enabled: isEnabled ?? true,
         validator: validator,
         controller: controller,
         decoration: InputDecoration(
