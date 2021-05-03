@@ -1,61 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:mybudget/view/screen/template_screen.dart';
+
 import '../widget/budget_button.dart';
 
-class AddBudgetScreen extends StatelessWidget {
+class AddBudgetScreen extends TemplateScreen {
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_rounded),
-            onPressed: () => Navigator.pop(context)),
-        backgroundColor: Colors.purple[800],
-        elevation: 0,
-        centerTitle: true,
-        title: const Text('Add Budget Account'),
-      ),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        color: Colors.purple[800],
-        child: Container(
-          padding: const EdgeInsets.fromLTRB(40, 0.0, 40, 10),
-          height: MediaQuery.of(context).size.height,
-          width: double.infinity,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(40),
-              topRight: Radius.circular(40),
-            ),
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+  Widget getLeading(BuildContext context) => IconButton(
+    icon: const Icon(Icons.arrow_back_ios_rounded),
+    onPressed: () => Navigator.pop(context),
+  );
+
+  @override
+  String get title => 'Add Budget Account';
+
+  @override
+  Widget buildBody(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(40, 0.0, 40, 10),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            const SizedBox(height: 58),
+            _fieldLabel('Account name'),
+            const SizedBox(height: 15),
+            _textField('Enter account name'),
+            const SizedBox(height: 30),
+            _fieldLabel('Budget amount'),
+            const SizedBox(height: 15),
+            _textField('Enter budget amount'),
+            const SizedBox(height: 30),
+            Row(
               children: <Widget>[
-                const SizedBox(height: 58),
-                _fieldLabel('Account name'),
-                const SizedBox(height: 15),
-                _textField('Enter account name'),
-                const SizedBox(height: 30),
-                _fieldLabel('Budget amount'),
-                const SizedBox(height: 15),
-                _textField('Enter budget amount'),
-                const SizedBox(height: 30),
-                Row(
-                  children: <Widget>[
-                    _fieldLabel('Auto deduct'),
-                    Checkbox(value: false, onChanged: (bool value) {}),
-                  ],
-                ),
-                const SizedBox(height: 30),
-                BudgetButton(() {}, 'Save'),
+                _fieldLabel('Auto deduct'),
+                Checkbox(value: false, onChanged: (bool value) {}),
               ],
             ),
-          ),
+            const SizedBox(height: 30),
+            BudgetButton(() {}, 'Save'),
+          ],
         ),
       ),
     );
   }
+
 
   /// LABEL
   ///
