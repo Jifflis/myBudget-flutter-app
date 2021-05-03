@@ -76,6 +76,7 @@ class HomeController extends GetxController {
       year: '2021',
       budget: 40000,
       balance: 10000,
+      expense: 19000,
       budgetList:<Account>[
         Account(
           title: 'Motorcycle Bill',

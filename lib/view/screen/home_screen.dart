@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:mybudget/controller/home_controller.dart';
-import 'package:mybudget/routes.dart';
-import 'package:mybudget/util/number_util.dart';
+import 'package:mybudget/view/screen/template_screen.dart';
 
-import '../constant/custom_colors.dart';
-import '../model/account.dart';
-import '../model/ledger.dart';
+import '../../constant/custom_colors.dart';
+import '../../controller/home_controller.dart';
+import '../../model/account.dart';
+import '../../model/ledger.dart';
+import '../../routes.dart';
+import '../../util/number_util.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -16,11 +18,14 @@ class HomeScreen extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       reverse: true,
       children: <Widget>[
-        for (int i = 0; i < controller.monthlyBudgetList.length; i++)
-          HomePageTemplate(
-            monthlyBudgetModel: controller.monthlyBudgetList[i],
-            index: i,
-          )
+        ...controller.monthlyBudgetList
+            .map(
+              (MonthlyBudgetModel e) => HomePageTemplate(
+                monthlyBudgetModel: e,
+                index: controller.monthlyBudgetList.indexOf(e),
+              ),
+            )
+            .toList(),
       ],
     );
   }
@@ -29,61 +34,32 @@ class HomeScreen extends StatelessWidget {
 /// Homepage Template
 ///
 ///
-class HomePageTemplate extends StatelessWidget {
-  const HomePageTemplate({
-    Key key,
+class HomePageTemplate extends TemplateScreen {
+  HomePageTemplate({
     @required this.monthlyBudgetModel,
     @required this.index,
-  }) : super(key: key);
+  });
 
   final MonthlyBudgetModel monthlyBudgetModel;
   final int index;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildAppBar(
-        _buildLeading(index),
-        _buildTitle(index, monthlyBudgetModel),
-        _buildAction(index),
-      ),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        color: Colors.purple[800],
-        child: SafeArea(
-          child: Container(
-            margin: const EdgeInsets.only(top: 8),
-            height: MediaQuery.of(context).size.height,
-            width: double.infinity,
-            decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(40),
-                    topRight: Radius.circular(40))),
-            child: Column(
-              children: <Widget>[
-                _buildHeader(monthlyBudgetModel),
-                _buildDivider(),
-                _buildItems(),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  String get title => _buildTitle(index, monthlyBudgetModel);
 
-  /// set app bar
-  ///
-  ///
-  Widget _buildAppBar(Icon leading, String title, Widget action) {
-    return AppBar(
-      backgroundColor: Colors.purple[800],
-      title: Text(title),
-      leading: leading,
-      actions: <Widget>[action],
-      elevation: 0,
-      centerTitle: true,
+  @override
+  List<Widget> get appBarActions => <Widget>[_buildAction(index)];
+
+  @override
+  Widget get leading => _buildLeading(index);
+
+  @override
+  Widget buildBody(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        _buildHeader(monthlyBudgetModel),
+        _buildDivider(),
+        _buildItems(),
+      ],
     );
   }
 
@@ -120,10 +96,11 @@ class HomePageTemplate extends StatelessWidget {
   ///
   Widget _buildLeading(int index) {
     return index == 0
-        ? Icon(
-            Icons.ac_unit,
-            color: Colors.purple[100],
-            size: 32,
+        ? Container(
+            padding: const EdgeInsets.only(left: 5),
+            child: SvgPicture.asset(
+              'images/logo.svg',
+            ),
           )
         : null;
   }
