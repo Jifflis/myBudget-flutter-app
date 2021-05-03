@@ -18,11 +18,14 @@ class HomeScreen extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       reverse: true,
       children: <Widget>[
-        for (int i = 0; i < controller.monthlyBudgetList.length; i++)
-          HomePageTemplate(
-            monthlyBudgetModel: controller.monthlyBudgetList[i],
-            index: i,
-          )
+        ...controller.monthlyBudgetList
+            .map(
+              (MonthlyBudgetModel e) => HomePageTemplate(
+                monthlyBudgetModel: e,
+                index: controller.monthlyBudgetList.indexOf(e),
+              ),
+            )
+            .toList(),
       ],
     );
   }
