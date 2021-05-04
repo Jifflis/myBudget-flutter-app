@@ -3,16 +3,25 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
 import 'package:mybudget/controller/view_budget_controller.dart';
 import 'package:mybudget/model/account.dart';
+import 'package:mybudget/view/screen/template_screen.dart';
 import 'package:mybudget/view/widget/budget_button.dart';
 import 'package:mybudget/view/widget/budget_field_label.dart';
 import 'package:mybudget/view/widget/budget_text_field.dart';
 
-class ViewBudgetScreen extends StatelessWidget {
+class ViewBudgetScreen extends TemplateScreen {
   final TextEditingController accountNameController = TextEditingController();
   final TextEditingController budgetAmountController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  Widget getLeading(BuildContext context) => IconButton(
+      icon: const Icon(Icons.arrow_back_ios_rounded),
+      onPressed: () => Navigator.pop(context));
+
+  @override
+  String get title => 'Budget Account';
+
+  @override
+  Widget buildBody(BuildContext context) {
     // catch args from route pushNamed
     //
     //
@@ -22,17 +31,8 @@ class ViewBudgetScreen extends StatelessWidget {
 
     final ViewBudgetController _controller = Get.put(ViewBudgetController());
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_rounded),
-            onPressed: () => Navigator.pop(context)),
-        backgroundColor: Colors.purple[800],
-        elevation: 0,
-        centerTitle: true,
-        title: const Text('Budget Account'),
-      ),
-      body: Container(
+    return SingleChildScrollView(
+      child: Container(
         height: MediaQuery.of(context).size.height,
         color: Colors.purple[800],
         child: Container(
