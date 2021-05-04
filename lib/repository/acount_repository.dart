@@ -5,15 +5,11 @@ import '../resources/local_provider.dart';
 
 class AccountRepository{
 
-  AccountRepository._(){
-    apiProvider = ApiProvider();
-    localProvider = LocalProvider();
-  }
+  AccountRepository._();
 
   static AccountRepository _instance;
 
-  ApiProvider apiProvider;
-  LocalProvider localProvider;
+  final LocalProvider _localProvider = LocalProvider();
 
   static AccountRepository getInstance(){
     if(_instance==null){
@@ -23,7 +19,7 @@ class AccountRepository{
   }
 
   Future<void> save(Account account)async{
-    await localProvider.upsert<Account>(account);
+    await _localProvider.upsert<Account>(account);
   }
 
 }

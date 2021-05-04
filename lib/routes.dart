@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'view/screen/add_budget_screen.dart';
 import 'view/screen/home_screen.dart';
+import 'view/screen/initial_screen.dart';
 import 'view/screen/introduction_screen.dart';
 import 'view/screen/main_screen.dart';
 import 'view/screen/settings_screen.dart';
@@ -15,7 +16,8 @@ class Routes {
   ///Screen Routes
   ///
   ///
-  static const String SCREEN_MAIN = '/';
+  static const String SCREEN_INITIAL = '/';
+  static const String SCREEN_MAIN = '/main_screen';
   static const String SCREEN_INTRODUCTION = '/introduction_screen';
   static const String SCREEN_HOME = '/home_screen';
   static const String SCREEN_SETTINGS = '/settings_screen';
@@ -64,6 +66,10 @@ class Routes {
     Widget screen;
 
     switch (settings.name) {
+      case SCREEN_INITIAL:
+        screen = InitialScreen();
+        break;
+
       case SCREEN_MAIN:
         screen = MainScreen();
         break;

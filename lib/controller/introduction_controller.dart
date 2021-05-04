@@ -1,203 +1,70 @@
-import 'package:get/get.dart';
-import 'package:mybudget/model/currency.dart';
+import 'dart:collection';
 
-class IntroductionController extends GetxController {
-  List<Currency> currencyList = <Currency>[
-    Currency(currency: 'PHP'),
-    Currency(currency: 'AED'),
-    Currency(currency: 'AFN'),
-    Currency(currency: 'ALL'),
-    Currency(currency: 'AMD'),
-    Currency(currency: 'ANG'),
-    Currency(currency: 'AOA'),
-    Currency(currency: 'ARS'),
-    Currency(currency: 'AUD'),
-    Currency(currency: 'AWG'),
-    Currency(currency: 'AZN'),
-    Currency(currency: 'BAM'),
-    Currency(currency: 'BBD'),
-    Currency(currency: 'BDT'),
-    Currency(currency: 'BGN'),
-    Currency(currency: 'BHD'),
-    Currency(currency: 'BIF'),
-    Currency(currency: 'BMD'),
-    Currency(currency: 'BND'),
-    Currency(currency: 'BOB'),
-    Currency(currency: 'BOV'),
-    Currency(currency: 'BRL'),
-    Currency(currency: 'BSD'),
-    Currency(currency: 'BTN'),
-    Currency(currency: 'BWP'),
-    Currency(currency: 'BYN'),
-    Currency(currency: 'BZD'),
-    Currency(currency: 'CAD'),
-    Currency(currency: 'CDF'),
-    Currency(currency: 'CHE'),
-    Currency(currency: 'CHF'),
-    Currency(currency: 'CHW'),
-    Currency(currency: 'CLF'),
-    Currency(currency: 'CLP'),
-    Currency(currency: 'CNY'),
-    Currency(currency: 'COP'),
-    Currency(currency: 'COU'),
-    Currency(currency: 'CRC'),
-    Currency(currency: 'CUC'),
-    Currency(currency: 'CUP'),
-    Currency(currency: 'CVE'),
-    Currency(currency: 'CZK'),
-    Currency(currency: 'DJF'),
-    Currency(currency: 'DKK'),
-    Currency(currency: 'DOP'),
-    Currency(currency: 'DZD'),
-    Currency(currency: 'EGP'),
-    Currency(currency: 'ERN'),
-    Currency(currency: 'ETB'),
-    Currency(currency: 'EUR'),
-    Currency(currency: 'FJD'),
-    Currency(currency: 'FKP'),
-    Currency(currency: 'GBP'),
-    Currency(currency: 'GEL'),
-    Currency(currency: 'GHS'),
-    Currency(currency: 'GIP'),
-    Currency(currency: 'GMD'),
-    Currency(currency: 'GNF'),
-    Currency(currency: 'GTQ'),
-    Currency(currency: 'GYD'),
-    Currency(currency: 'HKD'),
-    Currency(currency: 'HNL'),
-    Currency(currency: 'HRK'),
-    Currency(currency: 'HTG'),
-    Currency(currency: 'HUF'),
-    Currency(currency: 'IDR'),
-    Currency(currency: 'ILS'),
-    Currency(currency: 'INR'),
-    Currency(currency: 'IQD'),
-    Currency(currency: 'IRR'),
-    Currency(currency: 'ISK'),
-    Currency(currency: 'JMD'),
-    Currency(currency: 'JOD'),
-    Currency(currency: 'JPY'),
-    Currency(currency: 'KES'),
-    Currency(currency: 'KGS'),
-    Currency(currency: 'KHR'),
-    Currency(currency: 'KMF'),
-    Currency(currency: 'KPW'),
-    Currency(currency: 'KRW'),
-    Currency(currency: 'KWD'),
-    Currency(currency: 'KYD'),
-    Currency(currency: 'KZT'),
-    Currency(currency: 'LAK'),
-    Currency(currency: 'LBP'),
-    Currency(currency: 'LKR'),
-    Currency(currency: 'LRD'),
-    Currency(currency: 'LSL'),
-    Currency(currency: 'LYD'),
-    Currency(currency: 'MAD'),
-    Currency(currency: 'MDL'),
-    Currency(currency: 'MGA'),
-    Currency(currency: 'MKD'),
-    Currency(currency: 'MMK'),
-    Currency(currency: 'MNT'),
-    Currency(currency: 'MOP'),
-    Currency(currency: 'MRU'),
-    Currency(currency: 'MUR'),
-    Currency(currency: 'MVR'),
-    Currency(currency: 'MWK'),
-    Currency(currency: 'MXN'),
-    Currency(currency: 'MXV'),
-    Currency(currency: 'MYR'),
-    Currency(currency: 'MZN'),
-    Currency(currency: 'NAD'),
-    Currency(currency: 'NGN'),
-    Currency(currency: 'NIO'),
-    Currency(currency: 'NOK'),
-    Currency(currency: 'NPR'),
-    Currency(currency: 'NZD'),
-    Currency(currency: 'OMR'),
-    Currency(currency: 'PAB'),
-    Currency(currency: 'PEN'),
-    Currency(currency: 'PGK'),
-    Currency(currency: 'PHP'),
-    Currency(currency: 'PKR'),
-    Currency(currency: 'PLN'),
-    Currency(currency: 'PYG'),
-    Currency(currency: 'QAR'),
-    Currency(currency: 'RON'),
-    Currency(currency: 'RSD'),
-    Currency(currency: 'RUB'),
-    Currency(currency: 'RWF'),
-    Currency(currency: 'SAR'),
-    Currency(currency: 'SBD'),
-    Currency(currency: 'SCR'),
-    Currency(currency: 'SDG'),
-    Currency(currency: 'SEK'),
-    Currency(currency: 'SGD'),
-    Currency(currency: 'SHP'),
-    Currency(currency: 'SLL'),
-    Currency(currency: 'SOS'),
-    Currency(currency: 'SRD'),
-    Currency(currency: 'SSP'),
-    Currency(currency: 'STN'),
-    Currency(currency: 'SVC'),
-    Currency(currency: 'SYP'),
-    Currency(currency: 'SZL'),
-    Currency(currency: 'THB'),
-    Currency(currency: 'TJS'),
-    Currency(currency: 'TMT'),
-    Currency(currency: 'TND'),
-    Currency(currency: 'TOP'),
-    Currency(currency: 'TRY'),
-    Currency(currency: 'TTD'),
-    Currency(currency: 'TWD'),
-    Currency(currency: 'TZS'),
-    Currency(currency: 'UAH'),
-    Currency(currency: 'UGX'),
-    Currency(currency: 'USD'),
-    Currency(currency: 'USN'),
-    Currency(currency: 'UYI'),
-    Currency(currency: 'UYU'),
-    Currency(currency: 'UYW'),
-    Currency(currency: 'UZS'),
-    Currency(currency: 'VES'),
-    Currency(currency: 'VND'),
-    Currency(currency: 'VUV'),
-    Currency(currency: 'WST'),
-    Currency(currency: 'XAF'),
-    Currency(currency: 'XAG'),
-    Currency(currency: 'XAU'),
-    Currency(currency: 'XBA'),
-    Currency(currency: 'XBB'),
-    Currency(currency: 'XBC'),
-    Currency(currency: 'XBD'),
-    Currency(currency: 'XCD'),
-    Currency(currency: 'XDR'),
-    Currency(currency: 'XOF'),
-    Currency(currency: 'XPD'),
-    Currency(currency: 'XPF'),
-    Currency(currency: 'XPT'),
-    Currency(currency: 'XSU'),
-    Currency(currency: 'XTS'),
-    Currency(currency: 'XUA'),
-    Currency(currency: 'XXX'),
-    Currency(currency: 'YER'),
-    Currency(currency: 'ZAR'),
-    Currency(currency: 'ZMW'),
-    Currency(currency: 'ZWL'),
-  ];
+import 'package:mybudget/enum/status.dart';
+
+import '../model/currency.dart';
+import '../model/settings.dart';
+import '../model/user.dart';
+import '../repository/currency_repository.dart';
+import '../repository/settings_repository.dart';
+import '../repository/user_repository.dart';
+import '../util/date_util.dart';
+import '../util/random_util.dart';
+import 'base_controller.dart';
+
+class IntroductionController extends BaseController {
+  final CurrencyRepository _currencyRepository = CurrencyRepository.instance;
+  final SettingsRepository _settingsRepository = SettingsRepository.instance;
+  final UserRepository _userRepository = UserRepository.instance;
+
+  List<Currency> _currencyList = <Currency>[];
 
   Currency _selectedCurrency;
 
   @override
-  void onInit(){
-    _selectedCurrency = currencyList[0];
+  void onInit() {
+    _initCurrencies();
     super.onInit();
   }
 
-  Currency get selectedCurrency=>_selectedCurrency;
+  UnmodifiableListView<Currency> get currencyList =>
+      UnmodifiableListView<Currency>(_currencyList);
 
-  set selectedCurrency(Currency currency){
+  Currency get selectedCurrency => _selectedCurrency;
+
+  set selectedCurrency(Currency currency) {
     _selectedCurrency = currency;
     update();
   }
 
+  void _initCurrencies() {
+    _currencyList = _currencyRepository.currencyList;
+    _selectedCurrency = _currencyList[0];
+  }
+
+  Future<Status> save() async {
+    status = Status.LOADING;
+    final User user = User.factory();
+    await _saveUser(user);
+    await _saveSettings(user);
+    status = Status.COMPLETED;
+    return status;
+  }
+
+  Future<void> _saveSettings(User user) async {
+    final Settings settings = Settings(
+      settingsId: randomID(),
+      firstInstall: false,
+      refreshDate: getLastDateOfMonth(),
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+      currency: _selectedCurrency,
+      user: user,
+    );
+    await _settingsRepository.upsert(settings);
+  }
+
+  Future<void> _saveUser(User user) async {
+    await _userRepository.upsert(user);
+  }
 }
