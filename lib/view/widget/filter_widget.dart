@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import '../../constant/custom_colors.dart';
 import '../../controller/filter_controller.dart';
 import '../../model/filter.dart';
-import '../../routes.dart';
 import 'budget_button.dart';
 import 'filter_card.dart';
 
