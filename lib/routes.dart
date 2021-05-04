@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:mybudget/view/screen/add_transaction_scree.dart';
+import 'package:mybudget/view/screen/view_transaction_scree.dart';
 
 import 'view/screen/add_budget_screen.dart';
 import 'view/screen/home_screen.dart';
@@ -22,6 +24,8 @@ class Routes {
   static const String SCREEN_TRANSACTIONS = '/transaction_screen';
   static const String SCREEN_ADD_BUDGET = '/add_budget_screen';
   static const String SCREEN_VIEW_BUDGET = '/view_budget_screen';
+  static const String SCREEN_ADD_TRANSACTION = '/add_transaction_screen';
+  static const String SCREEN_VIEW_TRANSACTION = '/view_transaction_screen';
 
   //navigator key ------------------------------------------------------------
   /// set navigators key.
@@ -90,6 +94,13 @@ class Routes {
 
       case SCREEN_VIEW_BUDGET:
         screen = ViewBudgetScreen();
+        break;
+
+      case SCREEN_ADD_TRANSACTION:
+        screen = AddTransactionScreen();
+        break;
+      case SCREEN_VIEW_TRANSACTION:
+        screen = ViewTransactionScreen();
         break;
     }
 
