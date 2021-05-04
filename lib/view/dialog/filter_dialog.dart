@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../widget/filter_widget.dart';
 
-void showFilterDialog(BuildContext context) {
+void showFilterDialog(BuildContext context,Function onOk) {
   showGeneralDialog(
     barrierLabel: 'Filter',
     barrierDismissible: true,
@@ -16,7 +16,7 @@ void showFilterDialog(BuildContext context) {
       filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
       child: Align(
         alignment: Alignment.center,
-        child: FilterWidget(),
+        child: FilterWidget(onOk),
       ),
     ),
     transitionDuration: const Duration(milliseconds: 100),
