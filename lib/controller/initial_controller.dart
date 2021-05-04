@@ -1,5 +1,4 @@
-import 'package:mybudget/enum/status.dart';
-
+import '../enum/status.dart';
 import '../model/settings.dart';
 import '../repository/currency_repository.dart';
 import '../repository/settings_repository.dart';
@@ -53,7 +52,6 @@ class InitialController extends BaseController {
   /// either [IntroductionScreen] or [MainScreen]
   ///
   void _navigateDestination() {
-    print(_settings);
     if (_settings == null || _settings.firstInstall) {
       Routes.pushReplacementNamed(Routes.SCREEN_INTRODUCTION);
     } else {
