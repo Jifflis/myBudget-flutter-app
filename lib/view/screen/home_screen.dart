@@ -271,7 +271,7 @@ class BudgetItem extends StatelessWidget {
             flex: 1,
             child: Container(
               child: InkWell(
-                onTap: () => Routes.pushNamed(Routes.SCREEN_VIEW_BUDGET,
+                onTap: () => Routes.pushNamed(Routes.SCREEN_VIEW_TRANSACTION,
                     navigator: Routes.homeNavigator, arguments: budget),
                 child: const Text(
                   'View',
