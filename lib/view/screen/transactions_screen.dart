@@ -109,6 +109,9 @@ class TransactionsScreen extends TemplateScreen {
         ),
       );
 
+  /// Details section
+  ///
+  ///
   Widget _buildItems(List<Transaction> transactions) => Expanded(
         child: Container(
           padding: EdgeInsets.zero,
