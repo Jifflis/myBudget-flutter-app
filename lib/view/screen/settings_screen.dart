@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../routes.dart';
-import '../dialog/filter_dialog.dart';
 
 class SettingsScreen extends StatelessWidget {
   @override
@@ -24,9 +23,7 @@ class SettingsScreen extends StatelessWidget {
               height: 45,
             ),
             GestureDetector(
-              onTap: () {
-                showFilterDialog(context);
-              },
+              onTap: () {},
               child: const Text('show filter dialog'),
             ),
           ],

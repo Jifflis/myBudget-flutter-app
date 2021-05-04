@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
-import 'package:mybudget/constant/custom_colors.dart';
-import 'package:mybudget/controller/transactions_controller.dart';
-import 'package:mybudget/model/transaction.dart';
-import 'package:mybudget/util/number_util.dart';
-import 'package:mybudget/view/screen/template_screen.dart';
-import 'package:mybudget/view/widget/budget_text_field_icon_button.dart';
+
+import '../../constant/custom_colors.dart';
+import '../../controller/transactions_controller.dart';
+import '../../model/transaction.dart';
+import '../../routes.dart';
+import '../../util/number_util.dart';
+import '../dialog/filter_dialog.dart';
+import '../widget/budget_text_field_icon_button.dart';
+import 'template_screen.dart';
 
 class TransactionsScreen extends TemplateScreen {
   @override
@@ -33,7 +36,7 @@ class TransactionsScreen extends TemplateScreen {
         Get.put(TransactionsController());
     return Column(
       children: <Widget>[
-        _buildHeader(),
+        _buildHeader(context),
         _buildDivider(),
         _buildItems(_controller.transactionList),
       ],
@@ -43,14 +46,14 @@ class TransactionsScreen extends TemplateScreen {
   /// header section
   ///
   ///
-  Widget _buildHeader() => Container(
+  Widget _buildHeader(BuildContext context) => Container(
         padding: const EdgeInsets.fromLTRB(30.0, 20.0, 30.0, 0.0),
         height: 145,
         child: Row(
           children: <Widget>[
             _searchBar(),
             const SizedBox(width: 10),
-            _filter(),
+            _filter(context),
           ],
         ),
       );
@@ -90,9 +93,11 @@ class TransactionsScreen extends TemplateScreen {
   /// filter button
   ///
   ///
-  Widget _filter() => InkWell(
+  Widget _filter(BuildContext context) => InkWell(
         onTap: () {
-          print('test filter');
+          showFilterDialog(context,(){
+            Routes.pop(navigator: Routes.transactionNavigator);
+          });
         },
         child: Container(
           width: 50,

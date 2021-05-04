@@ -9,6 +9,10 @@ import 'budget_button.dart';
 import 'filter_card.dart';
 
 class FilterWidget extends StatelessWidget {
+  const FilterWidget(this.onOk);
+
+  final Function onOk;
+
   @override
   Widget build(BuildContext context) {
     Get.put(FilterController());
@@ -34,9 +38,7 @@ class FilterWidget extends StatelessWidget {
             children: <Widget>[
               _buildSuggestionList(controller),
               _buildSearchField(controller),
-              BudgetButton(() {
-                Routes.pop(navigator: Routes.settingsNavigator);
-              }, 'Ok'),
+              BudgetButton(onOk, 'Ok'),
             ],
           ),
         );

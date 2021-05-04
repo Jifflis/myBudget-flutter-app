@@ -1,5 +1,6 @@
 import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:mybudget/model/transaction.dart';
+
+import '../model/transaction.dart';
 
 class TransactionsController extends GetxController {
   //date format used YYYY-MM-DD
