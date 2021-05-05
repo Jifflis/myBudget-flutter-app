@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -18,14 +20,17 @@ class LocalDB {
   }
 
   ///Initialize DB
-  ///
-  ///
-  Future<void> initialize() async {
+  ///return true if the database is first created
+  ///otherwise false
+  Future<bool> initialize() async {
+    final String path = join(await getDatabasesPath(), 'budget.db');
+    final bool isFirstCreated = !File(path).existsSync();
+
     db = await openDatabase(
       // Set the path to the database. Note: Using the `join` function from the
       // `path` package is best practice to ensure the path is correctly
       // constructed for each platform.
-      join(await getDatabasesPath(), 'budget.db'),
+      path,
       onCreate: (Database db, int version) {
         // Run the CREATE TABLE statement on the database.
         _createTableAccount(db);
@@ -39,6 +44,8 @@ class LocalDB {
       // path to perform database upgrades and downgrades.
       version: 2,
     );
+
+    return isFirstCreated;
   }
 
   ///Create table account
