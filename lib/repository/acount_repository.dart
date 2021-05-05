@@ -1,29 +1,16 @@
-
 import '../model/account.dart';
-import '../resources/api_provider.dart';
 import '../resources/local_provider.dart';
 
-class AccountRepository{
-
-  AccountRepository._(){
-    apiProvider = ApiProvider();
-    localProvider = LocalProvider();
-  }
+class AccountRepository {
+  AccountRepository._();
 
   static AccountRepository _instance;
 
-  ApiProvider apiProvider;
-  LocalProvider localProvider;
+  final LocalProvider _localProvider = LocalProvider();
 
-  static AccountRepository getInstance(){
-    if(_instance==null){
-      return AccountRepository._();
-    }
-    return _instance;
+  static AccountRepository get instance => _instance ?? AccountRepository._();
+
+  Future<void> save(Account account) async {
+    await _localProvider.upsert<Account>(account);
   }
-
-  Future<void> save(Account account)async{
-    await localProvider.upsert<Account>(account);
-  }
-
 }

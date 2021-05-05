@@ -54,7 +54,8 @@ class LocalProvider {
     if (map == null || map.isEmpty) {
       return null;
     }
-    return def.builder(map[0]) as T;
+
+    return await def.builder(map[0],this) as T;
   }
 
   ///Get list of data
