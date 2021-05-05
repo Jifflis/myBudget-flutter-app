@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mybudget/view/screen/template_screen.dart';
 
+
 class SettingsScreen extends TemplateScreen {
   @override
   String get title => 'Settings';
