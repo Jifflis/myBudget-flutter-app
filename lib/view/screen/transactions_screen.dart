@@ -5,6 +5,7 @@ import '../../constant/custom_colors.dart';
 import '../../controller/transactions_controller.dart';
 import '../../model/transaction.dart';
 import '../../routes.dart';
+import '../../util/date_util.dart';
 import '../../util/number_util.dart';
 import '../dialog/filter_dialog.dart';
 import '../widget/budget_text_field_icon_button.dart';
@@ -19,14 +20,15 @@ class TransactionsScreen extends TemplateScreen {
         Padding(
           padding: const EdgeInsets.only(right: 17),
           child: IconButton(
-              icon: Icon(
-                Icons.add_circle,
-                color: Colors.purple[100],
-                size: 38,
-              ),
-              onPressed: () {
-                //
-              }),
+            icon: Icon(
+              Icons.add_circle,
+              color: Colors.purple[100],
+              size: 38,
+            ),
+            onPressed: () {
+              //
+            },
+          ),
         )
       ];
 
@@ -95,7 +97,7 @@ class TransactionsScreen extends TemplateScreen {
   ///
   Widget _filter(BuildContext context) => InkWell(
         onTap: () {
-          showFilterDialog(context,(){
+          showFilterDialog(context, () {
             Routes.pop(navigator: Routes.transactionNavigator);
           });
         },
