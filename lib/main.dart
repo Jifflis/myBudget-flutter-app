@@ -3,8 +3,6 @@ import 'package:get/get.dart';
 import 'package:mybudget/routes.dart';
 import 'package:oktoast/oktoast.dart';
 
-import 'resources/local_db.dart';
-
 void main() {
   runApp(MyApp());
 }
