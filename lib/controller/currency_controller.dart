@@ -4,13 +4,9 @@ import 'package:mybudget/controller/base_controller.dart';
 
 import '../model/currency.dart';
 import '../repository/currency_repository.dart';
-import '../repository/settings_repository.dart';
-import '../repository/user_repository.dart';
 
 class CurrencyController extends BaseController {
   final CurrencyRepository _currencyRepository = CurrencyRepository.instance;
-  final SettingsRepository _settingsRepository = SettingsRepository.instance;
-  final UserRepository _userRepository = UserRepository.instance;
 
   List<Currency> _currencyList = <Currency>[];
 
@@ -37,14 +33,6 @@ class CurrencyController extends BaseController {
     _selectedCurrency = currency;
     update();
   }
-
-  /// Get settings repository
-  ///
-  SettingsRepository get settingsRepository => _settingsRepository;
-
-  /// Get user repository
-  ///
-  UserRepository get userRepository => _userRepository;
 
   /// Initialize [_currencyList] data
   ///

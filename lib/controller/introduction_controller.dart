@@ -1,11 +1,17 @@
 import 'package:mybudget/controller/currency_controller.dart';
+
 import '../enum/status.dart';
 import '../model/settings.dart';
 import '../model/user.dart';
+import '../repository/settings_repository.dart';
+import '../repository/user_repository.dart';
 import '../util/date_util.dart';
 import '../util/random_util.dart';
 
 class IntroductionController extends CurrencyController {
+  final SettingsRepository _settingsRepository = SettingsRepository.instance;
+  final UserRepository _userRepository = UserRepository.instance;
+
   /// Save data into local database
   /// It will create a default user
   ///
@@ -30,12 +36,12 @@ class IntroductionController extends CurrencyController {
       currency: selectedCurrency,
       user: user,
     );
-    await settingsRepository.upsert(settings);
+    await _settingsRepository.upsert(settings);
   }
 
   /// Save user into local database
   ///
   Future<void> _saveUser(User user) async {
-    await userRepository.upsert(user);
+    await _userRepository.upsert(user);
   }
 }
