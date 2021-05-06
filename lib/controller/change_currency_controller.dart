@@ -1,5 +1,3 @@
-import 'package:mybudget/controller/introduction_controller.dart';
+import 'package:mybudget/controller/currency_controller.dart';
 
-class ChangeCurrencyController extends IntroductionController {
-  //
-}
+class ChangeCurrencyController extends CurrencyController {}
