@@ -1,7 +1,9 @@
 import 'package:get/get.dart';
 
+import '../enum/status.dart';
+
 class BaseController extends GetxController {
-  Status _status;
+  Status _status = Status.COMPLETED;
 
   set status(Status status) {
     _status = status;
@@ -14,5 +16,3 @@ class BaseController extends GetxController {
     update();
   }
 }
-
-enum Status { LOADING, COMPLETED, ERROR }

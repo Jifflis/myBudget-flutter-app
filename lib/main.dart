@@ -3,11 +3,7 @@ import 'package:get/get.dart';
 import 'package:mybudget/routes.dart';
 import 'package:oktoast/oktoast.dart';
 
-import 'resources/local_db.dart';
-
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await LocalDB.instance().initialize();
+void main() {
   runApp(MyApp());
 }
 
@@ -24,7 +20,7 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         navigatorKey: Routes.rootNavigatorKey,
-        initialRoute: Routes.SCREEN_MAIN,
+        initialRoute: Routes.SCREEN_INITIAL,
         onGenerateRoute: Routes.onGenerateRoute,
       ),
     );
