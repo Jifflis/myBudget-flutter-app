@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
-import 'package:mybudget/controller/change_currency_controller.dart';
-import 'package:mybudget/model/currency.dart';
-import 'package:mybudget/view/screen/template_screen.dart';
-import 'package:mybudget/view/widget/budget_button.dart';
-import 'package:mybudget/view/widget/budget_field_label.dart';
+import '../../controller/change_currency_controller.dart';
+import '../../model/currency.dart';
+import '../../view/screen/template_screen.dart';
+import '../../view/widget/budget_button.dart';
+import '../../view/widget/budget_field_label.dart';
 
 class ChangeCurrencyScreen extends TemplateScreen {
   @override
