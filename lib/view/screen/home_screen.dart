@@ -6,7 +6,7 @@ import 'package:mybudget/view/screen/template_screen.dart';
 import '../../constant/custom_colors.dart';
 import '../../controller/home_controller.dart';
 import '../../model/account.dart';
-import '../../model/ledger.dart';
+import '../../model/monthly_summary.dart';
 import '../../routes.dart';
 import '../../util/number_util.dart';
 
@@ -20,7 +20,7 @@ class HomeScreen extends StatelessWidget {
       children: <Widget>[
         ...controller.monthlyBudgetList
             .map(
-              (MonthlyBudgetModel e) => HomePageTemplate(
+              (MonthlySummary e) => HomePageTemplate(
                 monthlyBudgetModel: e,
                 index: controller.monthlyBudgetList.indexOf(e),
               ),
@@ -40,7 +40,7 @@ class HomePageTemplate extends TemplateScreen {
     @required this.index,
   });
 
-  final MonthlyBudgetModel monthlyBudgetModel;
+  final MonthlySummary monthlyBudgetModel;
   final int index;
 
   @override
@@ -108,7 +108,7 @@ class HomePageTemplate extends TemplateScreen {
   /// get appbar title
   ///
   ///
-  String _buildTitle(int index, MonthlyBudgetModel model) {
+  String _buildTitle(int index, MonthlySummary model) {
     return index == 0 ? 'myBudget' : '${model.month} ${model.year}';
   }
 
@@ -134,7 +134,7 @@ class HomePageTemplate extends TemplateScreen {
   /// header section
   ///
   ///
-  Widget _buildHeader(MonthlyBudgetModel model) => Column(
+  Widget _buildHeader(MonthlySummary model) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           const SizedBox(height: 20),
@@ -190,11 +190,11 @@ class HomePageTemplate extends TemplateScreen {
               itemBuilder: (BuildContext context, int index) {
                 return BudgetItem(
                   index: index,
-                  budget: monthlyBudgetModel.budgetList[index],
-                  isLoading: index == monthlyBudgetModel.budgetList.length - 1,
+                  budget: monthlyBudgetModel.accountList[index],
+                  isLoading: index == monthlyBudgetModel.accountList.length - 1,
                 );
               },
-              itemCount: monthlyBudgetModel.budgetList.length),
+              itemCount: monthlyBudgetModel.accountList.length),
         ),
       );
 }

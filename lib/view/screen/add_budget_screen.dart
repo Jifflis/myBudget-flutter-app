@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:mybudget/view/screen/template_screen.dart';
-import 'package:mybudget/view/widget/budget_field_label.dart';
-import 'package:mybudget/view/widget/budget_text_field.dart';
+import 'package:get/get.dart';
 
+import '../../controller/add_budget_controller.dart';
 import '../widget/budget_button.dart';
+import '../widget/budget_field_label.dart';
+import '../widget/budget_text_field.dart';
+import 'template_screen.dart';
 
 class AddBudgetScreen extends TemplateScreen {
   @override
@@ -17,6 +19,7 @@ class AddBudgetScreen extends TemplateScreen {
 
   @override
   Widget buildBody(BuildContext context) {
+    final AddBudgetController controller = Get.put(AddBudgetController());
     return Padding(
       padding: const EdgeInsets.fromLTRB(40, 0.0, 40, 10),
       child: SingleChildScrollView(
@@ -26,11 +29,17 @@ class AddBudgetScreen extends TemplateScreen {
             const SizedBox(height: 58),
             const BudgetFieldLabel(label: 'Account name'),
             const SizedBox(height: 15),
-            const BudgetTextField(hintText: 'Enter account name'),
+            BudgetTextField(
+              controller: controller.accountController,
+              hintText: 'Enter account name',
+            ),
             const SizedBox(height: 30),
             const BudgetFieldLabel(label: 'Budget amount'),
             const SizedBox(height: 15),
-            const BudgetTextField(hintText: 'Enter budget amount'),
+            BudgetTextField(
+              controller: controller.amountController,
+              hintText: 'Enter budget amount',
+            ),
             const SizedBox(height: 30),
             Row(
               children: <Widget>[
@@ -39,7 +48,9 @@ class AddBudgetScreen extends TemplateScreen {
               ],
             ),
             const SizedBox(height: 30),
-            BudgetButton(() {}, 'Save'),
+            BudgetButton(() {
+              controller.save();
+            }, 'Save'),
           ],
         ),
       ),

@@ -5,10 +5,16 @@ import 'resource_definition.dart';
 import 'resource_helper.dart';
 
 class LocalProvider {
+  factory LocalProvider() => _instance;
+
+  LocalProvider._();
+
+  static final LocalProvider _instance = LocalProvider._();
+
   ///Get instance of [Database] through instance of [LocalDB]
   ///
   ///
-  Database db = LocalDB.instance().db;
+  Database db = LocalDB().db;
 
   ///Insert or update data
   ///
@@ -22,11 +28,27 @@ class LocalProvider {
     );
   }
 
+  ///Insert or update data
+  ///
+  ///
+  Future<int> update<T>(
+    T data, {
+    String where,
+    List<dynamic> whereArgs,
+  }) async {
+    final ResourceDefinition def = ResourceHelper.get<T>();
+    return await db.update(
+      def.name,
+      def.toMap(data),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
   ///Update data using raw sql query
   ///Used this function only for updating specific column
   ///
-  Future<int> rawUpdate(String query,[List<dynamic> arguments]){
-    return db.rawUpdate(query,arguments);
+  Future<int> rawUpdate(String query, [List<dynamic> arguments]) {
+    return db.rawUpdate(query, arguments);
   }
 
   ///Delete data
@@ -41,6 +63,7 @@ class LocalProvider {
   ///
   ///
   Future<T> get<T>({
+    String tableName,
     List<String> columns,
     String where,
     List<dynamic> whereArgs,
@@ -48,20 +71,21 @@ class LocalProvider {
   }) async {
     final ResourceDefinition def = ResourceHelper.get<T>();
 
-    final List<Map<String, dynamic>> map = await db.query(def.name,
+    final List<Map<String, dynamic>> map = await db.query(tableName ?? def.name,
         columns: columns, where: where, whereArgs: whereArgs, having: having);
 
     if (map == null || map.isEmpty) {
       return null;
     }
 
-    return await def.builder(map[0],this) as T;
+    print(map[0].toString());
+    return await def.builder(map[0], this) as T;
   }
 
   ///Get list of data
   ///
   ///
-  Future<T> list<T>({
+  Future<List<T>> list<T>({
     bool distinct,
     List<String> columns,
     String where,
@@ -74,7 +98,7 @@ class LocalProvider {
   }) async {
     final ResourceDefinition def = ResourceHelper.get<T>();
 
-    final List<Map<String, dynamic>> map = await db.query(def.name,
+    final List<Map<String, dynamic>> maps = await db.query(def.name,
         distinct: distinct,
         columns: columns,
         where: where,
@@ -85,10 +109,16 @@ class LocalProvider {
         limit: limit,
         offset: offset);
 
-    if (map == null || map.isEmpty) {
+    if (maps == null || maps.isEmpty) {
       return null;
     }
 
-    return def.builder(map[0]) as T;
+    final List<T> list = <T>[];
+
+    for (final Map<String, dynamic> map in maps) {
+      list.add(def.builder(map, this) as T);
+    }
+
+    return list;
   }
 }

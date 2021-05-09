@@ -1,5 +1,5 @@
 import 'package:mybudget/constant/db_keys.dart';
-import 'package:mybudget/util/random_util.dart';
+import 'package:mybudget/util/id_util.dart';
 
 class User {
   User({
