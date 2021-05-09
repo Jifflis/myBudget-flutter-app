@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mybudget/routes.dart';
 import 'package:mybudget/view/screen/template_screen.dart';
-
 
 class SettingsScreen extends TemplateScreen {
   @override
@@ -15,7 +15,8 @@ class SettingsScreen extends TemplateScreen {
         children: <Widget>[
           _button('Change refresh date', () {}),
           const SizedBox(height: 20),
-          _button('Change currency', () {}),
+          _button('Change currency',
+              () => Routes.pushNamed(Routes.SCREEN_CHANGE_CURRENCY)),
         ],
       ),
     );

@@ -1,55 +1,13 @@
-import 'dart:collection';
-
-import 'package:get/get.dart';
-import 'package:mybudget/provider/user_provider.dart';
-
 import '../enum/status.dart';
-import '../model/currency.dart';
 import '../model/settings.dart';
 import '../model/user.dart';
-import '../repository/currency_repository.dart';
 import '../repository/settings_repository.dart';
-import '../repository/user_repository.dart';
 import '../util/date_util.dart';
 import '../util/id_util.dart';
-import 'base_controller.dart';
+import 'currency_controller.dart';
 
-class IntroductionController extends BaseController {
-  final CurrencyRepository _currencyRepository = CurrencyRepository();
+class IntroductionController extends CurrencyController {
   final SettingsRepository _settingsRepository = SettingsRepository();
-
-  List<Currency> _currencyList = <Currency>[];
-
-  Currency _selectedCurrency;
-
-  @override
-  void onInit() {
-    _initCurrencies();
-    super.onInit();
-  }
-
-  /// Get unmodifiable [_currencyList]
-  ///
-  UnmodifiableListView<Currency> get currencyList =>
-      UnmodifiableListView<Currency>(_currencyList);
-
-  /// Get selected currency
-  ///
-  Currency get selectedCurrency => _selectedCurrency;
-
-  /// Set selected currency
-  ///
-  set selectedCurrency(Currency currency) {
-    _selectedCurrency = currency;
-    update();
-  }
-
-  /// Initialize [_currencyList] data
-  ///
-  void _initCurrencies() {
-    _currencyList = _currencyRepository.currencyList;
-    _selectedCurrency = _currencyList[0];
-  }
 
   /// Save data into local database
   /// It will create a default user
@@ -70,7 +28,7 @@ class IntroductionController extends BaseController {
       refreshDate: getLastDateOfMonth(),
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
-      currency: _selectedCurrency,
+      currency: selectedCurrency,
       user: user,
     );
     await _settingsRepository.upsert(settings);
