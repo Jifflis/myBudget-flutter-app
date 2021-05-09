@@ -1,12 +1,11 @@
 import 'dart:collection';
 
-import 'package:mybudget/controller/base_controller.dart';
-
 import '../model/currency.dart';
 import '../repository/currency_repository.dart';
+import 'base_controller.dart';
 
 class CurrencyController extends BaseController {
-  final CurrencyRepository _currencyRepository = CurrencyRepository.instance;
+  final CurrencyRepository _currencyRepository = CurrencyRepository();
 
   List<Currency> _currencyList = <Currency>[];
 
