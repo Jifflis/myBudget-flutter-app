@@ -4,11 +4,12 @@ import '../model/currency.dart';
 import '../resources/local_provider.dart';
 
 class CurrencyRepository {
+  factory CurrencyRepository() => _instance;
+
   CurrencyRepository._();
 
-  static CurrencyRepository _instance;
+  static final CurrencyRepository _instance = CurrencyRepository._();
 
-  static CurrencyRepository get instance => _instance ?? CurrencyRepository._();
   final LocalProvider _localProvider = LocalProvider();
 
   final List<Currency> _currencyList = <Currency>[

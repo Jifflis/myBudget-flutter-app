@@ -14,12 +14,10 @@ class DBKey{
   static const  String EXPENSE = 'expense';
   static const  String BALANCE = 'balance';
   static const  String ADJUSTED = 'adjusted';
+  static const  String AUTO_DEDUCT = 'auto_deduct';
 
-  static const  String LEDGER = 'ledger';
-  static const  String LEDGER_ID = 'ledger_id';
-  static const  String BEGINNING_BALANCE = 'beginning_balance';
-  static const  String ENDING_BALANCE = 'ending_balance';
-  static const  String STATUS = 'status';
+  static const  String MONTHLY_SUMMARY = 'monthly_summary';
+  static const  String MONTHLY_SUMMARY_ID = 'monthly_summary_id';
   static const  String MONTH = 'month';
   static const  String YEAR = 'year';
 

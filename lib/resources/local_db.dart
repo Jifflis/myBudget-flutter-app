@@ -4,20 +4,18 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../constant/db_keys.dart';
+import 'db_migration.dart';
 
 class LocalDB {
+
+  ///set singleton instance of this class
+  ///
+  ///
+  factory LocalDB()=>_instance;
   LocalDB._();
+  static final LocalDB _instance = LocalDB._();
 
-  static LocalDB _instance;
   Database db;
-
-  ///Get singleton instance of this class
-  ///
-  ///
-  static LocalDB instance() {
-    _instance ??= LocalDB._();
-    return _instance;
-  }
 
   ///Initialize DB
   ///return true if the database is first created
@@ -25,7 +23,7 @@ class LocalDB {
   Future<bool> initialize() async {
     final String path = join(await getDatabasesPath(), 'budget.db');
     final bool isFirstCreated = !File(path).existsSync();
-
+    print(path);
     db = await openDatabase(
       // Set the path to the database. Note: Using the `join` function from the
       // `path` package is best practice to ensure the path is correctly
@@ -35,14 +33,17 @@ class LocalDB {
         // Run the CREATE TABLE statement on the database.
         _createTableAccount(db);
         _createTableUser(db);
-        _createTableLedger(db);
+        _createTableMonthlySummary(db);
         _createTableTransaction(db);
         _createTableSettings(db);
         _createTableCurrency(db);
       },
+      onUpgrade: (Database db, int oldVersion, int newVersion) async {
+        upgrade(db, oldVersion, newVersion);
+      },
       // Set the version. This executes the onCreate function and provides a
       // path to perform database upgrades and downgrades.
-      version: 2,
+      version: VERSION_1,
     );
 
     return isFirstCreated;
@@ -55,15 +56,17 @@ class LocalDB {
     db.execute(
       'CREATE TABLE ${DBKey.ACCOUNT}('
       'id INTEGER PRIMARY KEY AUTOINCREMENT,'
-      '${DBKey.ACCOUNT_ID} TEXT NOT NULL UNIQUE, '
-      '${DBKey.TITLE} STRING,'
-      '${DBKey.BUDGET} REAL,'
-      '${DBKey.EXPENSE} REAL,'
-      '${DBKey.BALANCE} REAL,'
-      '${DBKey.ADJUSTED} REAL,'
+      '${DBKey.ACCOUNT_ID} TEXT NOT NULL UNIQUE,'
+      '${DBKey.MONTHLY_SUMMARY_ID} TEXT,'
+      '${DBKey.TITLE} STRING NOT NULL UNIQUE,'
+      '${DBKey.BUDGET} REAL DEFAULT 0.0,'
+      '${DBKey.EXPENSE} REAL DEFAULT 0.0,'
+      '${DBKey.BALANCE} REAL DEFAULT 0.0,'
+      '${DBKey.ADJUSTED} REAL DEFAULT 0.0,'
+      '${DBKey.AUTO_DEDUCT} NUMERIC,'
       '${DBKey.CREATED_AT} STRING,'
       '${DBKey.UPDATED_AT} STRING,'
-      '${DBKey.USER_ID} STRING)',
+      '${DBKey.USER_ID} STRING NOT NULL)',
     );
   }
 
@@ -86,22 +89,19 @@ class LocalDB {
   ///Create table ledger
   ///
   ///
-  void _createTableLedger(Database db) {
-    db.execute('CREATE TABLE ${DBKey.LEDGER} ('
+  void _createTableMonthlySummary(Database db) {
+    db.execute('CREATE TABLE ${DBKey.MONTHLY_SUMMARY} ('
         'id INTEGER PRIMARY KEY AUTOINCREMENT,'
-        '${DBKey.LEDGER_ID} TEXT NOT NULL UNIQUE,'
-        '${DBKey.ACCOUNT_ID} STRING,'
-        '${DBKey.BEGINNING_BALANCE} REAL,'
-        '${DBKey.ENDING_BALANCE} REAL,'
-        '${DBKey.EXPENSE} REAL,'
-        '${DBKey.BUDGET} REAL,'
-        '${DBKey.ADJUSTED} REAL,'
-        '${DBKey.STATUS} STRING,'
+        '${DBKey.MONTHLY_SUMMARY_ID} TEXT NOT NULL UNIQUE,'
+        '${DBKey.USER_ID} STRING NOT NULL,'
         '${DBKey.MONTH} INTEGER,'
         '${DBKey.YEAR} INTEGER,'
-        '${DBKey.CREATED_AT} STRING,'
-        '${DBKey.UPDATED_AT} STRING,'
-        '${DBKey.USER_ID} STRING)');
+        '${DBKey.EXPENSE} REAL DEFAULT 0.0,'
+        '${DBKey.BUDGET} REAL DEFAULT 0.0,'
+        '${DBKey.ADJUSTED} REAL DEFAULT 0.0,'
+        '${DBKey.BALANCE} REAL DEFAULT 0.0,'
+        '${DBKey.CREATED_AT} STRING NOT NULL,'
+        '${DBKey.UPDATED_AT} STRING NOT NULL)');
   }
 
   ///Create table transaction
@@ -111,7 +111,7 @@ class LocalDB {
     db.execute('CREATE TABLE ${DBKey.TRANSACTION} ('
         'id INTEGER PRIMARY KEY AUTOINCREMENT,'
         '${DBKey.TRANSACTION_ID} TEXT NOT NULL UNIQUE,'
-        '${DBKey.USER_ID} STRING,'
+        '${DBKey.USER_ID} STRING NOT NULL,'
         '${DBKey.ACCOUNT_ID} STRING,'
         '${DBKey.AMOUNT} REAL,'
         '${DBKey.REMARKS} STRING,'
@@ -137,7 +137,7 @@ class LocalDB {
     db.execute('CREATE TABLE ${DBKey.SETTINGS} ('
         'id INTEGER PRIMARY KEY AUTOINCREMENT,'
         '${DBKey.SETTINGS_ID} TEXT NOT NULL UNIQUE,'
-        '${DBKey.USER_ID} STRING,'
+        '${DBKey.USER_ID} STRING NOT NULL,'
         '${DBKey.FIRST_INSTALL} NUMERIC,'
         '${DBKey.REFRESH_DATE} STRING,'
         '${DBKey.CURRENCY_ID} STRING,'

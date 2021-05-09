@@ -1,20 +1,32 @@
+import 'package:get/get.dart';
+
 import '../enum/status.dart';
+import '../model/monthly_summary.dart';
 import '../model/settings.dart';
-import '../repository/currency_repository.dart';
+import '../model/user.dart';
+import '../provider/user_provider.dart';
+import '../repository/monthly_repository.dart';
 import '../repository/settings_repository.dart';
+import '../repository/user_repository.dart';
 import '../resources/local_db.dart';
 import '../routes.dart';
+import '../util/id_util.dart';
 import 'base_controller.dart';
 
 class InitialController extends BaseController {
+  InitialController() : super(initializeUser: false);
+
   SettingsRepository _settingsRepository;
-  CurrencyRepository _currencyRepository;
+  UserRepository _userRepository;
+  MonthlySummaryRepository _monthlyRepository;
 
   Settings _settings;
 
   bool _isFirstLaunch;
 
   Settings get settings => _settings;
+
+  User user;
 
   @override
   void onInit() {
@@ -30,16 +42,19 @@ class InitialController extends BaseController {
     status = Status.LOADING;
 
     //initialize local db
-    _isFirstLaunch = await LocalDB.instance().initialize();
+    _isFirstLaunch = await LocalDB().initialize();
 
     //initialize repositories
     _initRepositories();
 
+    //initialize user
+    await _initUser();
+
+    //initialize monthly summary
+    await _initMonthlySummary();
+
     //initialize settings
     _settings = await _settingsRepository.getSettings();
-
-    //initialize first launch data
-    await _initFirstLaunchData();
 
     //set complete status
     status = Status.COMPLETED;
@@ -59,20 +74,40 @@ class InitialController extends BaseController {
     }
   }
 
-  /// Initialize first launch
-  ///
-  ///
-  Future<void> _initFirstLaunchData() async {
-    if (_isFirstLaunch) {
-      await _currencyRepository.saveDefaultCurrencies();
-    }
-  }
-
   /// Initialize repositories
   ///
   ///
   void _initRepositories() {
-    _settingsRepository = SettingsRepository.instance;
-    _currencyRepository = CurrencyRepository.instance;
+    _settingsRepository = SettingsRepository();
+    _userRepository = UserRepository();
+    _monthlyRepository = MonthlySummaryRepository();
+  }
+
+  /// Initialize user
+  ///
+  Future<void> _initUser() async {
+    if (_isFirstLaunch) {
+      user = User.factory();
+      await _userRepository.upsert(user);
+    } else {
+      user = await _userRepository.getUser();
+    }
+    Get.put(UserProvider(user));
+  }
+
+  /// Initialize monthly summary
+  ///
+  Future<void> _initMonthlySummary() async {
+    final MonthlySummary summary = await _monthlyRepository.currentMonthlySummary();
+    print(summary);
+
+    if (summary == null) {
+      _monthlyRepository.upsert(MonthlySummary(
+        monthlySummaryId: monthlySummaryID(),
+        month: DateTime.now().month,
+        year: DateTime.now().year,
+        user: user,
+      ));
+    }
   }
 }
