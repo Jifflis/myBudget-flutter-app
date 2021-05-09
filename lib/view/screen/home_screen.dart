@@ -77,7 +77,7 @@ class HomePageTemplate extends TemplateScreen {
                   size: 38,
                 ),
                 onPressed: () {
-                  Routes.pushNamed(Routes.SCREEN_ADD_TRANSACTION,
+                  Routes.pushNamed(Routes.SCREEN_ADD_BUDGET,
                       navigator: Routes.homeNavigator);
                 }),
           )

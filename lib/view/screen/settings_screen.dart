@@ -1,37 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:mybudget/routes.dart';
+import 'package:mybudget/view/screen/template_screen.dart';
 
-import '../../routes.dart';
-import '../dialog/filter_dialog.dart';
-
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends TemplateScreen {
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Container(
-        width: double.infinity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            GestureDetector(
-              onTap: () {
-                Routes.pushNamed(Routes.SCREEN_INTRODUCTION,
-                    navigator: Routes.settingsNavigator);
-              },
-              child: const Text('show introduction'),
-            ),
-            const SizedBox(
-              height: 45,
-            ),
-            GestureDetector(
-              onTap: () {
-                showFilterDialog(context);
-              },
-              child: const Text('show filter dialog'),
-            ),
-          ],
-        ),
+  String get title => 'Settings';
+  @override
+  Widget buildBody(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(20, 40, 20, 0.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          _button('Change refresh date', () {}),
+          const SizedBox(height: 20),
+          _button('Change currency',
+              () => Routes.pushNamed(Routes.SCREEN_CHANGE_CURRENCY)),
+        ],
       ),
     );
   }
+
+  /// button
+  ///
+  ///
+  Widget _button(String label, Function onPressed) => ElevatedButton(
+      onPressed: onPressed,
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(Colors.purple[800]),
+        padding:
+            MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.all(10)),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text(
+            label,
+            style: const TextStyle(fontSize: 16),
+          ),
+          const Icon(
+            Icons.arrow_forward_ios_rounded,
+            color: Colors.white,
+          )
+        ],
+      ));
 }

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mybudget/controller/introduction_controller.dart';
+import 'package:mybudget/enum/status.dart';
 import 'package:mybudget/model/currency.dart';
 import 'package:mybudget/view/screen/template_screen.dart';
 import 'package:mybudget/view/widget/budget_button.dart';
+
+import '../../routes.dart';
 
 class IntroductionScreen extends TemplateScreen {
   @override
@@ -12,38 +15,42 @@ class IntroductionScreen extends TemplateScreen {
   @override
   Widget buildBody(BuildContext context) {
     final IntroductionController controller = Get.put(IntroductionController());
-
     return Container(
-      height: MediaQuery.of(context).size.height,
-      color: Colors.purple[800],
-      child: SafeArea(
-        child: Container(
-          margin: const EdgeInsets.only(top: 8),
-          height: MediaQuery.of(context).size.height,
-          width: double.infinity,
-          decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(40), topRight: Radius.circular(40))),
-          child: Container(
-            margin: const EdgeInsets.fromLTRB(40, 5, 40, 80),
-            child: Column(
-              children: <Widget>[
-                _buildWelcomeMessage(),
-                _buildLabel(),
-                _buildDropDown((Currency value) {
-                  FocusScope.of(context).requestFocus(FocusNode());
-                  controller.selectedCurrency = value;
-                }),
-                BudgetButton(() {}, 'Ok'),
-              ],
-            ),
-          ),
-        ),
+      margin: const EdgeInsets.fromLTRB(40, 5, 40, 80),
+      child: Column(
+        children: <Widget>[
+          _buildWelcomeMessage(),
+          _buildLabel(),
+          _buildDropDown((Currency value) {
+            FocusScope.of(context).requestFocus(FocusNode());
+            controller.selectedCurrency = value;
+          }),
+          _buildButton(),
+        ],
       ),
     );
   }
 
+  ///Build ok button
+  ///
+  ///
+  Widget _buildButton() => GetBuilder<IntroductionController>(
+        builder: (IntroductionController controller) => BudgetButton(
+            controller.status == Status.LOADING
+                ? null
+                : () {
+                    controller.save().then((Status status) {
+                      if (status == Status.COMPLETED) {
+                        Routes.pushReplacementNamed(Routes.SCREEN_MAIN);
+                      }
+                    });
+                  },
+            'Ok'),
+      );
+
+  ///Build label
+  ///
+  ///
   Widget _buildLabel() {
     return Container(
       child: const Align(
@@ -61,7 +68,7 @@ class IntroductionScreen extends TemplateScreen {
   ///
   Widget _buildWelcomeMessage() {
     return Container(
-      margin: const EdgeInsets.only(top: 36,bottom: 52),
+      margin: const EdgeInsets.only(top: 36, bottom: 52),
       child: const Text(
         'Welcome!',
         style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
@@ -75,7 +82,7 @@ class IntroductionScreen extends TemplateScreen {
   Widget _buildDropDown(Function onChanged) {
     return GetBuilder<IntroductionController>(
       builder: (IntroductionController controller) => Container(
-        margin: const EdgeInsets.only(bottom: 70,top: 20),
+        margin: const EdgeInsets.only(bottom: 70, top: 20),
         decoration: BoxDecoration(color: Colors.white, boxShadow: <BoxShadow>[
           BoxShadow(
             color: Colors.grey[300].withOpacity(0.5),
@@ -95,7 +102,7 @@ class IntroductionScreen extends TemplateScreen {
                 .map(
                   (Currency currency) => DropdownMenuItem<Currency>(
                     value: currency,
-                    child: Text(currency.currency),
+                    child: Text(currency.name),
                   ),
                 )
                 .toList(),

@@ -1,10 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+
 import 'package:mybudget/view/screen/add_transaction_scree.dart';
 import 'package:mybudget/view/screen/view_transaction_scree.dart';
 
+import 'package:mybudget/view/screen/change_currency_screen.dart';
+
 import 'view/screen/add_budget_screen.dart';
 import 'view/screen/home_screen.dart';
+import 'view/screen/initial_screen.dart';
 import 'view/screen/introduction_screen.dart';
 import 'view/screen/main_screen.dart';
 import 'view/screen/settings_screen.dart';
@@ -17,7 +21,8 @@ class Routes {
   ///Screen Routes
   ///
   ///
-  static const String SCREEN_MAIN = '/';
+  static const String SCREEN_INITIAL = '/';
+  static const String SCREEN_MAIN = '/main_screen';
   static const String SCREEN_INTRODUCTION = '/introduction_screen';
   static const String SCREEN_HOME = '/home_screen';
   static const String SCREEN_SETTINGS = '/settings_screen';
@@ -26,6 +31,8 @@ class Routes {
   static const String SCREEN_VIEW_BUDGET = '/view_budget_screen';
   static const String SCREEN_ADD_TRANSACTION = '/add_transaction_screen';
   static const String SCREEN_VIEW_TRANSACTION = '/view_transaction_screen';
+
+  static const String SCREEN_CHANGE_CURRENCY = '/change_currency_screen';
 
   //navigator key ------------------------------------------------------------
   /// set navigators key.
@@ -68,6 +75,10 @@ class Routes {
     Widget screen;
 
     switch (settings.name) {
+      case SCREEN_INITIAL:
+        screen = InitialScreen();
+        break;
+
       case SCREEN_MAIN:
         screen = MainScreen();
         break;
@@ -101,6 +112,11 @@ class Routes {
         break;
       case SCREEN_VIEW_TRANSACTION:
         screen = ViewTransactionScreen();
+        break;
+
+      case SCREEN_CHANGE_CURRENCY:
+        screen = ChangeCurrencyScreen();
+
         break;
     }
 
