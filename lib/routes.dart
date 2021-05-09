@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+
+import 'package:mybudget/view/screen/add_transaction_screen.dart';
+import 'package:mybudget/view/screen/view_transaction_scree.dart';
 import 'package:mybudget/view/screen/change_currency_screen.dart';
 
 import 'view/screen/add_budget_screen.dart';
@@ -25,6 +28,10 @@ class Routes {
   static const String SCREEN_TRANSACTIONS = '/transaction_screen';
   static const String SCREEN_ADD_BUDGET = '/add_budget_screen';
   static const String SCREEN_VIEW_BUDGET = '/view_budget_screen';
+
+  static const String SCREEN_ADD_TRANSACTION = '/add_transaction_screen';
+  static const String SCREEN_VIEW_TRANSACTION = '/view_transaction_screen';
+
   static const String SCREEN_CHANGE_CURRENCY = '/change_currency_screen';
 
   //navigator key ------------------------------------------------------------
@@ -100,8 +107,17 @@ class Routes {
         screen = ViewBudgetScreen();
         break;
 
+      case SCREEN_ADD_TRANSACTION:
+        screen = AddTransactionScreen();
+        break;
+
+      case SCREEN_VIEW_TRANSACTION:
+        screen = ViewTransactionScreen();
+        break;
+
       case SCREEN_CHANGE_CURRENCY:
         screen = ChangeCurrencyScreen();
+
         break;
     }
 
