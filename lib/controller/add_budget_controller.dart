@@ -16,11 +16,12 @@ class AddBudgetController extends BaseController {
 
   Future<void> save() async {
     final Account account = Account(
+        summaryId: monthlySummaryID(),
         accountId: randomID(),
         title: accountController.text,
         budget: double.parse(amountController.text),
         balance: double.parse(amountController.text),
-        user: userProvider.user);
+        userId: userProvider.user.userId);
     await _accountRepository.upsert(account);
     await _monthlySummaryRepository.updateMonthlySummary();
   }

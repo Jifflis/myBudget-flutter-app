@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:mybudget/repository/acount_repository.dart';
+import 'package:mybudget/util/date_util.dart';
 
 import '../enum/status.dart';
 import '../model/monthly_summary.dart';
@@ -19,6 +21,7 @@ class InitialController extends BaseController {
   SettingsRepository _settingsRepository;
   UserRepository _userRepository;
   MonthlySummaryRepository _monthlyRepository;
+  AccountRepository _accountRepository;
 
   Settings _settings;
 
@@ -47,14 +50,17 @@ class InitialController extends BaseController {
     //initialize repositories
     _initRepositories();
 
+    //initialize settings
+    _settings = await _settingsRepository.getSettings();
+
     //initialize user
     await _initUser();
 
     //initialize monthly summary
     await _initMonthlySummary();
 
-    //initialize settings
-    _settings = await _settingsRepository.getSettings();
+    //initialize account refresher
+    await _initAccountRefresher();
 
     //set complete status
     status = Status.COMPLETED;
@@ -81,6 +87,7 @@ class InitialController extends BaseController {
     _settingsRepository = SettingsRepository();
     _userRepository = UserRepository();
     _monthlyRepository = MonthlySummaryRepository();
+    _accountRepository = AccountRepository();
   }
 
   /// Initialize user
@@ -98,16 +105,51 @@ class InitialController extends BaseController {
   /// Initialize monthly summary
   ///
   Future<void> _initMonthlySummary() async {
-    final MonthlySummary summary = await _monthlyRepository.currentMonthlySummary();
-    print(summary);
+    final MonthlySummary summary =
+        await _monthlyRepository.currentMonthlySummary();
 
     if (summary == null) {
-      _monthlyRepository.upsert(MonthlySummary(
-        monthlySummaryId: monthlySummaryID(),
-        month: DateTime.now().month,
-        year: DateTime.now().year,
-        user: user,
-      ));
+      _monthlyRepository.upsert(
+        MonthlySummary(
+          monthlySummaryId: monthlySummaryID(),
+          month: DateTime.now().month,
+          year: DateTime.now().year,
+          userId: user.userId,
+        ),
+      );
+    }
+  }
+
+  Future<void> _initAccountRefresher() async {
+    if (settings == null || settings.refreshDate == null) {
+      return;
+    }
+
+    while (DateTime.now().isAtSameMomentAs(settings.refreshDate) ||
+        DateTime.now().isAfter(settings.refreshDate)) {
+      final DateTime newRefreshDate =
+          getNextMonthLastDate(settings.refreshDate);
+
+      //update account table
+      await _accountRepository.monthlyRefresh(
+        monthlySummaryID(date: settings.refreshDate),
+        monthlySummaryID(date: newRefreshDate),
+      );
+
+      //update monthly summary table
+      await _monthlyRepository.upsert(
+        MonthlySummary(
+          monthlySummaryId: monthlySummaryID(date: newRefreshDate),
+          month: newRefreshDate.month,
+          year: newRefreshDate.year,
+          userId: user.userId,
+        ),
+      );
+      await _monthlyRepository.updateMonthlySummary();
+
+      //update settings refresh date
+      settings.refreshDate = newRefreshDate;
+      await _settingsRepository.upsert(settings);
     }
   }
 }

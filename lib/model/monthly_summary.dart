@@ -14,7 +14,7 @@ class MonthlySummary extends BaseModel {
     this.adjusted = 0.0,
     this.year,
     this.month,
-    this.user,
+    this.userId,
     DateTime createdAt,
     DateTime updateAt,
     Map<String, dynamic> json,
@@ -34,7 +34,7 @@ class MonthlySummary extends BaseModel {
   double expense;
   double balance;
   double adjusted;
-  User user;
+  String userId;
 
   @override
   void fromJson(Map<String, dynamic> json) {
@@ -47,7 +47,7 @@ class MonthlySummary extends BaseModel {
     adjusted = json[DBKey.ADJUSTED];
     createdAt = DateTime.tryParse(json[DBKey.CREATED_AT] ?? 'null');
     updatedAT = DateTime.tryParse(json[DBKey.UPDATED_AT] ?? 'null');
-    user = json[DBKey.USER] != null ? User(json: json[DBKey.USER]) : null;
+    userId =  json[DBKey.USER_ID];
   }
 
   @override
@@ -62,12 +62,12 @@ class MonthlySummary extends BaseModel {
     json[DBKey.ADJUSTED] = adjusted;
     json[DBKey.CREATED_AT] = createdAt?.toString();
     json[DBKey.UPDATED_AT] = updatedAT?.toString();
-    json[DBKey.USER_ID] = user?.userId;
+    json[DBKey.USER_ID] =userId;
     return filterToJson(json);
   }
 
   @override
   String toString() {
-    return 'MonthlySummary{accountList: $accountList, monthlySummaryId: $monthlySummaryId, month: $month, year: $year, budget: $budget, expense: $expense, balance: $balance, adjusted: $adjusted, createdAT: $createdAt, updatedAT: $updatedAT ,user:$user ,accounts ${accountList?.toString()}';
+    return 'MonthlySummary{accountList: $accountList, monthlySummaryId: $monthlySummaryId, month: $month, year: $year, budget: $budget, expense: $expense, balance: $balance, adjusted: $adjusted, createdAT: $createdAt, updatedAT: $updatedAT ,accounts ${accountList?.toString()}';
   }
 }
