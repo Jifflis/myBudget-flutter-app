@@ -1,6 +1,4 @@
-import 'package:mybudget/constant/db_keys.dart';
-import 'package:mybudget/model/user.dart';
-
+import '../constant/db_keys.dart';
 import 'account.dart';
 import 'base_model.dart';
 
@@ -47,7 +45,7 @@ class MonthlySummary extends BaseModel {
     adjusted = json[DBKey.ADJUSTED];
     createdAt = DateTime.tryParse(json[DBKey.CREATED_AT] ?? 'null');
     updatedAT = DateTime.tryParse(json[DBKey.UPDATED_AT] ?? 'null');
-    userId =  json[DBKey.USER_ID];
+    userId = json[DBKey.USER_ID];
   }
 
   @override
@@ -62,7 +60,7 @@ class MonthlySummary extends BaseModel {
     json[DBKey.ADJUSTED] = adjusted;
     json[DBKey.CREATED_AT] = createdAt?.toString();
     json[DBKey.UPDATED_AT] = updatedAT?.toString();
-    json[DBKey.USER_ID] =userId;
+    json[DBKey.USER_ID] = userId;
     return filterToJson(json);
   }
 

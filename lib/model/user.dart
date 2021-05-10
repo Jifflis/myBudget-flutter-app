@@ -1,5 +1,5 @@
-import 'package:mybudget/constant/db_keys.dart';
-import 'package:mybudget/util/id_util.dart';
+import '../constant/db_keys.dart';
+import '../util/id_util.dart';
 
 class User {
   User({
@@ -23,7 +23,7 @@ class User {
   DateTime createdAt;
   DateTime updatedAt;
 
-  static User factory(){
+  static User factory() {
     return User(
       userId: randomID(),
       name: 'user',
@@ -44,7 +44,7 @@ class User {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String,dynamic> json = <String,dynamic>{};
+    final Map<String, dynamic> json = <String, dynamic>{};
     json[DBKey.USER_ID] = userId;
     json[DBKey.NAME] = name;
     json[DBKey.EMAIL] = email;
