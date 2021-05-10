@@ -4,9 +4,9 @@ import '../model/account.dart';
 
 class AddTransactionController extends GetxController {
   List<Account> accountList = <Account>[
-    Account(title: 'Appartment Rental'),
-    Account(title: 'Food'),
-    Account(title: 'Fare'),
+    Account(title: 'Appartment Rental', accountId: null,userId: null,summaryId: null),
+    Account(title: 'Food', accountId: null,userId: null,summaryId: null),
+    Account(title: 'Fare', accountId: null,userId: null,summaryId: null),
   ];
   Account _selectedAccount;
 

@@ -18,7 +18,12 @@ class ResourceHelper {
         Map<String, dynamic> json,
         LocalProvider localProvider,
       ) =>
-          Account(json: json),
+          Account(
+              json: json,
+              accountId: null,
+              summaryId: null,
+              userId: null,
+              title: null),
       name: DBKey.ACCOUNT,
       toMap: (Account account) => account.toJson(),
     ),
@@ -71,10 +76,6 @@ class ResourceHelper {
         Map<String, dynamic> json,
         LocalProvider localProvider,
       ) async {
-        final User user = await localProvider.get<User>(
-          where: '${DBKey.USER_ID} =?',
-          whereArgs: <String>[json[DBKey.USER_ID]],
-        );
 
         final List<Account> accounts = await localProvider.list<Account>(
           where: '${DBKey.MONTHLY_SUMMARY_ID}=?',
@@ -84,7 +85,6 @@ class ResourceHelper {
         );
 
         final MonthlySummary summary = MonthlySummary(json: json);
-        summary.user = user;
         summary.accountList = accounts;
 
         return summary;
