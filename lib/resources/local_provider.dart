@@ -116,7 +116,7 @@ class LocalProvider {
     final List<T> list = <T>[];
 
     for (final Map<String, dynamic> map in maps) {
-      list.add(def.builder(map, this) as T);
+      list.add(await def.builder(map, this) as T);
     }
 
     return list;

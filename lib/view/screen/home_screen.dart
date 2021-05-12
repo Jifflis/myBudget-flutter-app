@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:mybudget/view/screen/template_screen.dart';
 
 import '../../constant/custom_colors.dart';
 import '../../controller/home_controller.dart';
@@ -9,20 +8,45 @@ import '../../model/account.dart';
 import '../../model/monthly_summary.dart';
 import '../../routes.dart';
 import '../../util/number_util.dart';
+import '../../view/screen/template_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final HomeController controller = Get.put(HomeController());
+
+    return Scaffold(
+      body: GetBuilder<HomeController>(
+          init: controller,
+          builder: (_) {
+            return controller.isLoading
+                ? Container()
+                : PageViewer(monthlyBudgetList: controller.monthlyBudgetList);
+          }),
+    );
+  }
+}
+
+/// PageViewer
+///
+///
+class PageViewer extends StatelessWidget {
+  const PageViewer({Key key, @required this.monthlyBudgetList})
+      : super(key: key);
+
+  final List<MonthlySummary> monthlyBudgetList;
+
+  @override
+  Widget build(BuildContext context) {
     return PageView(
       scrollDirection: Axis.horizontal,
       reverse: true,
       children: <Widget>[
-        ...controller.monthlyBudgetList
+        ...monthlyBudgetList
             .map(
               (MonthlySummary e) => HomePageTemplate(
                 monthlyBudgetModel: e,
-                index: controller.monthlyBudgetList.indexOf(e),
+                index: monthlyBudgetList.indexOf(e),
               ),
             )
             .toList(),
@@ -58,7 +82,7 @@ class HomePageTemplate extends TemplateScreen {
       children: <Widget>[
         _buildHeader(monthlyBudgetModel),
         _buildDivider(),
-        _buildItems(),
+        if (monthlyBudgetModel.accountList != null) _buildItems(),
       ],
     );
   }
