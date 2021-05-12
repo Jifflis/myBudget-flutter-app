@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:mybudget/view/screen/template_screen.dart';
+import 'package:mybudget/enum/status.dart';
 
 import '../../constant/custom_colors.dart';
 import '../../controller/home_controller.dart';
@@ -9,20 +9,45 @@ import '../../model/account.dart';
 import '../../model/monthly_summary.dart';
 import '../../routes.dart';
 import '../../util/number_util.dart';
+import '../../view/screen/template_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final HomeController controller = Get.put(HomeController());
+
+    return Scaffold(
+      body: GetBuilder<HomeController>(
+          init: controller,
+          builder: (_) {
+            return controller.status == Status.LOADING
+                ? Container()
+                : PageViewer(monthlyBudgetList: controller.monthlyBudgetList);
+          }),
+    );
+  }
+}
+
+/// PageViewer
+///
+///
+class PageViewer extends StatelessWidget {
+  const PageViewer({Key key, @required this.monthlyBudgetList})
+      : super(key: key);
+
+  final List<MonthlySummary> monthlyBudgetList;
+
+  @override
+  Widget build(BuildContext context) {
     return PageView(
       scrollDirection: Axis.horizontal,
       reverse: true,
       children: <Widget>[
-        ...controller.monthlyBudgetList
+        ...monthlyBudgetList
             .map(
               (MonthlySummary e) => HomePageTemplate(
                 monthlyBudgetModel: e,
-                index: controller.monthlyBudgetList.indexOf(e),
+                index: monthlyBudgetList.indexOf(e),
               ),
             )
             .toList(),
@@ -182,21 +207,34 @@ class HomePageTemplate extends TemplateScreen {
   /// Details section
   ///
   ///
-  Widget _buildItems() => Expanded(
-        child: Container(
-          padding: EdgeInsets.zero,
-          margin: EdgeInsets.zero,
-          child: ListView.builder(
-              itemBuilder: (BuildContext context, int index) {
-                return BudgetItem(
-                  index: index,
-                  budget: monthlyBudgetModel.accountList[index],
-                  isLoading: index == monthlyBudgetModel.accountList.length - 1,
-                );
-              },
-              itemCount: monthlyBudgetModel.accountList.length),
-        ),
-      );
+  Widget _buildItems() => monthlyBudgetModel.accountList != null
+      ? Expanded(
+          child: Container(
+            padding: EdgeInsets.zero,
+            margin: EdgeInsets.zero,
+            child: ListView.builder(
+                itemBuilder: (BuildContext context, int index) {
+                  return BudgetItem(
+                    index: index,
+                    budget: monthlyBudgetModel.accountList[index],
+                    isLoading:
+                        index == monthlyBudgetModel.accountList.length - 1,
+                  );
+                },
+                itemCount: monthlyBudgetModel.accountList.length),
+          ),
+        )
+      : const Expanded(
+          child: Center(
+            child: Text(
+              'No Data',
+              style: TextStyle(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30),
+            ),
+          ),
+        );
 }
 
 /// Budget Item

@@ -19,7 +19,7 @@ class MonthlySummaryRepository {
     );
   }
 
-  Future<void> upsert(MonthlySummary summary) async{
+  Future<void> upsert(MonthlySummary summary) async {
     await _localProvider.upsert<MonthlySummary>(summary);
   }
 
@@ -55,5 +55,9 @@ class MonthlySummaryRepository {
         ],
         where: '${DBKey.MONTHLY_SUMMARY_ID}=?',
         whereArgs: <dynamic>[monthlySummaryID()]);
+  }
+
+  Future<List<MonthlySummary>> getMonthlySummaryList() async {
+    return await _localProvider.list<MonthlySummary>();
   }
 }
