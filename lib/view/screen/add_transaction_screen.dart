@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:mybudget/controller/add_transaction_controller.dart';
+import 'package:mybudget/view/widget/add_transaction_dropdown.dart';
 import 'package:get/get.dart';
 
-import '../../controller/add_budget_controller.dart';
+import '../../model/account.dart';
 import '../widget/budget_button.dart';
 import '../widget/budget_field_label.dart';
 import '../widget/budget_text_field.dart';
 import 'template_screen.dart';
 
-class AddBudgetScreen extends TemplateScreen {
+class AddTransactionScreen extends TemplateScreen {
   @override
   Widget getLeading(BuildContext context) => IconButton(
         icon: const Icon(Icons.arrow_back_ios_rounded),
@@ -15,11 +17,12 @@ class AddBudgetScreen extends TemplateScreen {
       );
 
   @override
-  String get title => 'Add Budget Account';
+  String get title => 'Add Transaction';
 
   @override
   Widget buildBody(BuildContext context) {
-    final AddBudgetController controller = Get.put(AddBudgetController());
+    final AddTransactionController controller =
+        Get.put(AddTransactionController());
     return Padding(
       padding: const EdgeInsets.fromLTRB(40, 0.0, 40, 10),
       child: SingleChildScrollView(
@@ -27,30 +30,23 @@ class AddBudgetScreen extends TemplateScreen {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             const SizedBox(height: 58),
-            const BudgetFieldLabel(label: 'Account name'),
+            const BudgetFieldLabel(label: 'Budget Account'),
             const SizedBox(height: 15),
-            BudgetTextField(
-              controller: controller.accountController,
-              hintText: 'Enter account name',
-            ),
-            const SizedBox(height: 30),
-            const BudgetFieldLabel(label: 'Budget amount'),
+            AddTransactionDropdown((Account value) {
+              FocusScope.of(context).requestFocus(FocusNode());
+              controller.selectedCurrency = value;
+            }),
             const SizedBox(height: 15),
-            BudgetTextField(
-              controller: controller.amountController,
-              hintText: 'Enter budget amount',
-            ),
+            const BudgetFieldLabel(label: 'Amount'),
+            const SizedBox(height: 15),
+            const BudgetTextField(hintText: 'Enter Amount'),
             const SizedBox(height: 30),
-            Row(
-              children: <Widget>[
-                const BudgetFieldLabel(label: 'Auto deduct'),
-                Checkbox(value: false, onChanged: (bool value) {}),
-              ],
-            ),
+            const BudgetFieldLabel(label: 'Add Remarks'),
+            const SizedBox(height: 15),
+            const BudgetTextField(hintText: 'Enter Add Remarks'),
             const SizedBox(height: 30),
-            BudgetButton(() {
-              controller.save();
-            }, 'Save'),
+            const SizedBox(height: 30),
+            BudgetButton(() {}, 'Save'),
           ],
         ),
       ),

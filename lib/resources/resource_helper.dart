@@ -1,3 +1,5 @@
+import 'package:mybudget/model/monthly_summary.dart';
+
 import '../constant/db_keys.dart';
 import '../model/account.dart';
 import '../model/currency.dart';
@@ -15,7 +17,13 @@ class ResourceHelper {
       builder: (
         Map<String, dynamic> json,
         LocalProvider localProvider,
-      ) => Account(json: json),
+      ) =>
+          Account(
+              json: json,
+              accountId: null,
+              summaryId: null,
+              userId: null,
+              title: null),
       name: DBKey.ACCOUNT,
       toMap: (Account account) => account.toJson(),
     ),
@@ -47,7 +55,8 @@ class ResourceHelper {
       builder: (
         Map<String, dynamic> json,
         LocalProvider localProvider,
-      ) => User(json: json),
+      ) =>
+          User(json: json),
       name: DBKey.USER,
       toMap: (User user) => user.toJson(),
     ),
@@ -56,9 +65,32 @@ class ResourceHelper {
       builder: (
         Map<String, dynamic> json,
         LocalProvider localProvider,
-      ) => Currency(json: json),
+      ) =>
+          Currency(json: json),
       name: DBKey.CURRENCY,
       toMap: (Currency currency) => currency.toJson(),
+    ),
+    ResourceDefinition(
+      type: MonthlySummary,
+      builder: (
+        Map<String, dynamic> json,
+        LocalProvider localProvider,
+      ) async {
+
+        final List<Account> accounts = await localProvider.list<Account>(
+          where: '${DBKey.MONTHLY_SUMMARY_ID}=?',
+          whereArgs: <dynamic>[
+            json[DBKey.MONTHLY_SUMMARY_ID],
+          ],
+        );
+
+        final MonthlySummary summary = MonthlySummary(json: json);
+        summary.accountList = accounts;
+
+        return summary;
+      },
+      name: DBKey.MONTHLY_SUMMARY,
+      toMap: (MonthlySummary summary) => summary.toJson(),
     ),
   ];
 

@@ -1,11 +1,16 @@
 
 /// return last date of the month
 ///
-DateTime getLastDateOfMonth(){
-  final DateTime dateNow = DateTime.now();
+DateTime getLastDateOfMonth({DateTime date}){
+  final DateTime dateNow = date??DateTime.now();
   return DateTime(dateNow.year, dateNow.month + 1, 0);
 }
 
+/// return next last date of the month
+///
+DateTime getNextMonthLastDate(DateTime date){
+  return DateTime(date.year, date.month + 2, 0);
+}
 
 /// Simplify Date
 /// expected date format YYYY-MM-DD
