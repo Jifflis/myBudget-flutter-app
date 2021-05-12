@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:mybudget/enum/status.dart';
 
 import '../../constant/custom_colors.dart';
 import '../../controller/home_controller.dart';
@@ -19,7 +20,7 @@ class HomeScreen extends StatelessWidget {
       body: GetBuilder<HomeController>(
           init: controller,
           builder: (_) {
-            return controller.isLoading
+            return controller.status == Status.LOADING
                 ? Container()
                 : PageViewer(monthlyBudgetList: controller.monthlyBudgetList);
           }),
