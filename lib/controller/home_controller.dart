@@ -14,7 +14,6 @@ class HomeController extends BaseController {
   @override
   void onInit() {
     //set loading status
-    status = Status.LOADING;
     _initMonthlySummaryList();
     super.onInit();
   }
@@ -27,9 +26,9 @@ class HomeController extends BaseController {
   /// Initialize [_monthlyBudgetList] data
   ///
   Future<void> _initMonthlySummaryList() async {
+    status = Status.LOADING;
     _monthlyBudgetList =
         await _monthlySummaryRepository.getMonthlySummaryList();
     status = Status.COMPLETED;
-    update();
   }
 }
