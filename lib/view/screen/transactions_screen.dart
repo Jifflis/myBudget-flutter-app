@@ -260,7 +260,8 @@ class TransactionItem extends StatelessWidget {
   ///
   Widget _buildAction() => InkWell(
         onTap: () {
-          //
+          Routes.pushNamed(Routes.SCREEN_ADD_TRANSACTION,
+              navigator: Routes.homeNavigator);
         },
         child: Container(
             width: 25,
