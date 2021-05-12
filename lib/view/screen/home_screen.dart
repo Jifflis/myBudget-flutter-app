@@ -83,7 +83,7 @@ class HomePageTemplate extends TemplateScreen {
       children: <Widget>[
         _buildHeader(monthlyBudgetModel),
         _buildDivider(),
-        if (monthlyBudgetModel.accountList != null) _buildItems(),
+        _buildItems(),
       ],
     );
   }
@@ -207,21 +207,34 @@ class HomePageTemplate extends TemplateScreen {
   /// Details section
   ///
   ///
-  Widget _buildItems() => Expanded(
-        child: Container(
-          padding: EdgeInsets.zero,
-          margin: EdgeInsets.zero,
-          child: ListView.builder(
-              itemBuilder: (BuildContext context, int index) {
-                return BudgetItem(
-                  index: index,
-                  budget: monthlyBudgetModel.accountList[index],
-                  isLoading: index == monthlyBudgetModel.accountList.length - 1,
-                );
-              },
-              itemCount: monthlyBudgetModel.accountList.length),
-        ),
-      );
+  Widget _buildItems() => monthlyBudgetModel.accountList != null
+      ? Expanded(
+          child: Container(
+            padding: EdgeInsets.zero,
+            margin: EdgeInsets.zero,
+            child: ListView.builder(
+                itemBuilder: (BuildContext context, int index) {
+                  return BudgetItem(
+                    index: index,
+                    budget: monthlyBudgetModel.accountList[index],
+                    isLoading:
+                        index == monthlyBudgetModel.accountList.length - 1,
+                  );
+                },
+                itemCount: monthlyBudgetModel.accountList.length),
+          ),
+        )
+      : const Expanded(
+          child: Center(
+            child: Text(
+              'No Data',
+              style: TextStyle(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30),
+            ),
+          ),
+        );
 }
 
 /// Budget Item

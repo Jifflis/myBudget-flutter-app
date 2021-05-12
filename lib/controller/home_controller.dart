@@ -19,7 +19,7 @@ class HomeController extends BaseController {
     super.onInit();
   }
 
-  /// get monthlyBudgetList
+  /// get unmodifiable [_monthlyBudgetList]
   ///
   UnmodifiableListView<MonthlySummary> get monthlyBudgetList =>
       UnmodifiableListView<MonthlySummary>(_monthlyBudgetList);
