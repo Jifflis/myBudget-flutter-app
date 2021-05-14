@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/state_manager.dart';
-import 'package:mybudget/model/account.dart';
-import 'package:mybudget/repository/acount_repository.dart';
-import 'package:mybudget/util/number_util.dart';
 import 'package:oktoast/oktoast.dart';
+
+import '../model/account.dart';
+import '../repository/acount_repository.dart';
+import '../util/number_util.dart';
 
 class ViewBudgetController extends GetxController {
   bool _isFieldEnabled = false;
