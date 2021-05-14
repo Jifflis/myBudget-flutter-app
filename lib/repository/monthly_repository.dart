@@ -54,7 +54,7 @@ class MonthlySummaryRepository {
     return await _localProvider.get<MonthlySummary>(
         tableName: DBKey.ACCOUNT,
         columns: <String>[
-          'sum(${DBKey.BUDGET}) as ${DBKey.BALANCE}',
+          'sum(${DBKey.BALANCE}) as ${DBKey.BALANCE}',
           'sum(${DBKey.EXPENSE}) as ${DBKey.EXPENSE}',
           'sum(${DBKey.BUDGET}) as ${DBKey.BUDGET}',
           DBKey.MONTHLY_SUMMARY_ID,

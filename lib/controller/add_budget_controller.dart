@@ -43,8 +43,13 @@ class AddBudgetController extends BaseController {
           autoDeduct: isAutoDeduct,
           userId: userProvider.user.userId);
 
+      if (isAutoDeduct) {
+        account.expense = account.budget;
+        account.balance = 0.0;
+      }
+
       await _accountRepository.upsert(account);
-      await _monthlySummaryRepository.updateMonthlySummary();
+
 
       showToast('Budget account successfully added',
           position: ToastPosition.bottom);

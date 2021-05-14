@@ -29,6 +29,7 @@ class HomeController extends BaseController {
   ///
   Future<void> _initMonthlySummaryList() async {
     status = Status.LOADING;
+    await _monthlySummaryRepository.updateMonthlySummary();
     _monthlyBudgetList =
         await _monthlySummaryRepository.getMonthlySummaryList();
     status = Status.COMPLETED;

@@ -218,12 +218,18 @@ class HomePageTemplate extends TemplateScreen {
             margin: EdgeInsets.zero,
             child: ListView.builder(
                 itemBuilder: (BuildContext context, int index) {
-                  return BudgetItem(
-                    index: index,
-                    budget: monthlyBudgetModel.accountList[index],
-                    currency: currency,
-                    isLoading:
-                        index == monthlyBudgetModel.accountList.length - 1,
+                  return InkWell(
+                    onTap: () {
+                      Routes.pushNamed(Routes.SCREEN_ADD_TRANSACTION,
+                          navigator: Routes.homeNavigator);
+                    },
+                    child: BudgetItem(
+                      index: index,
+                      budget: monthlyBudgetModel.accountList[index],
+                      currency: currency,
+                      isLoading:
+                          index == monthlyBudgetModel.accountList.length - 1,
+                    ),
                   );
                 },
                 itemCount: monthlyBudgetModel.accountList.length),
@@ -331,8 +337,9 @@ class BudgetItem extends StatelessWidget {
                   'Details',
                   textAlign: TextAlign.right,
                   style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.normal,),
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                  ),
                 ),
               ),
             ),
@@ -384,7 +391,9 @@ class BudgetItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             _buildTitle(),
-            const SizedBox(height: 8,),
+            const SizedBox(
+              height: 8,
+            ),
             _buildSubtitle(),
           ],
         ),
