@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../../constant/custom_colors.dart';
 import '../../controller/main_controller.dart';
+import '../../enum/status.dart';
 import '../../routes.dart';
 
 class MainScreen extends StatelessWidget {
@@ -22,14 +23,18 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final MainController controller = Get.put(MainController());
-    return Obx(
-      () => Scaffold(
-        body: _navigationScreens[controller.selectedBottomIndex.value],
-        bottomNavigationBar: _buildBottomNavigation(
-          context,
-          controller,
-        ),
-      ),
+    return GetBuilder<MainController>(
+      builder: (_) => controller.status == Status.LOADING
+          ? Container()
+          : Obx(
+              () => Scaffold(
+                body: _navigationScreens[controller.selectedBottomIndex.value],
+                bottomNavigationBar: _buildBottomNavigation(
+                  context,
+                  controller,
+                ),
+              ),
+            ),
     );
   }
 

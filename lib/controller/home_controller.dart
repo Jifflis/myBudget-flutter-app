@@ -44,4 +44,6 @@ class HomeController extends BaseController {
     _monthlyBudgetList.replaceRange(0, 0, <MonthlySummary>[monthlySummary]);
     update();
   }
+
+  String getCurrency() => settingsProvider.settings.currency.name;
 }

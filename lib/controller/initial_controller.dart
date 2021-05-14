@@ -1,22 +1,26 @@
 import 'package:get/get.dart';
-import 'package:mybudget/repository/acount_repository.dart';
-import 'package:mybudget/util/date_util.dart';
 
 import '../enum/status.dart';
 import '../model/monthly_summary.dart';
 import '../model/settings.dart';
 import '../model/user.dart';
 import '../provider/user_provider.dart';
+import '../repository/acount_repository.dart';
 import '../repository/monthly_repository.dart';
 import '../repository/settings_repository.dart';
 import '../repository/user_repository.dart';
 import '../resources/local_db.dart';
 import '../routes.dart';
+import '../util/date_util.dart';
 import '../util/id_util.dart';
 import 'base_controller.dart';
 
 class InitialController extends BaseController {
-  InitialController() : super(initializeUser: false);
+  InitialController()
+      : super(
+          initializeUser: false,
+          provideSettings: false,
+        );
 
   SettingsRepository _settingsRepository;
   UserRepository _userRepository;
