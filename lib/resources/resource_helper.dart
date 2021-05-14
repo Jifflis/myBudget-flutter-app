@@ -1,10 +1,10 @@
-import 'package:mybudget/model/monthly_summary.dart';
-
 import '../constant/db_keys.dart';
 import '../model/account.dart';
 import '../model/currency.dart';
+import '../model/monthly_summary.dart';
 import '../model/settings.dart';
 import '../model/user.dart';
+import '../util/id_util.dart';
 import 'local_provider.dart';
 import 'resource_definition.dart';
 
@@ -76,11 +76,10 @@ class ResourceHelper {
         Map<String, dynamic> json,
         LocalProvider localProvider,
       ) async {
-
         final List<Account> accounts = await localProvider.list<Account>(
           where: '${DBKey.MONTHLY_SUMMARY_ID}=?',
           whereArgs: <dynamic>[
-            json[DBKey.MONTHLY_SUMMARY_ID],
+            json[DBKey.MONTHLY_SUMMARY_ID] ?? monthlySummaryID(),
           ],
         );
 

@@ -38,8 +38,9 @@ class HomeController extends BaseController {
   ///
   ///
   Future<void> updateCurrentMonthlyBudgetList() async {
+    await _monthlySummaryRepository.updateMonthlySummary();
     final MonthlySummary monthlySummary =
-        await _monthlySummaryRepository.getUpdatedMonthlySummary();
+        await _monthlySummaryRepository.currentMonthlySummary();
     _monthlyBudgetList.replaceRange(0, 0, <MonthlySummary>[monthlySummary]);
     update();
   }
