@@ -3,7 +3,6 @@ import 'package:oktoast/oktoast.dart';
 
 import '../model/account.dart';
 import '../repository/acount_repository.dart';
-import '../repository/monthly_repository.dart';
 import '../util/id_util.dart';
 import 'base_controller.dart';
 
@@ -13,8 +12,6 @@ class AddBudgetController extends BaseController {
   TextEditingController amountController = TextEditingController();
 
   final AccountRepository _accountRepository = AccountRepository();
-  final MonthlySummaryRepository _monthlySummaryRepository =
-      MonthlySummaryRepository();
 
   bool _isAutoDeduct = false;
 
@@ -49,7 +46,6 @@ class AddBudgetController extends BaseController {
       }
 
       await _accountRepository.upsert(account);
-
 
       showToast('Budget account successfully added',
           position: ToastPosition.bottom);
