@@ -16,8 +16,6 @@ class ViewBudgetController extends GetxController {
   final TextEditingController budgetAmountController = TextEditingController();
 
   final AccountRepository _accountRepository = AccountRepository();
-  final MonthlySummaryRepository _monthlySummaryRepository =
-      MonthlySummaryRepository();
 
   /// set data [_isFieldEnabled]
   ///
@@ -59,7 +57,7 @@ class ViewBudgetController extends GetxController {
       _account.autoDeduct = isAutoDeduct;
       _account.balance = _account.budget - _account.expense;
 
-      if(isAutoDeduct){
+      if (isAutoDeduct) {
         _account.expense = _account.budget;
         _account.balance = 0.0;
       }
