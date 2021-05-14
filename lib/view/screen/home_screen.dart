@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:mybudget/enum/status.dart';
+import 'package:mybudget/util/date_util.dart';
 
 import '../../constant/custom_colors.dart';
 import '../../controller/home_controller.dart';
@@ -18,12 +19,13 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       body: GetBuilder<HomeController>(
-          init: controller,
-          builder: (_) {
-            return controller.status == Status.LOADING
-                ? Container()
-                : PageViewer(monthlyBudgetList: controller.monthlyBudgetList);
-          }),
+        init: controller,
+        builder: (_) {
+          return controller.status == Status.LOADING
+              ? Container()
+              : PageViewer(monthlyBudgetList: controller.monthlyBudgetList);
+        },
+      ),
     );
   }
 }
@@ -139,7 +141,7 @@ class HomePageTemplate extends TemplateScreen {
   ///
   ///
   String _buildTitle(int index, MonthlySummary model) {
-    return index == 0 ? 'My Budget' : '${model.month} ${model.year}';
+    return index == 0 ? 'My Budget' : '${getMonth(model.month)} ${model.year}';
   }
 
   ///  divider with drop down shadow
