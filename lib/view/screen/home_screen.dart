@@ -82,7 +82,7 @@ class HomePageTemplate extends TemplateScreen {
     final HomeController controller = Get.find();
     return Column(
       children: <Widget>[
-        _buildHeader(monthlyBudgetModel, 'Php'),
+        _buildHeader(monthlyBudgetModel, controller.getCurrency()),
         _buildDivider(),
         _buildItems(),
       ],
