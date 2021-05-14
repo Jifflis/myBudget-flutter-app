@@ -1,3 +1,5 @@
+import 'package:mybudget/util/id_util.dart';
+
 import '../constant/db_keys.dart';
 import '../model/account.dart';
 import '../resources/local_provider.dart';
@@ -27,13 +29,19 @@ class AccountRepository {
   Future<void> monthlyRefresh(
       String oldMonthlySummaryID, String newMonthlySummaryID) async {
     final List<Account> previousAccounts = await _localProvider.list<Account>(
-        where: '$DBKey.MONTHLY_SUMMARY_ID=?',
+        where: '${DBKey.MONTHLY_SUMMARY_ID}=?',
         whereArgs: <dynamic>[oldMonthlySummaryID]);
 
     for (final Account account in previousAccounts) {
+      account.accountId = randomID();
       account.balance = account.budget;
-      account.expense = 0;
+      account.expense = 0.0;
       account.summaryId = newMonthlySummaryID;
+
+      if(account.autoDeduct){
+        account.expense = account.budget;
+        account.balance = 0.0;
+      }
       await upsert(account);
     }
   }

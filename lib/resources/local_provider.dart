@@ -40,6 +40,8 @@ class LocalProvider {
     return await db.update(
       def.name,
       def.toMap(data),
+      where: where,
+      whereArgs: whereArgs,
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }

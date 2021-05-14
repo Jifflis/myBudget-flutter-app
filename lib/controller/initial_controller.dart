@@ -113,7 +113,7 @@ class InitialController extends BaseController {
         await _monthlyRepository.currentMonthlySummary();
 
     if (summary == null) {
-      _monthlyRepository.upsert(
+      await _monthlyRepository.upsert(
         MonthlySummary(
           monthlySummaryId: monthlySummaryID(),
           month: DateTime.now().month,
