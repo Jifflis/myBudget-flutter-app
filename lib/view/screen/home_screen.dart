@@ -79,9 +79,10 @@ class HomePageTemplate extends TemplateScreen {
 
   @override
   Widget buildBody(BuildContext context) {
+    final HomeController controller = Get.find();
     return Column(
       children: <Widget>[
-        _buildHeader(monthlyBudgetModel),
+        _buildHeader(monthlyBudgetModel, 'Php'),
         _buildDivider(),
         _buildItems(),
       ],
@@ -163,7 +164,7 @@ class HomePageTemplate extends TemplateScreen {
   /// header section
   ///
   ///
-  Widget _buildHeader(MonthlySummary model) => Column(
+  Widget _buildHeader(MonthlySummary model, String currency) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           const SizedBox(height: 20),
@@ -183,9 +184,9 @@ class HomePageTemplate extends TemplateScreen {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              const Text(
-                'Php',
-                style: TextStyle(fontSize: 12),
+              Text(
+                currency,
+                style: const TextStyle(fontSize: 12),
               ),
               const SizedBox(
                 width: 12,

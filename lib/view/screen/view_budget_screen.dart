@@ -67,7 +67,7 @@ class ViewBudgetScreen extends TemplateScreen {
                                 FocusScope.of(context).unfocus();
                                 controller.edit();
                               }),
-                          const SizedBox(width: 10),
+                          const SizedBox(width: 20),
                           _textButton(
                               label: 'Delete',
                               function: () {
@@ -132,7 +132,8 @@ class ViewBudgetScreen extends TemplateScreen {
       onTap: function,
       child: Text(
         label,
-        style: const TextStyle(color: Colors.black87),
+        style: const TextStyle(
+            color: Colors.black87, fontSize: 16, fontWeight: FontWeight.bold),
       ),
     );
   }
