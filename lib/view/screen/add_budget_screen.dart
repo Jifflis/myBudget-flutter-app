@@ -12,7 +12,11 @@ class AddBudgetScreen extends TemplateScreen {
   @override
   Widget getLeading(BuildContext context) => IconButton(
         icon: const Icon(Icons.arrow_back_ios_rounded),
-        onPressed: () => Navigator.pop(context),
+        onPressed: () {
+          final AddBudgetController controller = Get.find();
+          controller.resetFields();
+          Navigator.pop(context);
+        },
       );
 
   @override
@@ -44,9 +48,14 @@ class AddBudgetScreen extends TemplateScreen {
                     const BudgetFieldLabel(label: 'Budget amount'),
                     const SizedBox(height: 15),
                     BudgetTextField(
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: true),
+                      textInputFormatterList: <FilteringTextInputFormatter>[
+                        FilteringTextInputFormatter.allow(
+                            RegExp(r'^\d+\.?\d{0,2}')),
+                      ],
                       controller: controller.amountController,
                       hintText: 'Enter budget amount',
-                      keyboardType: TextInputType.number,
                       validator: controller.textFieldValidator,
                     ),
                     const SizedBox(height: 30),

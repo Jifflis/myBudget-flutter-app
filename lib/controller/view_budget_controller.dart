@@ -3,6 +3,7 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/state_manager.dart';
 import 'package:mybudget/model/account.dart';
 import 'package:mybudget/repository/acount_repository.dart';
+import 'package:mybudget/repository/monthly_repository.dart';
 import 'package:mybudget/util/number_util.dart';
 import 'package:oktoast/oktoast.dart';
 
@@ -15,6 +16,8 @@ class ViewBudgetController extends GetxController {
   final TextEditingController budgetAmountController = TextEditingController();
 
   final AccountRepository _accountRepository = AccountRepository();
+  final MonthlySummaryRepository _monthlySummaryRepository =
+      MonthlySummaryRepository();
 
   /// set data [_isFieldEnabled]
   ///
@@ -56,6 +59,7 @@ class ViewBudgetController extends GetxController {
       _account.autoDeduct = isAutoDeduct;
 
       await _accountRepository.upsert(_account);
+      await _monthlySummaryRepository.getUpdatedMonthlySummary();
 
       showToast('Budget account successfully updated',
           position: ToastPosition.bottom);

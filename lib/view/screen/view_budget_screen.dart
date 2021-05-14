@@ -91,7 +91,7 @@ class ViewBudgetScreen extends TemplateScreen {
                           keyboardType: const TextInputType.numberWithOptions(
                               decimal: true),
                           textInputFormatterList: <FilteringTextInputFormatter>[
-                            if (!controller.isEnabled)
+                            if (controller.isEnabled)
                               FilteringTextInputFormatter.allow(
                                   RegExp(r'^\d+\.?\d{0,2}')),
                           ],
