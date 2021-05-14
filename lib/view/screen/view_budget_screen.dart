@@ -9,9 +9,6 @@ import 'package:mybudget/view/widget/budget_field_label.dart';
 import 'package:mybudget/view/widget/budget_text_field.dart';
 
 class ViewBudgetScreen extends TemplateScreen {
-  final TextEditingController accountNameController = TextEditingController();
-  final TextEditingController budgetAmountController = TextEditingController();
-
   @override
   Widget getLeading(BuildContext context) => IconButton(
       icon: const Icon(Icons.arrow_back_ios_rounded),
@@ -25,11 +22,11 @@ class ViewBudgetScreen extends TemplateScreen {
     // catch args from route pushNamed
     //
     //
-    final Account budget = ModalRoute.of(context).settings.arguments as Account;
-    accountNameController.text = budget.title;
-    budgetAmountController.text = budget.budget.toStringAsFixed(2);
+    final Account account =
+        ModalRoute.of(context).settings.arguments as Account;
 
-    final ViewBudgetController _controller = Get.put(ViewBudgetController());
+    final ViewBudgetController controller = Get.put(ViewBudgetController());
+    controller.getParams(account);
 
     return SingleChildScrollView(
       child: Container(
@@ -48,50 +45,65 @@ class ViewBudgetScreen extends TemplateScreen {
             ),
             child: SingleChildScrollView(
                 child: GetBuilder<ViewBudgetController>(
-              init: _controller,
+              init: controller,
               builder: (_) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    const SizedBox(height: 28),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        _textButton(
-                            label: _controller.isEnabled ? 'Update' : 'Edit',
-                            function: () {
-                              _controller.isEnabled = !_controller.isEnabled;
-                            }),
-                        const SizedBox(width: 10),
-                        _textButton(label: 'Delete', function: () {}),
-                      ],
-                    ),
-                    const SizedBox(height: 30),
-                    const BudgetFieldLabel(label: 'Account name'),
-                    const SizedBox(height: 15),
-                    BudgetTextField(
-                        isEnabled: _controller.isEnabled,
-                        hintText: 'Enter account name',
-                        controller: accountNameController),
-                    const SizedBox(height: 30),
-                    const BudgetFieldLabel(label: 'Budget amount'),
-                    const SizedBox(height: 15),
-                    BudgetTextField(
-                        isEnabled: _controller.isEnabled,
-                        hintText: 'Enter budget amount',
-                        controller: budgetAmountController),
-                    const SizedBox(height: 30),
-                    Row(
-                      children: <Widget>[
-                        const BudgetFieldLabel(label: 'Auto deduct'),
-                        Checkbox(value: false, onChanged: (bool value) {}),
-                      ],
-                    ),
-                    const SizedBox(height: 30),
-                    BudgetButton(() {}, 'Add Transaction'),
-                    const SizedBox(height: 30),
-                    BudgetButton(() {}, 'View Transaction'),
-                  ],
+                return Form(
+                  key: controller.formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      const SizedBox(height: 28),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          _textButton(
+                              label: controller.isEnabled ? 'Update' : 'Edit',
+                              function: () {
+                                FocusScope.of(context).unfocus();
+                                controller.updateAccount();
+                              }),
+                          const SizedBox(width: 10),
+                          _textButton(
+                              label: 'Delete',
+                              function: () {
+                                controller.deleteAccount();
+                                Navigator.pop(context);
+                              }),
+                        ],
+                      ),
+                      const SizedBox(height: 30),
+                      const BudgetFieldLabel(label: 'Account name'),
+                      const SizedBox(height: 15),
+                      BudgetTextField(
+                          isEnabled: controller.isEnabled,
+                          hintText: 'Enter account name',
+                          validator: controller.textFieldValidator,
+                          controller: controller.accountNameController),
+                      const SizedBox(height: 30),
+                      const BudgetFieldLabel(label: 'Budget amount'),
+                      const SizedBox(height: 15),
+                      BudgetTextField(
+                          keyboardType: TextInputType.number,
+                          isEnabled: controller.isEnabled,
+                          hintText: 'Enter budget amount',
+                          validator: controller.textFieldValidator,
+                          controller: controller.budgetAmountController),
+                      const SizedBox(height: 30),
+                      Row(
+                        children: <Widget>[
+                          const BudgetFieldLabel(label: 'Auto deduct'),
+                          Checkbox(
+                              value: controller.isAutoDeduct,
+                              onChanged: (bool value) =>
+                                  controller.isAutoDeduct = value),
+                        ],
+                      ),
+                      const SizedBox(height: 30),
+                      BudgetButton(() {}, 'Add Transaction'),
+                      const SizedBox(height: 30),
+                      BudgetButton(() {}, 'View Transaction'),
+                    ],
+                  ),
                 );
               },
             ))),

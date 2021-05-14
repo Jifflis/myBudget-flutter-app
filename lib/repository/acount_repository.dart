@@ -15,6 +15,11 @@ class AccountRepository {
     await _localProvider.upsert<Account>(account);
   }
 
+  Future<void> delete(String accountID) async {
+    await _localProvider.delete<Account>(
+        where: '${DBKey.ACCOUNT_ID}=?', whereArgs: <dynamic>[accountID]);
+  }
+
   Future<List<Account>> getAccounts() async {
     return await _localProvider.list<Account>();
   }

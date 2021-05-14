@@ -1,13 +1,86 @@
+import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/state_manager.dart';
+import 'package:mybudget/model/account.dart';
+import 'package:mybudget/repository/acount_repository.dart';
+import 'package:oktoast/oktoast.dart';
 
 class ViewBudgetController extends GetxController {
-  final RxBool _isFieldEnabled = false.obs;
+  bool _isFieldEnabled = false;
+  bool _isAutoDeduct = false;
+  Account _account;
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final TextEditingController accountNameController = TextEditingController();
+  final TextEditingController budgetAmountController = TextEditingController();
 
+  final AccountRepository _accountRepository = AccountRepository();
+
+  /// set data [_isFieldEnabled]
+  ///
   set isEnabled(bool isEnabled) {
-    _isFieldEnabled.value = isEnabled;
+    _isFieldEnabled = isEnabled;
     update();
   }
 
-  bool get isEnabled => _isFieldEnabled.value;
+  /// get data [_isFieldEnabled]
+  ///
+  bool get isEnabled => _isFieldEnabled;
+
+  /// set data [_isAutoDeduct]
+  ///
+  set isAutoDeduct(bool val) {
+    _isAutoDeduct = val;
+    update();
+  }
+
+  /// get data [_isAutoDeduct]
+  ///
+  bool get isAutoDeduct => _isAutoDeduct;
+
+  /// get params from route
+  ///
+  void getParams(Account account) {
+    _account = account;
+    accountNameController.text = account.title;
+    budgetAmountController.text = account.budget.toStringAsFixed(2);
+    isAutoDeduct = account.autoDeduct;
+  }
+
+  /// update budget account
+  ///
+  Future<void> updateAccount() async {
+    if (!isEnabled) {
+      isEnabled = !isEnabled;
+    } else {
+      if (isEnabled && formKey.currentState.validate()) {
+        _account.title = accountNameController.text;
+        _account.budget = double.parse(budgetAmountController.text);
+        _account.autoDeduct = isAutoDeduct;
+
+        await _accountRepository.upsert(_account);
+
+        showToast('Budget account successfully updated',
+            position: ToastPosition.bottom);
+        isEnabled = !isEnabled;
+      }
+    }
+  }
+
+  /// delete update account
+  ///
+  ///
+  Future<void> deleteAccount() async {
+    await _accountRepository.delete(_account.accountId);
+    update();
+  }
+
+  /// text form field validator
+  ///
+  ///
+  String textFieldValidator(String value) {
+    if (value == null || value.isEmpty) {
+      return 'Empty value is invalid.';
+    }
+    return null;
+  }
 }

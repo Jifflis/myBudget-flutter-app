@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
-
 import 'package:mybudget/view/screen/add_transaction_screen.dart';
 import 'package:mybudget/view/screen/view_transaction_scree.dart';
 import 'package:mybudget/view/screen/change_currency_screen.dart';
@@ -109,7 +108,7 @@ class Routes {
       case SCREEN_ADD_TRANSACTION:
         screen = AddTransactionScreen();
         break;
-        
+
       case SCREEN_VIEW_TRANSACTION:
         screen = ViewTransactionScreen();
         break;
@@ -167,14 +166,13 @@ class Routes {
   /// Navigate to route name via [CupertinoPageRoute].
   ///
   /// If [navigator] is not set, it will use the [rootNavigator].
-  static void pushNamed(String routeName,
+  static Future<dynamic> pushNamed(String routeName,
       {NavigatorState navigator, Object arguments}) {
     if (navigator != null) {
-      navigator.pushNamed(routeName, arguments: arguments);
-      return;
+      return navigator.pushNamed(routeName, arguments: arguments);
     }
 
-    rootNavigator.pushNamed(routeName, arguments: arguments);
+    return rootNavigator.pushNamed(routeName, arguments: arguments);
   }
 
   /// Navigate to route name via [CupertinoPageRoute].

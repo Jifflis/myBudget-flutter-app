@@ -103,7 +103,11 @@ class HomePageTemplate extends TemplateScreen {
                 ),
                 onPressed: () {
                   Routes.pushNamed(Routes.SCREEN_ADD_BUDGET,
-                      navigator: Routes.homeNavigator);
+                          navigator: Routes.homeNavigator)
+                      .then((_) {
+                    final HomeController controller = Get.find();
+                    controller.updateCurrentMonthlyBudgetList();
+                  });
                 }),
           )
         : const Padding(
@@ -309,8 +313,12 @@ class BudgetItem extends StatelessWidget {
             flex: 1,
             child: Container(
               child: InkWell(
-                onTap: () => Routes.pushNamed(Routes.SCREEN_VIEW_TRANSACTION,
-                    navigator: Routes.homeNavigator, arguments: budget),
+                onTap: () => Routes.pushNamed(Routes.SCREEN_VIEW_BUDGET,
+                        navigator: Routes.homeNavigator, arguments: budget)
+                    .then((_) {
+                  final HomeController controller = Get.find();
+                  controller.updateCurrentMonthlyBudgetList();
+                }),
                 child: const Text(
                   'View',
                   textAlign: TextAlign.right,

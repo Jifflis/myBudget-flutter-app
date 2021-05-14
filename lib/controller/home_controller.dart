@@ -20,15 +20,29 @@ class HomeController extends BaseController {
 
   /// get unmodifiable [_monthlyBudgetList]
   ///
+  ///
   UnmodifiableListView<MonthlySummary> get monthlyBudgetList =>
       UnmodifiableListView<MonthlySummary>(_monthlyBudgetList);
 
   /// Initialize [_monthlyBudgetList] data
+  ///
   ///
   Future<void> _initMonthlySummaryList() async {
     status = Status.LOADING;
     _monthlyBudgetList =
         await _monthlySummaryRepository.getMonthlySummaryList();
     status = Status.COMPLETED;
+  }
+
+  /// Update current monthly budget list
+  ///
+  ///
+  Future<void> updateCurrentMonthlyBudgetList() async {
+    final MonthlySummary monthlySummary =
+        await _monthlySummaryRepository.getUpdatedMonthlySummary();
+    if (monthlySummary != null) {
+      _monthlyBudgetList.replaceRange(0, 0, <MonthlySummary>[monthlySummary]);
+    }
+    update();
   }
 }
