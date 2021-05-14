@@ -57,9 +57,9 @@ class ViewBudgetController extends GetxController {
       _account.title = accountNameController.text;
       _account.budget = double.parse(budgetAmountController.text);
       _account.autoDeduct = isAutoDeduct;
+      _account.balance = _account.budget - _account.expense;
 
       await _accountRepository.upsert(_account);
-      await _monthlySummaryRepository.getUpdatedMonthlySummary();
 
       showToast('Budget account successfully updated',
           position: ToastPosition.bottom);
