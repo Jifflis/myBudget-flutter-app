@@ -38,6 +38,7 @@ class MonthlySummaryRepository {
       DBKey.USER_ID,
       DBKey.MONTH,
       DBKey.YEAR,
+      DBKey.MONTHLY_SUMMARY_ID,
     ];
 
     await _localProvider.update<MonthlySummary>(
@@ -65,6 +66,6 @@ class MonthlySummaryRepository {
   }
 
   Future<List<MonthlySummary>> getMonthlySummaryList() async {
-    return await _localProvider.list<MonthlySummary>();
+    return await _localProvider.list<MonthlySummary>(orderBy: 'id Desc');
   }
 }
