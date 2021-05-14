@@ -3,6 +3,7 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/state_manager.dart';
 import 'package:mybudget/model/account.dart';
 import 'package:mybudget/repository/acount_repository.dart';
+import 'package:mybudget/util/number_util.dart';
 import 'package:oktoast/oktoast.dart';
 
 class ViewBudgetController extends GetxController {
@@ -42,28 +43,50 @@ class ViewBudgetController extends GetxController {
   void getParams(Account account) {
     _account = account;
     accountNameController.text = account.title;
-    budgetAmountController.text = account.budget.toStringAsFixed(2);
+    budgetAmountController.text = amountFormatter(account.budget);
     isAutoDeduct = account.autoDeduct;
   }
 
   /// update budget account
   ///
   Future<void> updateAccount() async {
-    if (!isEnabled) {
+    if (isEnabled && formKey.currentState.validate()) {
+      _account.title = accountNameController.text;
+      _account.budget = double.parse(budgetAmountController.text);
+      _account.autoDeduct = isAutoDeduct;
+
+      await _accountRepository.upsert(_account);
+
+      showToast('Budget account successfully updated',
+          position: ToastPosition.bottom);
       isEnabled = !isEnabled;
-    } else {
-      if (isEnabled && formKey.currentState.validate()) {
-        _account.title = accountNameController.text;
-        _account.budget = double.parse(budgetAmountController.text);
-        _account.autoDeduct = isAutoDeduct;
-
-        await _accountRepository.upsert(_account);
-
-        showToast('Budget account successfully updated',
-            position: ToastPosition.bottom);
-        isEnabled = !isEnabled;
-      }
     }
+  }
+
+  /// edit | cancel text button
+  ///
+  ///
+  Future<void> edit() async {
+    isEnabled = !isEnabled;
+  }
+
+  TextEditingController formattedBudgetAmount() {
+    if (!isEnabled) {
+      budgetAmountController.text = amountFormatter(
+          double.parse(budgetAmountController.text.replaceAll(',', '')));
+    } else {
+      budgetAmountController.text =
+          budgetAmountController.text.replaceAll(',', '');
+    }
+
+    return budgetAmountController;
+  }
+
+  /// reset page
+  ///
+  ///
+  Future<void> resetPage() async {
+    isEnabled = false;
   }
 
   /// delete update account

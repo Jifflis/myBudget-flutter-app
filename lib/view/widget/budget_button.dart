@@ -16,7 +16,8 @@ class BudgetButton extends StatelessWidget {
       height: 50,
       child: ElevatedButton(
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(Colors.purple[800]),
+          backgroundColor: MaterialStateProperty.all<Color>(
+              onPressed != null ? Colors.purple[800] : Colors.grey),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),

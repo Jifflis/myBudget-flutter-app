@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
 import 'package:mybudget/controller/view_budget_controller.dart';
@@ -12,7 +13,11 @@ class ViewBudgetScreen extends TemplateScreen {
   @override
   Widget getLeading(BuildContext context) => IconButton(
       icon: const Icon(Icons.arrow_back_ios_rounded),
-      onPressed: () => Navigator.pop(context));
+      onPressed: () {
+        final ViewBudgetController controller = Get.find();
+        controller.resetPage();
+        Navigator.pop(context);
+      });
 
   @override
   String get title => 'Budget Account';
@@ -57,10 +62,10 @@ class ViewBudgetScreen extends TemplateScreen {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
                           _textButton(
-                              label: controller.isEnabled ? 'Update' : 'Edit',
+                              label: controller.isEnabled ? 'Cancel' : 'Edit',
                               function: () {
                                 FocusScope.of(context).unfocus();
-                                controller.updateAccount();
+                                controller.edit();
                               }),
                           const SizedBox(width: 10),
                           _textButton(
@@ -83,11 +88,17 @@ class ViewBudgetScreen extends TemplateScreen {
                       const BudgetFieldLabel(label: 'Budget amount'),
                       const SizedBox(height: 15),
                       BudgetTextField(
-                          keyboardType: TextInputType.number,
+                          keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true),
+                          textInputFormatterList: <FilteringTextInputFormatter>[
+                            if (!controller.isEnabled)
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'^\d+\.?\d{0,2}')),
+                          ],
                           isEnabled: controller.isEnabled,
                           hintText: 'Enter budget amount',
                           validator: controller.textFieldValidator,
-                          controller: controller.budgetAmountController),
+                          controller: controller.formattedBudgetAmount()),
                       const SizedBox(height: 30),
                       Row(
                         children: <Widget>[
@@ -99,9 +110,11 @@ class ViewBudgetScreen extends TemplateScreen {
                         ],
                       ),
                       const SizedBox(height: 30),
-                      BudgetButton(() {}, 'Add Transaction'),
-                      const SizedBox(height: 30),
-                      BudgetButton(() {}, 'View Transaction'),
+                      BudgetButton(
+                          controller.isEnabled
+                              ? controller.updateAccount
+                              : null,
+                          'Update'),
                     ],
                   ),
                 );
