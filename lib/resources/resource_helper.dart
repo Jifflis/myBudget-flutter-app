@@ -38,13 +38,12 @@ class ResourceHelper {
           whereArgs: <String>[json[DBKey.USER_ID]],
         );
 
-        final Currency currency = await localProvider.get<Currency>(
-            where: '${DBKey.CURRENCY_ID} = ?',
-            whereArgs: <String>[json[DBKey.CURRENCY_ID]]);
-
         final Settings settings = Settings(json: json);
         settings.user = user;
-        settings.currency = currency;
+        settings.currency = Currency(
+          currencyID: json[DBKey.CURRENCY_ID],
+          name: json[DBKey.CURRENCY_ID],
+        );
         return settings;
       },
       name: DBKey.SETTINGS,
