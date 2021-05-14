@@ -38,7 +38,7 @@ class Account extends BaseModel {
   @override
   void fromJson(Map<String, dynamic> json) {
     accountId = json[DBKey.ACCOUNT_ID];
-    title = json[DBKey.TITLE];
+    title = json[DBKey.TITLE]?.toString();
     budget = json[DBKey.BUDGET];
     expense = json[DBKey.EXPENSE];
     balance = json[DBKey.BALANCE];

@@ -1,10 +1,10 @@
-import 'package:mybudget/model/monthly_summary.dart';
-
 import '../constant/db_keys.dart';
 import '../model/account.dart';
 import '../model/currency.dart';
+import '../model/monthly_summary.dart';
 import '../model/settings.dart';
 import '../model/user.dart';
+import '../util/id_util.dart';
 import 'local_provider.dart';
 import 'resource_definition.dart';
 
@@ -38,13 +38,12 @@ class ResourceHelper {
           whereArgs: <String>[json[DBKey.USER_ID]],
         );
 
-        final Currency currency = await localProvider.get<Currency>(
-            where: '${DBKey.CURRENCY_ID} = ?',
-            whereArgs: <String>[json[DBKey.CURRENCY_ID]]);
-
         final Settings settings = Settings(json: json);
         settings.user = user;
-        settings.currency = currency;
+        settings.currency = Currency(
+          currencyID: json[DBKey.CURRENCY_ID],
+          name: json[DBKey.CURRENCY_ID],
+        );
         return settings;
       },
       name: DBKey.SETTINGS,
@@ -76,11 +75,10 @@ class ResourceHelper {
         Map<String, dynamic> json,
         LocalProvider localProvider,
       ) async {
-
         final List<Account> accounts = await localProvider.list<Account>(
           where: '${DBKey.MONTHLY_SUMMARY_ID}=?',
           whereArgs: <dynamic>[
-            json[DBKey.MONTHLY_SUMMARY_ID],
+            json[DBKey.MONTHLY_SUMMARY_ID] ?? monthlySummaryID(),
           ],
         );
 

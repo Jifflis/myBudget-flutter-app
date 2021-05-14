@@ -79,11 +79,12 @@ class HomePageTemplate extends TemplateScreen {
 
   @override
   Widget buildBody(BuildContext context) {
+    final HomeController controller = Get.find();
     return Column(
       children: <Widget>[
-        _buildHeader(monthlyBudgetModel),
+        _buildHeader(monthlyBudgetModel, controller.getCurrency()),
         _buildDivider(),
-        _buildItems(),
+        _buildItems(controller.getCurrency()),
       ],
     );
   }
@@ -103,7 +104,11 @@ class HomePageTemplate extends TemplateScreen {
                 ),
                 onPressed: () {
                   Routes.pushNamed(Routes.SCREEN_ADD_BUDGET,
-                      navigator: Routes.homeNavigator);
+                          navigator: Routes.homeNavigator)
+                      .then((_) {
+                    final HomeController controller = Get.find();
+                    controller.updateCurrentMonthlyBudgetList();
+                  });
                 }),
           )
         : const Padding(
@@ -134,7 +139,7 @@ class HomePageTemplate extends TemplateScreen {
   ///
   ///
   String _buildTitle(int index, MonthlySummary model) {
-    return index == 0 ? 'myBudget' : '${model.month} ${model.year}';
+    return index == 0 ? 'My Budget' : '${model.month} ${model.year}';
   }
 
   ///  divider with drop down shadow
@@ -159,7 +164,7 @@ class HomePageTemplate extends TemplateScreen {
   /// header section
   ///
   ///
-  Widget _buildHeader(MonthlySummary model) => Column(
+  Widget _buildHeader(MonthlySummary model, String currency) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           const SizedBox(height: 20),
@@ -167,7 +172,6 @@ class HomePageTemplate extends TemplateScreen {
             '${amountFormatter(model.budget)}  / ${amountFormatter(model.expense)}',
             style: const TextStyle(
               fontSize: 20,
-              fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 5),
@@ -179,9 +183,9 @@ class HomePageTemplate extends TemplateScreen {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              const Text(
-                'Php',
-                style: TextStyle(fontSize: 12),
+              Text(
+                currency,
+                style: const TextStyle(fontSize: 12),
               ),
               const SizedBox(
                 width: 12,
@@ -189,8 +193,8 @@ class HomePageTemplate extends TemplateScreen {
               Text(
                 amountFormatter(model.balance),
                 style: const TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 42,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
             ],
@@ -207,18 +211,25 @@ class HomePageTemplate extends TemplateScreen {
   /// Details section
   ///
   ///
-  Widget _buildItems() => monthlyBudgetModel.accountList != null
+  Widget _buildItems(String currency) => monthlyBudgetModel.accountList != null
       ? Expanded(
           child: Container(
             padding: EdgeInsets.zero,
             margin: EdgeInsets.zero,
             child: ListView.builder(
                 itemBuilder: (BuildContext context, int index) {
-                  return BudgetItem(
-                    index: index,
-                    budget: monthlyBudgetModel.accountList[index],
-                    isLoading:
-                        index == monthlyBudgetModel.accountList.length - 1,
+                  return InkWell(
+                    onTap: () {
+                      Routes.pushNamed(Routes.SCREEN_ADD_TRANSACTION,
+                          navigator: Routes.homeNavigator);
+                    },
+                    child: BudgetItem(
+                      index: index,
+                      budget: monthlyBudgetModel.accountList[index],
+                      currency: currency,
+                      isLoading:
+                          index == monthlyBudgetModel.accountList.length - 1,
+                    ),
                   );
                 },
                 itemCount: monthlyBudgetModel.accountList.length),
@@ -230,8 +241,8 @@ class HomePageTemplate extends TemplateScreen {
               'No Data',
               style: TextStyle(
                   color: Colors.grey,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 30),
+                  fontWeight: FontWeight.normal,
+                  fontSize: 14),
             ),
           ),
         );
@@ -242,12 +253,17 @@ class HomePageTemplate extends TemplateScreen {
 ///
 class BudgetItem extends StatelessWidget {
   const BudgetItem(
-      {Key key, @required this.index, @required this.budget, this.isLoading})
+      {Key key,
+      @required this.index,
+      @required this.budget,
+      this.isLoading,
+      this.currency})
       : super(key: key);
 
   final int index;
   final bool isLoading;
   final Account budget;
+  final String currency;
 
   @override
   Widget build(BuildContext context) {
@@ -297,11 +313,13 @@ class BudgetItem extends StatelessWidget {
           Expanded(
             flex: 3,
             child: Container(
-              child: Text(budget.title,
-                  style: TextStyle(
-                      color: Colors.purple[800],
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold)),
+              child: Text(
+                budget.title,
+                style: TextStyle(
+                    color: Colors.purple[800],
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400),
+              ),
             ),
           ),
           //VIEW
@@ -309,15 +327,19 @@ class BudgetItem extends StatelessWidget {
             flex: 1,
             child: Container(
               child: InkWell(
-                onTap: () => Routes.pushNamed(Routes.SCREEN_VIEW_TRANSACTION,
-                    navigator: Routes.homeNavigator, arguments: budget),
+                onTap: () => Routes.pushNamed(Routes.SCREEN_VIEW_BUDGET,
+                        navigator: Routes.homeNavigator, arguments: budget)
+                    .then((_) {
+                  final HomeController controller = Get.find();
+                  controller.updateCurrentMonthlyBudgetList();
+                }),
                 child: const Text(
-                  'View',
+                  'Details',
                   textAlign: TextAlign.right,
                   style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      fontStyle: FontStyle.italic),
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                  ),
                 ),
               ),
             ),
@@ -333,27 +355,27 @@ class BudgetItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            'Budget: ₱ ${amountFormatter(budget.budget)}',
+            'Budget: ${amountFormatter(budget.budget)}',
             style: const TextStyle(fontSize: 12),
           ),
           //EXP
-          const SizedBox(height: 5),
+          const SizedBox(height: 3),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Container(
                 child: Text(
-                  'Exp: ₱ ${amountFormatter(budget.expense)}',
+                  'Expenses: ${amountFormatter(budget.expense)}',
                   style: const TextStyle(fontSize: 12),
                 ),
               ),
               Container(
                 child: Text(
-                  'Bal: ₱ ${amountFormatter(budget.budget - budget.expense)}',
+                  'Bal: ${amountFormatter(budget.budget - budget.expense)}',
                   style: TextStyle(
                       fontSize: 12,
                       color: Colors.pink[600],
-                      fontWeight: FontWeight.bold),
+                      fontWeight: FontWeight.w400),
                 ),
               ),
             ],
@@ -369,6 +391,9 @@ class BudgetItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             _buildTitle(),
+            const SizedBox(
+              height: 8,
+            ),
             _buildSubtitle(),
           ],
         ),

@@ -20,15 +20,31 @@ class HomeController extends BaseController {
 
   /// get unmodifiable [_monthlyBudgetList]
   ///
+  ///
   UnmodifiableListView<MonthlySummary> get monthlyBudgetList =>
       UnmodifiableListView<MonthlySummary>(_monthlyBudgetList);
 
   /// Initialize [_monthlyBudgetList] data
   ///
+  ///
   Future<void> _initMonthlySummaryList() async {
     status = Status.LOADING;
+    await _monthlySummaryRepository.updateMonthlySummary();
     _monthlyBudgetList =
         await _monthlySummaryRepository.getMonthlySummaryList();
     status = Status.COMPLETED;
   }
+
+  /// Update current monthly budget list
+  ///
+  ///
+  Future<void> updateCurrentMonthlyBudgetList() async {
+    await _monthlySummaryRepository.updateMonthlySummary();
+    final MonthlySummary monthlySummary =
+        await _monthlySummaryRepository.currentMonthlySummary();
+    _monthlyBudgetList[0] = monthlySummary;
+    update();
+  }
+
+  String getCurrency() => settingsProvider.settings.currency.name;
 }

@@ -25,7 +25,14 @@ class MonthlySummaryRepository {
 
   Future<void> updateMonthlySummary() async {
     final MonthlySummary updatedSummary = await getUpdatedMonthlySummary();
-    print(updatedSummary);
+
+    if (updatedSummary.monthlySummaryId == null) {
+      updatedSummary.balance = 0;
+      updatedSummary.expense = 0;
+      updatedSummary.budget = 0;
+      updatedSummary.monthlySummaryId = monthlySummaryID();
+    }
+
     updatedSummary.notIncludeInMapping = <String>[
       DBKey.CREATED_AT,
       DBKey.USER_ID,
