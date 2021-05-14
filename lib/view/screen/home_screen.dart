@@ -84,7 +84,7 @@ class HomePageTemplate extends TemplateScreen {
       children: <Widget>[
         _buildHeader(monthlyBudgetModel, controller.getCurrency()),
         _buildDivider(),
-        _buildItems(),
+        _buildItems(controller.getCurrency()),
       ],
     );
   }
@@ -212,7 +212,7 @@ class HomePageTemplate extends TemplateScreen {
   /// Details section
   ///
   ///
-  Widget _buildItems() => monthlyBudgetModel.accountList != null
+  Widget _buildItems(String currency) => monthlyBudgetModel.accountList != null
       ? Expanded(
           child: Container(
             padding: EdgeInsets.zero,
@@ -222,6 +222,7 @@ class HomePageTemplate extends TemplateScreen {
                   return BudgetItem(
                     index: index,
                     budget: monthlyBudgetModel.accountList[index],
+                    currency: currency,
                     isLoading:
                         index == monthlyBudgetModel.accountList.length - 1,
                   );
@@ -247,12 +248,17 @@ class HomePageTemplate extends TemplateScreen {
 ///
 class BudgetItem extends StatelessWidget {
   const BudgetItem(
-      {Key key, @required this.index, @required this.budget, this.isLoading})
+      {Key key,
+      @required this.index,
+      @required this.budget,
+      this.isLoading,
+      this.currency})
       : super(key: key);
 
   final int index;
   final bool isLoading;
   final Account budget;
+  final String currency;
 
   @override
   Widget build(BuildContext context) {
@@ -342,7 +348,7 @@ class BudgetItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            'Budget: ₱ ${amountFormatter(budget.budget)}',
+            'Budget: $currency ${amountFormatter(budget.budget)}',
             style: const TextStyle(fontSize: 12),
           ),
           //EXP
@@ -352,13 +358,13 @@ class BudgetItem extends StatelessWidget {
             children: <Widget>[
               Container(
                 child: Text(
-                  'Exp: ₱ ${amountFormatter(budget.expense)}',
+                  'Exp: $currency ${amountFormatter(budget.expense)}',
                   style: const TextStyle(fontSize: 12),
                 ),
               ),
               Container(
                 child: Text(
-                  'Bal: ₱ ${amountFormatter(budget.budget - budget.expense)}',
+                  'Bal: $currency ${amountFormatter(budget.budget - budget.expense)}',
                   style: TextStyle(
                       fontSize: 12,
                       color: Colors.pink[600],
