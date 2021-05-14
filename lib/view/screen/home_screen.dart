@@ -139,7 +139,7 @@ class HomePageTemplate extends TemplateScreen {
   ///
   ///
   String _buildTitle(int index, MonthlySummary model) {
-    return index == 0 ? 'myBudget' : '${model.month} ${model.year}';
+    return index == 0 ? 'My Budget' : '${model.month} ${model.year}';
   }
 
   ///  divider with drop down shadow
@@ -172,7 +172,6 @@ class HomePageTemplate extends TemplateScreen {
             '${amountFormatter(model.budget)}  / ${amountFormatter(model.expense)}',
             style: const TextStyle(
               fontSize: 20,
-              fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 5),
@@ -194,8 +193,8 @@ class HomePageTemplate extends TemplateScreen {
               Text(
                 amountFormatter(model.balance),
                 style: const TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 42,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
             ],
@@ -236,8 +235,8 @@ class HomePageTemplate extends TemplateScreen {
               'No Data',
               style: TextStyle(
                   color: Colors.grey,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 30),
+                  fontWeight: FontWeight.normal,
+                  fontSize: 14),
             ),
           ),
         );
@@ -308,11 +307,13 @@ class BudgetItem extends StatelessWidget {
           Expanded(
             flex: 3,
             child: Container(
-              child: Text(budget.title,
-                  style: TextStyle(
-                      color: Colors.purple[800],
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold)),
+              child: Text(
+                budget.title,
+                style: TextStyle(
+                    color: Colors.purple[800],
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400),
+              ),
             ),
           ),
           //VIEW
@@ -327,12 +328,11 @@ class BudgetItem extends StatelessWidget {
                   controller.updateCurrentMonthlyBudgetList();
                 }),
                 child: const Text(
-                  'View',
+                  'Details',
                   textAlign: TextAlign.right,
                   style: TextStyle(
                       fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      fontStyle: FontStyle.italic),
+                      fontWeight: FontWeight.normal,),
                 ),
               ),
             ),
@@ -348,27 +348,27 @@ class BudgetItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            'Budget: $currency ${amountFormatter(budget.budget)}',
+            'Budget: ${amountFormatter(budget.budget)}',
             style: const TextStyle(fontSize: 12),
           ),
           //EXP
-          const SizedBox(height: 5),
+          const SizedBox(height: 3),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Container(
                 child: Text(
-                  'Exp: $currency ${amountFormatter(budget.expense)}',
+                  'Expenses: ${amountFormatter(budget.expense)}',
                   style: const TextStyle(fontSize: 12),
                 ),
               ),
               Container(
                 child: Text(
-                  'Bal: $currency ${amountFormatter(budget.budget - budget.expense)}',
+                  'Bal: ${amountFormatter(budget.budget - budget.expense)}',
                   style: TextStyle(
                       fontSize: 12,
                       color: Colors.pink[600],
-                      fontWeight: FontWeight.bold),
+                      fontWeight: FontWeight.w400),
                 ),
               ),
             ],
@@ -384,6 +384,7 @@ class BudgetItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             _buildTitle(),
+            const SizedBox(height: 8,),
             _buildSubtitle(),
           ],
         ),
