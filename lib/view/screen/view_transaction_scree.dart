@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mybudget/controller/add_transaction_controller.dart';
 import 'package:mybudget/controller/view_transaction_controller.dart';
+import 'package:mybudget/repository/acount_repository.dart';
+import 'package:mybudget/repository/transaction_repository.dart';
 import 'package:mybudget/view/widget/add_transaction_dropdown.dart';
 import 'package:mybudget/view/widget/transaction_field_label.dart';
 import 'package:mybudget/view/widget/transaction_text_field.dart';
@@ -40,8 +42,11 @@ class ViewTransactionScreen extends TemplateScreen {
     final ViewTransactionController _viewTranController =
         Get.put(ViewTransactionController());
 
-    final AddTransactionController _addTranController =
-        Get.put(AddTransactionController());
+    final AddTransactionController _addTranController = Get.put(
+      AddTransactionController(
+          transactionRepository: TransactionRepository(),
+          accountRepository: AccountRepository()),
+    );
 
     return SingleChildScrollView(
       child: Container(
@@ -90,10 +95,14 @@ class ViewTransactionScreen extends TemplateScreen {
                           hintText: 'Enter account name',
                           controller: accountNameController),
                     if (_viewTranController.isEnabled)
-                      AddTransactionDropdown((Account value) {
-                        FocusScope.of(context).requestFocus(FocusNode());
-                        _addTranController.selectedCurrency = value;
-                      }),
+                      AddTransactionDropdown<Account>(
+                        list: _addTranController.accountList,
+                        selected: _addTranController.selectedAccount,
+                        onChange: (Account value) {
+                          FocusScope.of(context).requestFocus(FocusNode());
+                          _addTranController.selectedAccount = value;
+                        },
+                      ),
                     const SizedBox(height: 30),
                     const TransactionFieldLabel(label: 'Transaction Date'),
                     const SizedBox(height: 15),

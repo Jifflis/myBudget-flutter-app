@@ -1,3 +1,5 @@
+import 'package:mybudget/model/transaction.dart';
+
 import '../constant/db_keys.dart';
 import '../model/account.dart';
 import '../model/currency.dart';
@@ -12,6 +14,24 @@ class ResourceHelper {
   String tag = 'resource_helper';
 
   static final List<ResourceDefinition> _resources = <ResourceDefinition>[
+    ResourceDefinition(
+      type: Transaction,
+      builder: (
+        Map<String, dynamic> json,
+        LocalProvider localProvider,
+      ) =>
+          Transaction(
+        transactionID: null,
+        userID: null,
+        accountID: null,
+        title: null,
+        remarks: null,
+        amount: null,
+        json: json,
+      ),
+      name: DBKey.TRANSACTION,
+      toMap: (Transaction transaction) => transaction.toJson(),
+    ),
     ResourceDefinition(
       type: Account,
       builder: (
