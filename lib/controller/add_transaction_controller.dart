@@ -32,18 +32,23 @@ class AddTransactionController extends BaseController {
     status = Status.LOADING;
     _accountList = await accountRepository.getAccounts();
 
-    for (final Account element in _accountList) {
-      if (element.accountId == account.accountId) {
-        selectedAccount = element;
+    if (account != null) {
+      for (final Account element in _accountList) {
+        if (element.accountId == account.accountId) {
+          selectedAccount = element;
+        }
       }
+    } else {
+      selectedAccount = _accountList.first;
     }
+
     status = Status.COMPLETED;
   }
 
   /// save transaction
   ///
   ///
-  bool save() {
+  Future<bool> save() async {
     if (formKey.currentState.validate()) {
       final Transaction transaction = Transaction(
           transactionID: randomID(),
@@ -52,6 +57,13 @@ class AddTransactionController extends BaseController {
           remarks: remarksController.text,
           amount: double.parse(amountController.text));
       transactionRepository.upsert(transaction);
+
+      // update account
+      selectedAccount.expense += double.parse(amountController.text);
+      selectedAccount.balance =
+          selectedAccount.budget - selectedAccount.expense;
+      await accountRepository.upsert(selectedAccount);
+
       resetFields();
       return true;
     }

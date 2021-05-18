@@ -11,7 +11,7 @@ class TransactionRepository {
   final LocalProvider _localProvider = LocalProvider();
 
   Future<List<Transaction>> getTransactions() async {
-    return await _localProvider.list<Transaction>();
+    return await _localProvider.list<Transaction>(orderBy: 'id desc');
   }
 
   Future<void> upsert(Transaction transaction) async {

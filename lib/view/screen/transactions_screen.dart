@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
+import 'package:mybudget/enum/status.dart';
+import 'package:mybudget/repository/acount_repository.dart';
+import 'package:mybudget/repository/transaction_repository.dart';
 
 import '../../constant/custom_colors.dart';
 import '../../controller/transactions_controller.dart';
@@ -25,24 +29,32 @@ class TransactionsScreen extends TemplateScreen {
               color: Colors.purple[100],
               size: 38,
             ),
-            onPressed: () {
-              //
-            },
+            onPressed: () => Routes.pushNamed(Routes.SCREEN_ADD_TRANSACTION,
+                navigator: Routes.transactionNavigator),
           ),
         )
       ];
 
   @override
   Widget buildBody(BuildContext context) {
-    final TransactionsController _controller =
-        Get.put(TransactionsController());
-    return Column(
-      children: <Widget>[
-        _buildHeader(context),
-        _buildDivider(),
-        _buildItems(_controller.transactionList),
-      ],
-    );
+    final TransactionsController _controller = Get.put(
+        TransactionsController(transactionRepository: TransactionRepository()));
+
+    _controller.getTransactionList();
+
+    return GetBuilder<TransactionsController>(
+        init: _controller,
+        builder: (_) {
+          return _controller.status == Status.LOADING
+              ? const Center(child: CircularProgressIndicator())
+              : Column(
+                  children: <Widget>[
+                    _buildHeader(context),
+                    _buildDivider(),
+                    _buildItems(_controller.transactions),
+                  ],
+                );
+        });
   }
 
   /// header section
@@ -189,14 +201,14 @@ class TransactionItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              dateSimplified(transaction.date)['MM'],
+              dateSimplified(transaction.createdAt.toString())['MM'],
               style: TextStyle(
                 color: Colors.purple[800],
                 fontSize: 12,
               ),
             ),
             Text(
-              dateSimplified(transaction.date)['DD'],
+              dateSimplified(transaction.createdAt.toString())['DD'],
               style: TextStyle(
                   color: Colors.purple[800],
                   fontSize: 18,
@@ -209,13 +221,15 @@ class TransactionItem extends StatelessWidget {
   /// title
   ///
   ///
-  Widget _buildTitle() => Container(
-        child: Text(transaction.title,
-            style: const TextStyle(
-                color: Colors.black87,
-                fontSize: 16,
-                fontWeight: FontWeight.bold)),
-      );
+  Widget _buildTitle() {
+    return Container(
+      child: Text(transaction.account.title,
+          style: const TextStyle(
+              color: Colors.black87,
+              fontSize: 16,
+              fontWeight: FontWeight.bold)),
+    );
+  }
 
   /// subtitle
   ///

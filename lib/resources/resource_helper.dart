@@ -19,16 +19,24 @@ class ResourceHelper {
       builder: (
         Map<String, dynamic> json,
         LocalProvider localProvider,
-      ) =>
-          Transaction(
-        transactionID: null,
-        userID: null,
-        accountID: null,
-        title: null,
-        remarks: null,
-        amount: null,
-        json: json,
-      ),
+      ) async {
+        final Account account = await localProvider.get<Account>(
+          where: '${DBKey.ACCOUNT_ID}=?',
+          whereArgs: <dynamic>[
+            json[DBKey.ACCOUNT_ID],
+          ],
+        );
+        return Transaction(
+          transactionID: null,
+          userID: null,
+          accountID: null,
+          title: null,
+          remarks: null,
+          amount: null,
+          account: account,
+          json: json,
+        );
+      },
       name: DBKey.TRANSACTION,
       toMap: (Transaction transaction) => transaction.toJson(),
     ),

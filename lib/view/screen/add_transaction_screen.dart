@@ -80,8 +80,8 @@ class AddTransactionScreen extends TemplateScreen {
                               hintText: 'Enter Add Remarks'),
                           const SizedBox(height: 30),
                           const SizedBox(height: 30),
-                          BudgetButton(() {
-                            controller.save()
+                          BudgetButton(() async {
+                            await controller.save()
                                 ? showToast('Success',
                                     position: ToastPosition.bottom)
                                 : showToast('Saving failed',

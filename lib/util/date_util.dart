@@ -1,14 +1,13 @@
-
 /// return last date of the month
 ///
-DateTime getLastDateOfMonth({DateTime date}){
-  final DateTime dateNow = date??DateTime.now();
+DateTime getLastDateOfMonth({DateTime date}) {
+  final DateTime dateNow = date ?? DateTime.now();
   return DateTime(dateNow.year, dateNow.month + 1, 0);
 }
 
 /// return next last date of the month
 ///
-DateTime getNextMonthLastDate(DateTime date){
+DateTime getNextMonthLastDate(DateTime date) {
   return DateTime(date.year, date.month + 2, 0);
 }
 
@@ -16,7 +15,8 @@ DateTime getNextMonthLastDate(DateTime date){
 /// expected date format YYYY-MM-DD
 ///
 Map<String, dynamic> dateSimplified(String date) {
-  final List<String> dateItems = date.split('-');
+  final List<String> firstSplit = date.split(' ');
+  final List<String> dateItems = firstSplit[0].split('-');
 
   return <String, dynamic>{
     'YYYY': dateItems[0],

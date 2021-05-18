@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:mybudget/constant/db_keys.dart';
+import 'package:mybudget/model/account.dart';
 import 'package:mybudget/model/base_model.dart';
 
 class Transaction extends BaseModel {
@@ -11,6 +12,7 @@ class Transaction extends BaseModel {
     @required this.amount,
     this.date,
     this.title,
+    this.account,
     DateTime createdAt,
     DateTime updatedAT,
     Map<String, dynamic> json,
@@ -29,6 +31,7 @@ class Transaction extends BaseModel {
   String remarks;
   String date;
   double amount;
+  Account account;
 
   @override
   void fromJson(Map<String, dynamic> json) {

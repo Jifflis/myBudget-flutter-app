@@ -223,8 +223,12 @@ class HomePageTemplate extends TemplateScreen {
                   return InkWell(
                     onTap: () {
                       Routes.pushNamed(Routes.SCREEN_ADD_TRANSACTION,
-                          navigator: Routes.homeNavigator,
-                          arguments: monthlyBudgetModel.accountList[index]);
+                              navigator: Routes.homeNavigator,
+                              arguments: monthlyBudgetModel.accountList[index])
+                          .then((_) {
+                        final HomeController controller = Get.find();
+                        controller.updateCurrentMonthlyBudgetList();
+                      });
                     },
                     child: BudgetItem(
                       index: index,
