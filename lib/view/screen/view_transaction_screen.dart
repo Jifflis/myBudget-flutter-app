@@ -71,11 +71,16 @@ class ViewTransactionScreen extends TemplateScreen {
                         children: <Widget>[
                           BudgetTextButton(
                               label: controller.isEnabled ? 'Cancel' : 'Edit',
-                              onPressed: () {
-                                controller.isEnabled = !controller.isEnabled;
-                              }),
+                              onPressed: () =>
+                                  controller.isEnabled = !controller.isEnabled),
                           const SizedBox(width: 10),
-                          BudgetTextButton(label: 'Delete', onPressed: () {}),
+                          BudgetTextButton(
+                              label: 'Delete',
+                              onPressed: () {
+                                controller.deleteTransaction();
+                                controller.resetFields();
+                                Navigator.pop(context);
+                              }),
                         ],
                       ),
                       const SizedBox(height: 30),

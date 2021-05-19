@@ -55,6 +55,9 @@ class ViewTransactionController extends BaseController {
   ///
   bool get isEnabled => _isFieldEnabled;
 
+  /// update transaction
+  ///
+  ///
   Future<bool> updateTransaction() async {
     if (formKey.currentState.validate()) {
       final double difference =
@@ -71,6 +74,17 @@ class ViewTransactionController extends BaseController {
       return true;
     }
     return false;
+  }
+
+  /// delete transaction
+  ///
+  ///
+  Future<void> deleteTransaction() async {
+    final Account account = _transaction.account;
+    account.expense -= _transaction.amount;
+    account.balance = account.budget - account.expense;
+    accountRepository.upsert(account);
+    await transactionRepository.delete(_transaction.transactionID);
   }
 
   /// Text form field validator

@@ -30,15 +30,20 @@ class TransactionsController extends BaseController {
     status = Status.COMPLETED;
   }
 
-  /// update specific transaction
+  /// update specific transaction from list
   ///
   ///
   Future<void> updateItem(Transaction transaction) async {
     final Transaction temp =
         await transactionRepository.getTransaction(transaction.transactionID);
 
-    _transactions[_transactions.indexWhere((Transaction element) =>
-        element.transactionID == transaction.transactionID)] = temp;
+    if (temp != null) {
+      _transactions[_transactions.indexWhere((Transaction element) =>
+          element.transactionID == transaction.transactionID)] = temp;
+    } else {
+      _transactions.removeWhere((Transaction element) =>
+          element.transactionID == transaction.transactionID);
+    }
 
     update();
   }

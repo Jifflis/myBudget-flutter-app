@@ -24,4 +24,10 @@ class TransactionRepository {
         where: '${DBKey.TRANSACTION_ID}=?',
         whereArgs: <dynamic>[transactionID]);
   }
+
+  Future<void> delete(String transactionID) async {
+    return await _localProvider.delete<Transaction>(
+        where: '${DBKey.TRANSACTION_ID}=?',
+        whereArgs: <dynamic>[transactionID]);
+  }
 }
