@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mybudget/controller/add_transaction_controller.dart';
-import 'package:get/get.dart';
 
 import '../../model/account.dart';
 

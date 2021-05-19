@@ -3,7 +3,6 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
 import 'package:mybudget/controller/home_controller.dart';
 import 'package:mybudget/enum/status.dart';
-import 'package:mybudget/repository/acount_repository.dart';
 import 'package:mybudget/repository/transaction_repository.dart';
 
 import '../../constant/custom_colors.dart';
@@ -132,18 +131,24 @@ class TransactionsScreen extends TemplateScreen {
   /// Details section
   ///
   ///
-  Widget _buildItems(List<Transaction> transactions) => Expanded(
-        child: Container(
-          padding: EdgeInsets.zero,
-          margin: EdgeInsets.zero,
-          child: ListView.builder(
-              itemBuilder: (BuildContext context, int index) {
-                return TransactionItem(
-                    index: index, transaction: transactions[index]);
-              },
-              itemCount: transactions.length),
-        ),
-      );
+  Widget _buildItems(List<Transaction> transactions) {
+    final TransactionsController controller = Get.find();
+    return Expanded(
+      child: Container(
+        padding: EdgeInsets.zero,
+        margin: EdgeInsets.zero,
+        child: ListView.builder(
+            itemBuilder: (BuildContext context, int index) {
+              return TransactionItem(
+                index: index,
+                transaction: transactions[index],
+                currency: controller.getCurrency(),
+              );
+            },
+            itemCount: transactions.length),
+      ),
+    );
+  }
 }
 
 /// Transaction Item
@@ -154,12 +159,14 @@ class TransactionItem extends StatelessWidget {
       {Key key,
       @required this.index,
       @required this.transaction,
+      @required this.currency,
       this.isLoading})
       : super(key: key);
 
   final int index;
   final bool isLoading;
   final Transaction transaction;
+  final String currency;
 
   @override
   Widget build(BuildContext context) {
@@ -246,7 +253,7 @@ class TransactionItem extends StatelessWidget {
           ),
           Container(
             child: Text(
-              '₱ ${amountFormatter(transaction.amount)}',
+              '$currency ${amountFormatter(transaction.amount)}',
               style: TextStyle(
                   fontSize: 12,
                   color: Colors.blue[600],

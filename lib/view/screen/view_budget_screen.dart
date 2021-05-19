@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
-import 'package:mybudget/controller/view_budget_controller.dart';
-import 'package:mybudget/model/account.dart';
-import 'package:mybudget/view/screen/template_screen.dart';
-import 'package:mybudget/view/widget/budget_button.dart';
-import 'package:mybudget/view/widget/budget_field_label.dart';
-import 'package:mybudget/view/widget/budget_text_button.dart';
-import 'package:mybudget/view/widget/budget_text_field.dart';
+
+import '../../controller/view_budget_controller.dart';
+import '../../model/account.dart';
+import '../widget/budget_button.dart';
+import '../widget/budget_field_label.dart';
+import '../widget/budget_text_button.dart';
+import '../widget/budget_text_field.dart';
+import 'template_screen.dart';
 
 class ViewBudgetScreen extends TemplateScreen {
   @override

@@ -47,4 +47,6 @@ class TransactionsController extends BaseController {
 
     update();
   }
+
+  String getCurrency() => settingsProvider.settings.currency.name;
 }

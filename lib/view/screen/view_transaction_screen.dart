@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:mybudget/controller/add_transaction_controller.dart';
-import 'package:mybudget/controller/view_transaction_controller.dart';
-import 'package:mybudget/model/transaction.dart';
-import 'package:mybudget/repository/acount_repository.dart';
-import 'package:mybudget/repository/transaction_repository.dart';
-import 'package:mybudget/view/widget/budget_button.dart';
-import 'package:mybudget/view/widget/budget_text_button.dart';
-import 'package:mybudget/view/widget/budget_text_field.dart';
-import 'package:mybudget/view/widget/transaction_field_label.dart';
 import 'package:oktoast/oktoast.dart';
 
+import '../../controller/view_transaction_controller.dart';
+import '../../model/transaction.dart';
+import '../../repository/acount_repository.dart';
+import '../../repository/transaction_repository.dart';
+import '../widget/budget_button.dart';
+import '../widget/budget_text_button.dart';
+import '../widget/budget_text_field.dart';
+import '../widget/transaction_field_label.dart';
 import 'template_screen.dart';
 
 class ViewTransactionScreen extends TemplateScreen {
