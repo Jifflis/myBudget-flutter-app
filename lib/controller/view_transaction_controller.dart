@@ -89,4 +89,13 @@ class ViewTransactionController extends BaseController {
   Future<void> resetFields() async {
     isEnabled = false;
   }
+
+  @override
+  void onClose() {
+    super.onClose();
+    titleController.dispose();
+    dateController.dispose();
+    amountController.dispose();
+    remarksController.dispose();
+  }
 }

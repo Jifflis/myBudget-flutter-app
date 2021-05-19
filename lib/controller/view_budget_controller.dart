@@ -113,4 +113,11 @@ class ViewBudgetController extends GetxController {
     }
     return null;
   }
+
+  @override
+  void onClose() {
+    super.onClose();
+    accountNameController.dispose();
+    budgetAmountController.dispose();
+  }
 }

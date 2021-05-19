@@ -106,4 +106,11 @@ class AddTransactionController extends BaseController {
     }
     return null;
   }
+
+  @override
+  void onClose() {
+    super.onClose();
+    amountController.dispose();
+    remarksController.dispose();
+  }
 }
