@@ -30,7 +30,14 @@ class TransactionsScreen extends TemplateScreen {
               size: 38,
             ),
             onPressed: () => Routes.pushNamed(Routes.SCREEN_ADD_TRANSACTION,
-                navigator: Routes.transactionNavigator),
+                    navigator: Routes.transactionNavigator)
+                .then((_) {
+              final TransactionsController controller = Get.find();
+              controller.getTransactionList();
+
+              final HomeController homeController = Get.find();
+              homeController.updateCurrentMonthlyBudgetList();
+            }),
           ),
         )
       ];
