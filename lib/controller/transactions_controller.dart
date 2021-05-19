@@ -21,6 +21,13 @@ class TransactionsController extends BaseController {
   UnmodifiableListView<Transaction> get transactions =>
       UnmodifiableListView<Transaction>(_transactions);
 
+
+  @override
+  void onInit() {
+    getTransactionList();
+    super.onInit();
+  }
+
   /// initialize transaction list
   ///
   ///
