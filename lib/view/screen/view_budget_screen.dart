@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
+import 'package:mybudget/view/dialog/confirmation_dialog.dart';
 
 import '../../controller/view_budget_controller.dart';
 import '../../model/account.dart';
@@ -73,8 +74,19 @@ class ViewBudgetScreen extends TemplateScreen {
                           BudgetTextButton(
                               label: 'Delete',
                               onPressed: () {
-                                controller.deleteAccount();
-                                Navigator.pop(context);
+                                const String message =
+                                    'Are you sure you want to delete?';
+                                showConfirmationDialog(
+                                  context: context,
+                                  message: message,
+                                  yes: () {
+                                    controller.deleteAccount();
+                                    controller.resetPage();
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  },
+                                  cancel: () => Navigator.pop(context),
+                                );
                               }),
                         ],
                       ),

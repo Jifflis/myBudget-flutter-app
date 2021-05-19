@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/state_manager.dart';
+import 'package:mybudget/repository/transaction_repository.dart';
 import 'package:oktoast/oktoast.dart';
 
 import '../model/account.dart';
@@ -16,6 +17,7 @@ class ViewBudgetController extends GetxController {
   final TextEditingController budgetAmountController = TextEditingController();
 
   final AccountRepository _accountRepository = AccountRepository();
+  final TransactionRepository _transactionRepository = TransactionRepository();
 
   /// set data [_isFieldEnabled]
   ///
@@ -101,6 +103,7 @@ class ViewBudgetController extends GetxController {
   ///
   Future<void> deleteAccount() async {
     await _accountRepository.delete(_account.accountId);
+    await _transactionRepository.deleteAll(_account.accountId);
     update();
   }
 
