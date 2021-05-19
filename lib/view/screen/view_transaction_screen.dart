@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mybudget/view/dialog/confirmation_dialog.dart';
+import 'package:mybudget/view/dialog/success_dialog.dart';
 import 'package:oktoast/oktoast.dart';
 
 import '../../controller/view_transaction_controller.dart';
@@ -135,11 +136,15 @@ class ViewTransactionScreen extends TemplateScreen {
                       BudgetButton(
                           controller.isEnabled
                               ? () async {
-                                  await controller.updateTransaction()
-                                      ? showToast('Update Success',
-                                          position: ToastPosition.bottom)
-                                      : showToast('Update Failed',
-                                          position: ToastPosition.bottom);
+                                  if (await controller.updateTransaction()) {
+                                    const String message =
+                                        'Transaction has been updated!';
+                                    showSuccessDialog(
+                                        context: context,
+                                        close: () => Navigator.pop(context),
+                                        message: message);
+                                    controller.resetFields();
+                                  }
                                 }
                               : null,
                           'Update'),

@@ -52,7 +52,7 @@ class ViewBudgetController extends GetxController {
 
   /// update budget account
   ///
-  Future<void> updateAccount() async {
+  Future<bool> updateAccount() async {
     if (isEnabled && formKey.currentState.validate()) {
       _account.title = accountNameController.text;
       _account.budget = double.parse(budgetAmountController.text);
@@ -66,10 +66,10 @@ class ViewBudgetController extends GetxController {
 
       await _accountRepository.upsert(_account);
 
-      showToast('Budget account successfully updated',
-          position: ToastPosition.bottom);
       isEnabled = !isEnabled;
+      return true;
     }
+    return false;
   }
 
   /// edit | cancel text button

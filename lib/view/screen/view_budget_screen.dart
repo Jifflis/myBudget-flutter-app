@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
 import 'package:mybudget/view/dialog/confirmation_dialog.dart';
+import 'package:mybudget/view/dialog/success_dialog.dart';
 
 import '../../controller/view_budget_controller.dart';
 import '../../model/account.dart';
@@ -126,7 +127,16 @@ class ViewBudgetScreen extends TemplateScreen {
                       const SizedBox(height: 30),
                       BudgetButton(
                           controller.isEnabled
-                              ? controller.updateAccount
+                              ? () async {
+                                  if (await controller.updateAccount()) {
+                                    const String message =
+                                        'Account has been updated!';
+                                    showSuccessDialog(
+                                        context: context,
+                                        close: () => Navigator.pop(context),
+                                        message: message);
+                                  }
+                                }
                               : null,
                           'Update'),
                     ],
