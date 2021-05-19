@@ -4,8 +4,6 @@ import 'package:get/instance_manager.dart';
 import 'package:mybudget/controller/home_controller.dart';
 import 'package:mybudget/enum/status.dart';
 import 'package:mybudget/repository/transaction_repository.dart';
-import 'package:mybudget/view/dialog/add_account_success_dialog.dart';
-import 'package:mybudget/view/dialog/add_transaction_success_dialog.dart';
 
 import '../../constant/custom_colors.dart';
 import '../../controller/transactions_controller.dart';

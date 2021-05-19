@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mybudget/view/widget/add_account_success_widget.dart';
 import 'package:mybudget/view/widget/add_transaction_success_widget.dart';
 
 void showAddTransactionSuccessDialog({

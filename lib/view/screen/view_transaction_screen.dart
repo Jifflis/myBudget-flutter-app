@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mybudget/view/dialog/confirmation_dialog.dart';
 import 'package:mybudget/view/dialog/success_dialog.dart';
-import 'package:oktoast/oktoast.dart';
 
 import '../../controller/view_transaction_controller.dart';
 import '../../model/transaction.dart';
