@@ -46,17 +46,17 @@ class ViewTransactionScreen extends TemplateScreen {
       child: Container(
         color: Colors.purple[800],
         child: Container(
-            padding: const EdgeInsets.fromLTRB(40, 0.0, 40, 10),
-            width: double.infinity,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(40),
-                topRight: Radius.circular(40),
-              ),
+          padding: const EdgeInsets.fromLTRB(40, 0.0, 40, 10),
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(40),
+              topRight: Radius.circular(40),
             ),
-            child: SingleChildScrollView(
-                child: GetBuilder<ViewTransactionController>(
+          ),
+          child: SingleChildScrollView(
+            child: GetBuilder<ViewTransactionController>(
               init: controller,
               builder: (_) {
                 return Form(
@@ -104,7 +104,8 @@ class ViewTransactionScreen extends TemplateScreen {
                             decimal: true),
                         textInputFormatterList: <FilteringTextInputFormatter>[
                           FilteringTextInputFormatter.allow(
-                              RegExp(r'^\d+\.?\d{0,2}')),
+                            RegExp(r'^\d+\.?\d{0,2}'),
+                          ),
                         ],
                         isEnabled: controller.isEnabled,
                         hintText: 'Enter Transaction amount',
@@ -137,7 +138,9 @@ class ViewTransactionScreen extends TemplateScreen {
                   ),
                 );
               },
-            ))),
+            ),
+          ),
+        ),
       ),
     );
   }

@@ -15,8 +15,6 @@ pubspec.lock
 .pub-cache/
 .pub/
 **/ios/Flutter/.last_build_id
-**/ios/Flutter/Release.xcconfig
-**/ios/Flutter/Debug.xcconfig
 
 
 # Symbolication related
