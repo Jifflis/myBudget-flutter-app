@@ -29,7 +29,7 @@ class AddBudgetController extends BaseController {
   /// Save account
   ///
   ///
-  Future<void> save() async {
+  Future<bool> save() async {
     if (formKey.currentState.validate()) {
       final Account account = Account(
           summaryId: monthlySummaryID(),
@@ -46,11 +46,9 @@ class AddBudgetController extends BaseController {
       }
 
       await _accountRepository.upsert(account);
-
-      showToast('Budget account successfully added',
-          position: ToastPosition.bottom);
-      resetFields();
+      return true;
     }
+    return false;
   }
 
   Future<void> getList() async {

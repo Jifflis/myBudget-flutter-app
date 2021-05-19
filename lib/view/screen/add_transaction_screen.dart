@@ -4,6 +4,8 @@ import 'package:mybudget/controller/add_transaction_controller.dart';
 import 'package:mybudget/enum/status.dart';
 import 'package:mybudget/repository/acount_repository.dart';
 import 'package:mybudget/repository/transaction_repository.dart';
+import 'package:mybudget/routes.dart';
+import 'package:mybudget/view/dialog/add_transaction_success_dialog.dart';
 import 'package:mybudget/view/widget/add_transaction_dropdown.dart';
 import 'package:get/get.dart';
 import 'package:oktoast/oktoast.dart';
@@ -81,11 +83,22 @@ class AddTransactionScreen extends TemplateScreen {
                           const SizedBox(height: 30),
                           const SizedBox(height: 30),
                           BudgetButton(() async {
-                            await controller.save()
-                                ? showToast('Saving Success',
-                                    position: ToastPosition.bottom)
-                                : showToast('Saving failed',
-                                    position: ToastPosition.bottom);
+                            if (await controller.save()) {
+                              showAddTransactionSuccessDialog(
+                                  context: context,
+                                  close: () {
+                                    Navigator.of(context, rootNavigator: true)
+                                        .pop();
+                                    Navigator.pop(context);
+                                  },
+                                  addAnother: () =>
+                                      Navigator.of(context, rootNavigator: true)
+                                          .pop(),
+                                  title: controller.selectedAccount.title,
+                                  amount: controller.amountController.text,
+                                  remarks: controller.remarksController.text);
+                              controller.resetFields();
+                            }
                           }, 'Save'),
                         ],
                       ),

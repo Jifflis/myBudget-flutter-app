@@ -63,7 +63,6 @@ class AddTransactionController extends BaseController {
           selectedAccount.budget - selectedAccount.expense;
       await accountRepository.upsert(selectedAccount);
 
-      resetFields();
       return true;
     }
     return false;
