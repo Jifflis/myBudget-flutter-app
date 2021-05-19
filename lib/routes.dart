@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 import 'package:mybudget/view/screen/add_transaction_screen.dart';
-import 'package:mybudget/view/screen/view_transaction_scree.dart';
+import 'package:mybudget/view/screen/view_transaction_screen.dart';
 import 'package:mybudget/view/screen/change_currency_screen.dart';
 
 import 'view/screen/add_budget_screen.dart';

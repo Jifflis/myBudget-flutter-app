@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
+import 'package:mybudget/controller/home_controller.dart';
 import 'package:mybudget/enum/status.dart';
 import 'package:mybudget/repository/acount_repository.dart';
 import 'package:mybudget/repository/transaction_repository.dart';
@@ -274,8 +275,17 @@ class TransactionItem extends StatelessWidget {
   ///
   Widget _buildAction() => InkWell(
         onTap: () {
-          Routes.pushNamed(Routes.SCREEN_ADD_TRANSACTION,
-              navigator: Routes.homeNavigator);
+          Routes.pushNamed(
+            Routes.SCREEN_VIEW_TRANSACTION,
+            navigator: Routes.homeNavigator,
+            arguments: transaction,
+          ).then((_) {
+            final TransactionsController controller = Get.find();
+            controller.updateItem(transaction);
+
+            final HomeController homeController = Get.find();
+            homeController.updateCurrentMonthlyBudgetList();
+          });
         },
         child: Container(
             width: 25,

@@ -82,7 +82,7 @@ class AddTransactionScreen extends TemplateScreen {
                           const SizedBox(height: 30),
                           BudgetButton(() async {
                             await controller.save()
-                                ? showToast('Success',
+                                ? showToast('Saving Success',
                                     position: ToastPosition.bottom)
                                 : showToast('Saving failed',
                                     position: ToastPosition.bottom);

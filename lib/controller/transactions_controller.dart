@@ -29,4 +29,17 @@ class TransactionsController extends BaseController {
     _transactions = await transactionRepository.getTransactions();
     status = Status.COMPLETED;
   }
+
+  /// update specific transaction
+  ///
+  ///
+  Future<void> updateItem(Transaction transaction) async {
+    final Transaction temp =
+        await transactionRepository.getTransaction(transaction.transactionID);
+
+    _transactions[_transactions.indexWhere((Transaction element) =>
+        element.transactionID == transaction.transactionID)] = temp;
+
+    update();
+  }
 }

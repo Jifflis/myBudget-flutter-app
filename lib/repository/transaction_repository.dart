@@ -1,3 +1,4 @@
+import 'package:mybudget/constant/db_keys.dart';
 import 'package:mybudget/model/transaction.dart';
 import 'package:mybudget/resources/local_provider.dart';
 
@@ -16,5 +17,11 @@ class TransactionRepository {
 
   Future<void> upsert(Transaction transaction) async {
     await _localProvider.upsert<Transaction>(transaction);
+  }
+
+  Future<Transaction> getTransaction(String transactionID) async {
+    return await _localProvider.get<Transaction>(
+        where: '${DBKey.TRANSACTION_ID}=?',
+        whereArgs: <dynamic>[transactionID]);
   }
 }

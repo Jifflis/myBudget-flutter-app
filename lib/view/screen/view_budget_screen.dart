@@ -7,6 +7,7 @@ import 'package:mybudget/model/account.dart';
 import 'package:mybudget/view/screen/template_screen.dart';
 import 'package:mybudget/view/widget/budget_button.dart';
 import 'package:mybudget/view/widget/budget_field_label.dart';
+import 'package:mybudget/view/widget/budget_text_button.dart';
 import 'package:mybudget/view/widget/budget_text_field.dart';
 
 class ViewBudgetScreen extends TemplateScreen {
@@ -61,16 +62,16 @@ class ViewBudgetScreen extends TemplateScreen {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
-                          _textButton(
+                          BudgetTextButton(
                               label: controller.isEnabled ? 'Cancel' : 'Edit',
-                              function: () {
+                              onPressed: () {
                                 FocusScope.of(context).unfocus();
                                 controller.edit();
                               }),
                           const SizedBox(width: 20),
-                          _textButton(
+                          BudgetTextButton(
                               label: 'Delete',
-                              function: () {
+                              onPressed: () {
                                 controller.deleteAccount();
                                 Navigator.pop(context);
                               }),
@@ -120,20 +121,6 @@ class ViewBudgetScreen extends TemplateScreen {
                 );
               },
             ))),
-      ),
-    );
-  }
-
-  /// TEXT BUTTON
-  ///
-  ///
-  Widget _textButton({@required String label, @required Function function}) {
-    return InkWell(
-      onTap: function,
-      child: Text(
-        label,
-        style: const TextStyle(
-            color: Colors.black87, fontSize: 16, fontWeight: FontWeight.bold),
       ),
     );
   }
