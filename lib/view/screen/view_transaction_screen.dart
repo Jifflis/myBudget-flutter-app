@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:mybudget/view/dialog/confirmation_dialog.dart';
 import 'package:oktoast/oktoast.dart';
 
 import '../../controller/view_transaction_controller.dart';
@@ -76,9 +77,18 @@ class ViewTransactionScreen extends TemplateScreen {
                           BudgetTextButton(
                               label: 'Delete',
                               onPressed: () {
-                                controller.deleteTransaction();
-                                controller.resetFields();
-                                Navigator.pop(context);
+                                const String message =
+                                    'Are you sure you want to delete?';
+                                showConfirmationDialog(
+                                    context: context,
+                                    message: message,
+                                    yes: () {
+                                      controller.deleteTransaction();
+                                      controller.resetFields();
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                    },
+                                    cancel: () => Navigator.pop(context));
                               }),
                         ],
                       ),
