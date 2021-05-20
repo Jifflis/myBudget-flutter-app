@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mybudget/util/number_util.dart';
 import '../controller/base_controller.dart';
 import '../model/account.dart';
 import '../model/transaction.dart';
@@ -112,6 +113,17 @@ class ViewTransactionController extends BaseController {
   ///
   Future<void> resetFields() async {
     isEnabled = false;
+  }
+
+  TextEditingController formattedAmount() {
+    if (!isEnabled) {
+      amountController.text = amountFormatter(
+          double.parse(amountController.text.replaceAll(',', '')));
+    } else {
+      amountController.text = amountController.text.replaceAll(',', '');
+    }
+
+    return amountController;
   }
 
   @override
