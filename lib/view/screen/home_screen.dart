@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:mybudget/controller/transactions_controller.dart';
 import 'package:mybudget/enum/status.dart';
+import 'package:mybudget/util/color_util.dart';
 import 'package:mybudget/util/date_util.dart';
 
 import '../../constant/custom_colors.dart';
@@ -195,17 +196,22 @@ class HomePageTemplate extends TemplateScreen {
               ),
               Text(
                 amountFormatter(model.balance),
-                style: const TextStyle(
-                  fontSize: 42,
-                  fontWeight: FontWeight.w400,
-                ),
+                style: TextStyle(
+                    fontSize: 42,
+                    fontWeight: FontWeight.w400,
+                    color: balanceColorIndicator(
+                      budget: model.budget,
+                      balance: model.balance,
+                    )),
               ),
             ],
           ),
           const SizedBox(height: 5),
           const Text(
             'Balance',
-            style: TextStyle(fontSize: 12),
+            style: TextStyle(
+              fontSize: 12,
+            ),
           ),
           const SizedBox(height: 15),
         ],
@@ -386,7 +392,10 @@ class BudgetItem extends StatelessWidget {
                   'Bal: ${amountFormatter(budget.budget - budget.expense)}',
                   style: TextStyle(
                       fontSize: 12,
-                      color: Colors.pink[600],
+                      color: balanceColorIndicator(
+                        budget: budget.budget,
+                        balance: budget.balance,
+                      ),
                       fontWeight: FontWeight.w400),
                 ),
               ),
