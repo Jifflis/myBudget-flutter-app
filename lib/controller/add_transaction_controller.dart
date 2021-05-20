@@ -21,8 +21,22 @@ class AddTransactionController extends BaseController {
   final TextEditingController amountController = TextEditingController();
   final TextEditingController remarksController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  DateTime _selectedDate = DateTime.now();
   List<Account> _accountList = <Account>[];
   Account _selectedAccount;
+
+  /// get data [_selectedDate]
+  ///
+  ///
+  DateTime get selectedDate => _selectedDate;
+
+  /// set data [_selectedData]
+  ///
+  ///
+  set selectedDate(DateTime dateTime) {
+    _selectedDate = dateTime;
+    update();
+  }
 
   /// get params
   ///
@@ -50,11 +64,15 @@ class AddTransactionController extends BaseController {
   Future<bool> save() async {
     if (formKey.currentState.validate()) {
       final Transaction transaction = Transaction(
-          transactionID: randomID(),
-          userID: userProvider.user.userId,
-          accountID: selectedAccount.accountId,
-          remarks: remarksController.text,
-          amount: double.parse(amountController.text));
+        transactionID: randomID(),
+        userID: userProvider.user.userId,
+        accountID: selectedAccount.accountId,
+        remarks: remarksController.text,
+        amount: double.parse(amountController.text),
+        createdAt: selectedDate,
+        updatedAT: selectedDate,
+      );
+
       transactionRepository.upsert(transaction);
 
       // update account
@@ -74,6 +92,7 @@ class AddTransactionController extends BaseController {
   void resetFields() {
     amountController.clear();
     remarksController.clear();
+    _selectedDate = DateTime.now();
   }
 
   /// get unmodified [accountList]

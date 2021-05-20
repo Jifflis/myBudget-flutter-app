@@ -7,6 +7,7 @@ import 'package:mybudget/repository/transaction_repository.dart';
 import 'package:mybudget/view/dialog/add_transaction_success_dialog.dart';
 import 'package:mybudget/view/widget/add_transaction_dropdown.dart';
 import 'package:get/get.dart';
+import 'package:mybudget/view/widget/budget_date_selector_button.dart';
 
 import '../../model/account.dart';
 import '../widget/budget_button.dart';
@@ -55,6 +56,15 @@ class AddTransactionScreen extends TemplateScreen {
                             selected: controller.selectedAccount,
                             onChange: (Account value) {
                               controller.selectedAccount = value;
+                            },
+                          ),
+                          const SizedBox(height: 15),
+                          const BudgetFieldLabel(label: 'Date'),
+                          const SizedBox(height: 15),
+                          BudgetDateSelectorButton(
+                            selectedDate: controller.selectedDate,
+                            dateCallBack: (DateTime dateTime) {
+                              controller.selectedDate = dateTime;
                             },
                           ),
                           const SizedBox(height: 15),
