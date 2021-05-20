@@ -26,8 +26,16 @@ class TransactionRepository {
   }
 
   Future<void> delete(String transactionID) async {
-    return await _localProvider.delete<Transaction>(
-        where: '${DBKey.TRANSACTION_ID}=?',
-        whereArgs: <dynamic>[transactionID]);
+    await _localProvider.delete<Transaction>(
+      where: '${DBKey.TRANSACTION_ID}=?',
+      whereArgs: <dynamic>[transactionID],
+    );
+  }
+
+  Future<void> deleteAll(String accountID) async {
+    await _localProvider.delete<Transaction>(
+      where: '${DBKey.ACCOUNT_ID}=?',
+      whereArgs: <dynamic>[accountID],
+    );
   }
 }

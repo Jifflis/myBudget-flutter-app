@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mybudget/controller/base_controller.dart';
-import 'package:mybudget/model/account.dart';
-import 'package:mybudget/model/transaction.dart';
-import 'package:mybudget/repository/acount_repository.dart';
-import 'package:mybudget/repository/transaction_repository.dart';
-import 'package:mybudget/util/date_util.dart';
+import '../controller/base_controller.dart';
+import '../model/account.dart';
+import '../model/transaction.dart';
+import '../repository/acount_repository.dart';
+import '../repository/transaction_repository.dart';
 
 class ViewTransactionController extends BaseController {
   ViewTransactionController({
@@ -20,8 +19,21 @@ class ViewTransactionController extends BaseController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController titleController = TextEditingController();
   final TextEditingController amountController = TextEditingController();
-  final TextEditingController dateController = TextEditingController();
   final TextEditingController remarksController = TextEditingController();
+  DateTime _selectedDate = DateTime.now();
+
+  /// get data [_selectedDate]
+  ///
+  ///
+  DateTime get selectedDate => _selectedDate;
+
+  /// set data [_selectedDate]
+  ///
+  ///
+  set selectedDate(DateTime dateTime) {
+    _selectedDate = dateTime;
+    update();
+  }
 
   /// get params
   ///
@@ -30,10 +42,7 @@ class ViewTransactionController extends BaseController {
     _transaction = transaction;
     titleController.text = transaction.account.title;
     amountController.text = transaction.amount.toString();
-    final Map<String, dynamic> dateObj =
-        dateSimplified(transaction.updatedAT.toString());
-    dateController.text =
-        '${dateObj['MM']} ${dateObj['DD']}, ${dateObj['YYYY']}';
+    _selectedDate = transaction.updatedAT;
     remarksController.text = transaction.remarks;
   }
 
@@ -64,6 +73,7 @@ class ViewTransactionController extends BaseController {
           double.parse(amountController.text) - _transaction.amount;
       _transaction.amount = double.parse(amountController.text);
       _transaction.remarks = remarksController.text;
+      _transaction.updatedAT = selectedDate;
       transactionRepository.upsert(transaction);
 
       final Account account = _transaction.account;
@@ -108,7 +118,6 @@ class ViewTransactionController extends BaseController {
   void onClose() {
     super.onClose();
     titleController.dispose();
-    dateController.dispose();
     amountController.dispose();
     remarksController.dispose();
   }
