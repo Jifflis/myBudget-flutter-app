@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mybudget/view/dialog/confirmation_dialog.dart';
 import 'package:mybudget/view/dialog/success_dialog.dart';
+import 'package:mybudget/view/widget/budget_date_selector_button.dart';
 
 import '../../controller/view_transaction_controller.dart';
 import '../../model/transaction.dart';
@@ -102,10 +103,12 @@ class ViewTransactionScreen extends TemplateScreen {
                       const SizedBox(height: 30),
                       const TransactionFieldLabel(label: 'Transaction Date'),
                       const SizedBox(height: 15),
-                      BudgetTextField(
-                          isEnabled: false,
-                          hintText: 'Enter Transaction Date',
-                          controller: controller.dateController),
+                      BudgetDateSelectorButton(
+                          enabled: controller.isEnabled,
+                          selectedDate: controller.selectedDate,
+                          dateCallBack: (DateTime dateTime) {
+                            controller.selectedDate = dateTime;
+                          }),
                       const SizedBox(height: 15),
                       const TransactionFieldLabel(label: 'Transaction amount'),
                       const SizedBox(height: 15),
