@@ -116,13 +116,14 @@ class ViewTransactionScreen extends TemplateScreen {
                         keyboardType: const TextInputType.numberWithOptions(
                             decimal: true),
                         textInputFormatterList: <FilteringTextInputFormatter>[
-                          FilteringTextInputFormatter.allow(
-                            RegExp(r'^\d+\.?\d{0,2}'),
-                          ),
+                          if (controller.isEnabled)
+                            FilteringTextInputFormatter.allow(
+                              RegExp(r'^\d+\.?\d{0,2}'),
+                            ),
                         ],
                         isEnabled: controller.isEnabled,
                         hintText: 'Enter Transaction amount',
-                        controller: controller.amountController,
+                        controller: controller.formattedAmount(),
                         validator: controller.textFieldValidator,
                       ),
                       const SizedBox(height: 15),
