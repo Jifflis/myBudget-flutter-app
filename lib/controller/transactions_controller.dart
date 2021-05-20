@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'package:meta/meta.dart';
 import 'package:mybudget/controller/base_controller.dart';
 import 'package:mybudget/enum/status.dart';
+import 'package:mybudget/model/filter.dart';
 import 'package:mybudget/repository/transaction_repository.dart';
 
 import '../model/transaction.dart';
@@ -9,11 +10,14 @@ import '../model/transaction.dart';
 class TransactionsController extends BaseController {
   TransactionsController({
     @required this.transactionRepository,
+    this.filters,
   });
 
   final TransactionRepository transactionRepository;
 
   List<Transaction> _transactions = <Transaction>[];
+
+  List<Filter> filters;
 
   /// get unmodifiable [_transactions]
   ///
@@ -24,6 +28,8 @@ class TransactionsController extends BaseController {
 
   @override
   void onInit() {
+    filters ??= Filter.defaultFilter();
+
     getTransactionList();
     super.onInit();
   }
@@ -33,7 +39,7 @@ class TransactionsController extends BaseController {
   ///
   Future<void> getTransactionList() async {
     status = Status.LOADING;
-    _transactions = await transactionRepository.getTransactions();
+    _transactions = (await transactionRepository.getTransactions(filters))??<Transaction>[];
     status = Status.COMPLETED;
   }
 

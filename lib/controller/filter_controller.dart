@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 import '../enum/filter_type.dart';
 import '../model/filter.dart';
@@ -26,12 +25,7 @@ class FilterController extends GetxController {
   /// [FilterType.month],[FilterType.day],[FilterType.year]
   ///
   void _addDefaultFilter() {
-    final DateTime dateNow = DateTime.now();
-    filters = <Filter>[
-      Filter(dateNow.day.toString(), FilterType.day),
-      Filter(DateFormat.MMMM().format(dateNow), FilterType.month),
-      Filter(dateNow.year.toString(), FilterType.year),
-    ];
+    filters = Filter.defaultFilter();
     filters.sort();
   }
 

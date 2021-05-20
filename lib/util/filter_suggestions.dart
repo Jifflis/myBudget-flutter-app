@@ -8,17 +8,18 @@ class Day {}
 class Year {}
 
 List<Filter> monthsFilter = <Filter>[
-  Filter('January', FilterType.month),
-  Filter('February', FilterType.month),
-  Filter('March', FilterType.month),
-  Filter('April', FilterType.month),
-  Filter('May', FilterType.month),
-  Filter('June', FilterType.month),
-  Filter('July', FilterType.month),
-  Filter('September', FilterType.month),
-  Filter('October', FilterType.month),
-  Filter('November', FilterType.month),
-  Filter('December', FilterType.month),
+  Filter('January', FilterType.month,key: '01'),
+  Filter('February', FilterType.month,key: '02'),
+  Filter('March', FilterType.month,key: '03'),
+  Filter('April', FilterType.month,key: '04'),
+  Filter('May', FilterType.month,key: '05'),
+  Filter('June', FilterType.month,key: '06'),
+  Filter('July', FilterType.month,key: '07'),
+  Filter('August', FilterType.month,key: '08'),
+  Filter('September', FilterType.month,key: '09'),
+  Filter('October', FilterType.month,key: '10'),
+  Filter('November', FilterType.month,key: '11'),
+  Filter('December', FilterType.month,key: '12'),
 ];
 
 List<Filter> daysFilter = <Filter>[

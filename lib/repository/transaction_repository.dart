@@ -1,4 +1,5 @@
 import 'package:mybudget/constant/db_keys.dart';
+import 'package:mybudget/model/filter.dart';
 import 'package:mybudget/model/transaction.dart';
 import 'package:mybudget/resources/local_provider.dart';
 
@@ -11,8 +12,20 @@ class TransactionRepository {
 
   final LocalProvider _localProvider = LocalProvider();
 
-  Future<List<Transaction>> getTransactions() async {
-    return await _localProvider.list<Transaction>(orderBy: 'id desc');
+  Future<List<Transaction>> getTransactions(List<Filter> filters) async {
+    final Map<String, dynamic> filter = Filter.generateFilter(filters);
+
+    if(filter==null){
+      return <Transaction>[];
+    }
+
+    print(filter['where']);
+    print(filter['whereArgs'].toString());
+
+    return await _localProvider.list<Transaction>(
+        where: filter['where'],
+        whereArgs: filter['whereArgs'],
+        orderBy: 'id desc');
   }
 
   Future<void> upsert(Transaction transaction) async {

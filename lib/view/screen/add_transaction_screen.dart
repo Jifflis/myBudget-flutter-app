@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:mybudget/controller/add_transaction_controller.dart';
 import 'package:mybudget/enum/status.dart';
 import 'package:mybudget/repository/acount_repository.dart';
 import 'package:mybudget/repository/transaction_repository.dart';
 import 'package:mybudget/view/widget/add_transaction_dropdown.dart';
-import 'package:get/get.dart';
 import 'package:oktoast/oktoast.dart';
 
 import '../../model/account.dart';
@@ -28,11 +28,12 @@ class AddTransactionScreen extends TemplateScreen {
   Widget buildBody(BuildContext context) {
     final Account account =
         ModalRoute.of(context).settings.arguments as Account;
-    final AddTransactionController controller =
-        Get.put(AddTransactionController(
-      transactionRepository: TransactionRepository(),
-      accountRepository: AccountRepository(),
-    ));
+    final AddTransactionController controller = Get.put(
+      AddTransactionController(
+        transactionRepository: TransactionRepository(),
+        accountRepository: AccountRepository(),
+      ),
+    );
     controller.getParams(account);
     return GetBuilder<AddTransactionController>(
         init: controller,
