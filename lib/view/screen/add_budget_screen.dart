@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:mybudget/view/dialog/add_account_success_dialog.dart';
 
 import '../../controller/add_budget_controller.dart';
 import '../widget/budget_button.dart';
@@ -70,9 +71,21 @@ class AddBudgetScreen extends TemplateScreen {
                       ],
                     ),
                     const SizedBox(height: 30),
-                    BudgetButton(() {
+                    BudgetButton(() async {
                       FocusScope.of(context).unfocus();
-                      controller.save();
+                      if (await controller.save()) {
+                        showAddAccountSuccessDialog(
+                            context: context,
+                            close: () {
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            },
+                            addAnother: () {
+                              Navigator.pop(context);
+                            },
+                            message: 'Account has been saved!');
+                        controller.resetFields();
+                      }
                     }, 'Save'),
                   ],
                 ),

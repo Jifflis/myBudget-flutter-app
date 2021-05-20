@@ -8,8 +8,8 @@ abstract class BaseModel {
     if (json != null) {
       fromJson(json);
     }
-    createdAt = DateTime.now();
-    updatedAT = DateTime.now();
+    createdAt = createdAt ?? DateTime.now();
+    updatedAT = updatedAT ?? DateTime.now();
   }
 
   DateTime createdAt;

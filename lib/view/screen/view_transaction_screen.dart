@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:oktoast/oktoast.dart';
+import 'package:mybudget/view/dialog/confirmation_dialog.dart';
+import 'package:mybudget/view/dialog/success_dialog.dart';
+import 'package:mybudget/view/widget/budget_date_selector_button.dart';
+import 'package:mybudget/view/widget/budget_field_label.dart';
 
 import '../../controller/view_transaction_controller.dart';
 import '../../model/transaction.dart';
@@ -10,7 +13,6 @@ import '../../repository/transaction_repository.dart';
 import '../widget/budget_button.dart';
 import '../widget/budget_text_button.dart';
 import '../widget/budget_text_field.dart';
-import '../widget/transaction_field_label.dart';
 import 'template_screen.dart';
 
 class ViewTransactionScreen extends TemplateScreen {
@@ -76,28 +78,39 @@ class ViewTransactionScreen extends TemplateScreen {
                           BudgetTextButton(
                               label: 'Delete',
                               onPressed: () {
-                                controller.deleteTransaction();
-                                controller.resetFields();
-                                Navigator.pop(context);
+                                const String message =
+                                    'Are you sure you want to delete?';
+                                showConfirmationDialog(
+                                    context: context,
+                                    message: message,
+                                    yes: () {
+                                      controller.deleteTransaction();
+                                      controller.resetFields();
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                    },
+                                    cancel: () => Navigator.pop(context));
                               }),
                         ],
                       ),
                       const SizedBox(height: 30),
-                      const TransactionFieldLabel(label: 'Account name'),
+                      const BudgetFieldLabel(label: 'Account name'),
                       const SizedBox(height: 15),
                       BudgetTextField(
                           isEnabled: false,
                           hintText: 'Enter account name',
                           controller: controller.titleController),
                       const SizedBox(height: 30),
-                      const TransactionFieldLabel(label: 'Transaction Date'),
+                      const BudgetFieldLabel(label: 'Transaction Date'),
                       const SizedBox(height: 15),
-                      BudgetTextField(
-                          isEnabled: false,
-                          hintText: 'Enter Transaction Date',
-                          controller: controller.dateController),
+                      BudgetDateSelectorButton(
+                          enabled: controller.isEnabled,
+                          selectedDate: controller.selectedDate,
+                          dateCallBack: (DateTime dateTime) {
+                            controller.selectedDate = dateTime;
+                          }),
                       const SizedBox(height: 15),
-                      const TransactionFieldLabel(label: 'Transaction amount'),
+                      const BudgetFieldLabel(label: 'Transaction amount'),
                       const SizedBox(height: 15),
                       BudgetTextField(
                         keyboardType: const TextInputType.numberWithOptions(
@@ -113,7 +126,7 @@ class ViewTransactionScreen extends TemplateScreen {
                         validator: controller.textFieldValidator,
                       ),
                       const SizedBox(height: 15),
-                      const TransactionFieldLabel(label: 'Remarks'),
+                      const BudgetFieldLabel(label: 'Remarks'),
                       const SizedBox(height: 15),
                       BudgetTextField(
                         isEnabled: controller.isEnabled,
@@ -125,11 +138,15 @@ class ViewTransactionScreen extends TemplateScreen {
                       BudgetButton(
                           controller.isEnabled
                               ? () async {
-                                  await controller.updateTransaction()
-                                      ? showToast('Update Success',
-                                          position: ToastPosition.bottom)
-                                      : showToast('Update Failed',
-                                          position: ToastPosition.bottom);
+                                  if (await controller.updateTransaction()) {
+                                    const String message =
+                                        'Transaction has been updated!';
+                                    showSuccessDialog(
+                                        context: context,
+                                        close: () => Navigator.pop(context),
+                                        message: message);
+                                    controller.resetFields();
+                                  }
                                 }
                               : null,
                           'Update'),
