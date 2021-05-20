@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:mybudget/controller/transactions_controller.dart';
 import 'package:mybudget/enum/status.dart';
 import 'package:mybudget/util/date_util.dart';
 
@@ -226,6 +227,10 @@ class HomePageTemplate extends TemplateScreen {
                               navigator: Routes.homeNavigator,
                               arguments: monthlyBudgetModel.accountList[index])
                           .then((_) {
+                        final TransactionsController transactionController =
+                            Get.find();
+                        transactionController.getTransactionList();
+
                         final HomeController controller = Get.find();
                         controller.updateCurrentMonthlyBudgetList();
                       });
