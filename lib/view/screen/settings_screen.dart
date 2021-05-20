@@ -4,7 +4,8 @@ import 'package:mybudget/view/screen/template_screen.dart';
 
 class SettingsScreen extends TemplateScreen {
   @override
-  String get title => 'Settings';
+  Widget get title => const Text('Settings');
+
   @override
   Widget buildBody(BuildContext context) {
     return Container(

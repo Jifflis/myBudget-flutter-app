@@ -39,29 +39,38 @@ class Filter implements Comparable<Filter> {
     ];
   }
 
-  ///param [filters] should have a type of [FilterType.month] and [FilterType.year]
-  ///otherwise it will return null;
-  ///
-  static Map<String, dynamic> generateFilter(List<Filter> filters) {
+  static Map<String, dynamic> generateFilter(List<Filter> filters,{bool filterNoneDate = true}) {
     //check null or length is less than 2
-    if (filters == null || filters.length < 2) {
+    if (filters == null) {
       return null;
     }
+
+    final DateTime dateNow = DateTime.now();
 
     //sort filter
     filters.sort();
 
     //check if filters contains  FilterType.month
-    if (filters[0].type != FilterType.month) {
-      return null;
+    if (filters.isEmpty || filters[0].type != FilterType.month) {
+      filters.add(
+        Filter(
+          DateFormat.MMMM().format(dateNow),
+          FilterType.month,
+          key: dateNow.month.toString(),
+        ),
+      );
+      filters.sort();
     }
 
-    //check if filters contains  FilterType.year
+    //check if filter type year is exist
     final Filter filter = filters.firstWhere(
         (Filter element) => element.type == FilterType.year,
         orElse: () => null);
     if (filter == null) {
-      return null;
+      filters.add(
+        Filter(dateNow.year.toString(), FilterType.year),
+      );
+      filters.sort();
     }
 
     final Map<String, dynamic> map = <String, dynamic>{};
@@ -83,16 +92,20 @@ class Filter implements Comparable<Filter> {
           '${filters[1].name.padLeft(2, '0')}-${filters[0].key.padLeft(2, '0')}-31 11:59:59');
     }
 
-    for (final Filter filter in filters) {
-      if (filter.type == FilterType.month ||
-          filter.type == FilterType.day ||
-          filter.type == FilterType.year) {
-        continue;
-      }
 
-      where += ' and ${filter.type.dbValue} = ?';
-      whereArgs.add(filter.key);
+    if(filterNoneDate){
+      for (final Filter filter in filters) {
+        if (filter.type == FilterType.month ||
+            filter.type == FilterType.day ||
+            filter.type == FilterType.year) {
+          continue;
+        }
+
+        where += ' and ${filter.type.dbValue} = ?';
+        whereArgs.add(filter.key);
+      }
     }
+
 
     map['where'] = where;
     map['whereArgs'] = whereArgs;

@@ -71,7 +71,7 @@ class HomePageTemplate extends TemplateScreen {
   final int index;
 
   @override
-  String get title => _buildTitle(index, monthlyBudgetModel);
+  Widget get title => Text(_buildTitle(index, monthlyBudgetModel));
 
   @override
   List<Widget> get appBarActions => <Widget>[_buildAction(index)];

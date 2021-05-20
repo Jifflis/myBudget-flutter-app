@@ -1,3 +1,4 @@
+import 'package:mybudget/model/filter.dart';
 import 'package:mybudget/util/id_util.dart';
 
 import '../constant/db_keys.dart';
@@ -20,6 +21,20 @@ class AccountRepository {
   Future<void> delete(String accountID) async {
     await _localProvider.delete<Account>(
         where: '${DBKey.ACCOUNT_ID}=?', whereArgs: <dynamic>[accountID]);
+  }
+
+  Future<List<Account>> getAccountsWithFiltr(List<Filter> filters) async {
+
+    final Map<String, dynamic> filter = Filter.generateFilter(filters);
+
+    if (filter == null) {
+      return <Account>[];
+    }
+
+    return await _localProvider.list<Account>(
+        where: filter['where'],
+        whereArgs: filter['whereArgs'],
+        orderBy: 'id desc');
   }
 
   Future<List<Account>> getAccounts() async {

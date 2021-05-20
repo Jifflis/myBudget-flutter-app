@@ -1,0 +1,4 @@
+enum TransactionViewType{
+  month,
+  day,
+}

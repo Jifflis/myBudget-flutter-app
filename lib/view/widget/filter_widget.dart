@@ -37,7 +37,9 @@ class FilterWidget extends StatelessWidget {
             children: <Widget>[
               _buildSuggestionList(controller),
               _buildSearchField(controller),
-              BudgetButton(onOk, 'Ok'),
+              BudgetButton((){
+                onOk(controller.getFilters());
+              }, 'Ok'),
             ],
           ),
         );

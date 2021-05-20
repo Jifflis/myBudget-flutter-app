@@ -1,7 +1,7 @@
-import 'package:mybudget/constant/db_keys.dart';
-import 'package:mybudget/model/filter.dart';
-import 'package:mybudget/model/transaction.dart';
-import 'package:mybudget/resources/local_provider.dart';
+import '../constant/db_keys.dart';
+import '../model/filter.dart';
+import '../model/transaction.dart';
+import '../resources/local_provider.dart';
 
 class TransactionRepository {
   factory TransactionRepository() => _instance;
@@ -12,15 +12,21 @@ class TransactionRepository {
 
   final LocalProvider _localProvider = LocalProvider();
 
-  Future<List<Transaction>> getTransactions(List<Filter> filters) async {
+  Future<List<Transaction>> getTransactions(
+  {String where,List<dynamic> whereArgs}) async {
+    return await _localProvider.list<Transaction>(
+        where: where,
+        whereArgs: whereArgs,
+        orderBy: '${DBKey.UPDATED_AT} desc');
+  }
+
+  Future<List<Transaction>> getTransactionsWithFilter(
+      List<Filter> filters) async {
     final Map<String, dynamic> filter = Filter.generateFilter(filters);
 
-    if(filter==null){
+    if (filter == null) {
       return <Transaction>[];
     }
-
-    print(filter['where']);
-    print(filter['whereArgs'].toString());
 
     return await _localProvider.list<Transaction>(
         where: filter['where'],

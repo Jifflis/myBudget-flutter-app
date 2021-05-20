@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:mybudget/controller/add_transaction_controller.dart';
-import 'package:mybudget/enum/status.dart';
-import 'package:mybudget/repository/acount_repository.dart';
-import 'package:mybudget/repository/transaction_repository.dart';
-import 'package:mybudget/view/dialog/add_transaction_success_dialog.dart';
-import 'package:mybudget/view/widget/add_transaction_dropdown.dart';
-import 'package:mybudget/view/widget/budget_date_selector_button.dart';
 
+import '../../controller/add_transaction_controller.dart';
+import '../../enum/status.dart';
 import '../../model/account.dart';
+import '../../repository/acount_repository.dart';
+import '../../repository/transaction_repository.dart';
+import '../dialog/add_transaction_success_dialog.dart';
+import '../widget/add_transaction_dropdown.dart';
 import '../widget/budget_button.dart';
+import '../widget/budget_date_selector_button.dart';
 import '../widget/budget_field_label.dart';
 import '../widget/budget_text_field.dart';
 import 'template_screen.dart';
@@ -23,7 +23,7 @@ class AddTransactionScreen extends TemplateScreen {
       );
 
   @override
-  String get title => 'Add Transaction';
+  Widget get title => const Text('Add Transaction');
 
   @override
   Widget buildBody(BuildContext context) {
@@ -50,6 +50,19 @@ class AddTransactionScreen extends TemplateScreen {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           const SizedBox(height: 58),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              BudgetDateSelectorButton(
+                                text: '${controller.selectedDate.month.toString().padLeft(2, "0")}/${controller.selectedDate.day.toString().padLeft(2, "0")}/${controller.selectedDate.year}',
+                                selectedDate: controller.selectedDate,
+                                dateCallBack: (DateTime dateTime) {
+                                  controller.selectedDate = dateTime;
+                                },
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 32),
                           const BudgetFieldLabel(label: 'Budget Account'),
                           const SizedBox(height: 15),
                           AddTransactionDropdown<Account>(
@@ -57,15 +70,6 @@ class AddTransactionScreen extends TemplateScreen {
                             selected: controller.selectedAccount,
                             onChange: (Account value) {
                               controller.selectedAccount = value;
-                            },
-                          ),
-                          const SizedBox(height: 15),
-                          const BudgetFieldLabel(label: 'Date'),
-                          const SizedBox(height: 15),
-                          BudgetDateSelectorButton(
-                            selectedDate: controller.selectedDate,
-                            dateCallBack: (DateTime dateTime) {
-                              controller.selectedDate = dateTime;
                             },
                           ),
                           const SizedBox(height: 15),

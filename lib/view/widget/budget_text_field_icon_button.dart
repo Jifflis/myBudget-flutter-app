@@ -36,11 +36,11 @@ class BudgetTextFieldIconButton extends StatelessWidget {
               icon: Icon(
                 iconData,
                 color: Colors.purple[800],
-                size: 35,
+                size: 24,
               ),
             ),
             focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.purple, width: 2),
+              borderSide: BorderSide(color: Colors.purple, width: 1),
               borderRadius: BorderRadius.all(Radius.circular(15)),
             ),
             enabledBorder: const OutlineInputBorder(

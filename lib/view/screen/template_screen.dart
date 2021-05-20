@@ -33,7 +33,7 @@ abstract class TemplateScreen extends StatelessWidget {
   ///
   Widget _buildAppBar(BuildContext context) => AppBar(
       backgroundColor: Colors.purple[800],
-      title: Text(title),
+      title: title,
       leading: getLeading(context),
       actions: getAppBarActions(context),
       elevation: 0,
@@ -47,9 +47,8 @@ abstract class TemplateScreen extends StatelessWidget {
   bool get centerTitle => true;
 
   /// get [AppBar] title
-  ///
-  ///
-  String get title;
+
+  Widget get title;
 
   /// get [AppBar] leading icon
   ///

@@ -21,7 +21,7 @@ class AddBudgetScreen extends TemplateScreen {
       );
 
   @override
-  String get title => 'Add Budget Account';
+  Widget get title => const Text('Add Budget Account');
 
   @override
   Widget buildBody(BuildContext context) {

@@ -10,7 +10,7 @@ import '../../routes.dart';
 
 class IntroductionScreen extends TemplateScreen {
   @override
-  String get title => 'myBudget';
+  Widget get title => const Text('My Budget');
 
   @override
   Widget buildBody(BuildContext context) {
