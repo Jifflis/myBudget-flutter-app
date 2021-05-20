@@ -26,6 +26,13 @@ class AccountRepository {
     return await _localProvider.list<Account>();
   }
 
+  Future<Account> getAccount(String accountID) async {
+    return await _localProvider.get<Account>(
+      where: DBKey.ACCOUNT_ID,
+      whereArgs: <dynamic>[accountID],
+    );
+  }
+
   Future<void> monthlyRefresh(
       String oldMonthlySummaryID, String newMonthlySummaryID) async {
     final List<Account> previousAccounts = await _localProvider.list<Account>(
@@ -38,7 +45,7 @@ class AccountRepository {
       account.expense = 0.0;
       account.summaryId = newMonthlySummaryID;
 
-      if(account.autoDeduct){
+      if (account.autoDeduct) {
         account.expense = account.budget;
         account.balance = 0.0;
       }

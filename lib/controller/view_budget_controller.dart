@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/state_manager.dart';
-import 'package:oktoast/oktoast.dart';
+import 'package:mybudget/repository/transaction_repository.dart';
 
 import '../model/account.dart';
 import '../repository/acount_repository.dart';
@@ -16,6 +16,7 @@ class ViewBudgetController extends GetxController {
   final TextEditingController budgetAmountController = TextEditingController();
 
   final AccountRepository _accountRepository = AccountRepository();
+  final TransactionRepository _transactionRepository = TransactionRepository();
 
   /// set data [_isFieldEnabled]
   ///
@@ -50,7 +51,7 @@ class ViewBudgetController extends GetxController {
 
   /// update budget account
   ///
-  Future<void> updateAccount() async {
+  Future<bool> updateAccount() async {
     if (isEnabled && formKey.currentState.validate()) {
       _account.title = accountNameController.text;
       _account.budget = double.parse(budgetAmountController.text);
@@ -64,10 +65,10 @@ class ViewBudgetController extends GetxController {
 
       await _accountRepository.upsert(_account);
 
-      showToast('Budget account successfully updated',
-          position: ToastPosition.bottom);
       isEnabled = !isEnabled;
+      return true;
     }
+    return false;
   }
 
   /// edit | cancel text button
@@ -101,6 +102,7 @@ class ViewBudgetController extends GetxController {
   ///
   Future<void> deleteAccount() async {
     await _accountRepository.delete(_account.accountId);
+    await _transactionRepository.deleteAll(_account.accountId);
     update();
   }
 
@@ -112,5 +114,12 @@ class ViewBudgetController extends GetxController {
       return 'Empty value is invalid.';
     }
     return null;
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+    accountNameController.dispose();
+    budgetAmountController.dispose();
   }
 }

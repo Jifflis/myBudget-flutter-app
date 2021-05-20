@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
-import 'package:mybudget/controller/view_budget_controller.dart';
-import 'package:mybudget/model/account.dart';
-import 'package:mybudget/view/screen/template_screen.dart';
-import 'package:mybudget/view/widget/budget_button.dart';
-import 'package:mybudget/view/widget/budget_field_label.dart';
-import 'package:mybudget/view/widget/budget_text_field.dart';
+import 'package:mybudget/view/dialog/confirmation_dialog.dart';
+import 'package:mybudget/view/dialog/success_dialog.dart';
+
+import '../../controller/view_budget_controller.dart';
+import '../../model/account.dart';
+import '../widget/budget_button.dart';
+import '../widget/budget_field_label.dart';
+import '../widget/budget_text_button.dart';
+import '../widget/budget_text_field.dart';
+import 'template_screen.dart';
 
 class ViewBudgetScreen extends TemplateScreen {
   @override
@@ -61,18 +65,29 @@ class ViewBudgetScreen extends TemplateScreen {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
-                          _textButton(
+                          BudgetTextButton(
                               label: controller.isEnabled ? 'Cancel' : 'Edit',
-                              function: () {
+                              onPressed: () {
                                 FocusScope.of(context).unfocus();
                                 controller.edit();
                               }),
                           const SizedBox(width: 20),
-                          _textButton(
+                          BudgetTextButton(
                               label: 'Delete',
-                              function: () {
-                                controller.deleteAccount();
-                                Navigator.pop(context);
+                              onPressed: () {
+                                const String message =
+                                    'Are you sure you want to delete?';
+                                showConfirmationDialog(
+                                  context: context,
+                                  message: message,
+                                  yes: () {
+                                    controller.deleteAccount();
+                                    controller.resetPage();
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  },
+                                  cancel: () => Navigator.pop(context),
+                                );
                               }),
                         ],
                       ),
@@ -112,7 +127,16 @@ class ViewBudgetScreen extends TemplateScreen {
                       const SizedBox(height: 30),
                       BudgetButton(
                           controller.isEnabled
-                              ? controller.updateAccount
+                              ? () async {
+                                  if (await controller.updateAccount()) {
+                                    const String message =
+                                        'Account has been updated!';
+                                    showSuccessDialog(
+                                        context: context,
+                                        close: () => Navigator.pop(context),
+                                        message: message);
+                                  }
+                                }
                               : null,
                           'Update'),
                     ],
@@ -120,20 +144,6 @@ class ViewBudgetScreen extends TemplateScreen {
                 );
               },
             ))),
-      ),
-    );
-  }
-
-  /// TEXT BUTTON
-  ///
-  ///
-  Widget _textButton({@required String label, @required Function function}) {
-    return InkWell(
-      onTap: function,
-      child: Text(
-        label,
-        style: const TextStyle(
-            color: Colors.black87, fontSize: 16, fontWeight: FontWeight.bold),
       ),
     );
   }

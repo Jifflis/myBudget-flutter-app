@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mybudget/controller/add_transaction_controller.dart';
+import 'package:mybudget/enum/status.dart';
+import 'package:mybudget/repository/acount_repository.dart';
+import 'package:mybudget/repository/transaction_repository.dart';
+import 'package:mybudget/view/dialog/add_transaction_success_dialog.dart';
 import 'package:mybudget/view/widget/add_transaction_dropdown.dart';
 import 'package:get/get.dart';
+import 'package:mybudget/view/widget/budget_date_selector_button.dart';
 
 import '../../model/account.dart';
 import '../widget/budget_button.dart';
@@ -21,35 +27,92 @@ class AddTransactionScreen extends TemplateScreen {
 
   @override
   Widget buildBody(BuildContext context) {
+    final Account account =
+        ModalRoute.of(context).settings.arguments as Account;
     final AddTransactionController controller =
-        Get.put(AddTransactionController());
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(40, 0.0, 40, 10),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const SizedBox(height: 58),
-            const BudgetFieldLabel(label: 'Budget Account'),
-            const SizedBox(height: 15),
-            AddTransactionDropdown((Account value) {
-              FocusScope.of(context).requestFocus(FocusNode());
-              controller.selectedCurrency = value;
-            }),
-            const SizedBox(height: 15),
-            const BudgetFieldLabel(label: 'Amount'),
-            const SizedBox(height: 15),
-            const BudgetTextField(hintText: 'Enter Amount'),
-            const SizedBox(height: 30),
-            const BudgetFieldLabel(label: 'Add Remarks'),
-            const SizedBox(height: 15),
-            const BudgetTextField(hintText: 'Enter Add Remarks'),
-            const SizedBox(height: 30),
-            const SizedBox(height: 30),
-            BudgetButton(() {}, 'Save'),
-          ],
-        ),
-      ),
-    );
+        Get.put(AddTransactionController(
+      transactionRepository: TransactionRepository(),
+      accountRepository: AccountRepository(),
+    ));
+    controller.getParams(account);
+    return GetBuilder<AddTransactionController>(
+        init: controller,
+        builder: (_) {
+          return controller.status == Status.LOADING
+              ? Container()
+              : Padding(
+                  padding: const EdgeInsets.fromLTRB(40, 0.0, 40, 10),
+                  child: SingleChildScrollView(
+                    child: Form(
+                      key: controller.formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          const SizedBox(height: 58),
+                          const BudgetFieldLabel(label: 'Budget Account'),
+                          const SizedBox(height: 15),
+                          AddTransactionDropdown<Account>(
+                            list: controller.accountList,
+                            selected: controller.selectedAccount,
+                            onChange: (Account value) {
+                              controller.selectedAccount = value;
+                            },
+                          ),
+                          const SizedBox(height: 15),
+                          const BudgetFieldLabel(label: 'Date'),
+                          const SizedBox(height: 15),
+                          BudgetDateSelectorButton(
+                            selectedDate: controller.selectedDate,
+                            dateCallBack: (DateTime dateTime) {
+                              controller.selectedDate = dateTime;
+                            },
+                          ),
+                          const SizedBox(height: 15),
+                          const BudgetFieldLabel(label: 'Amount'),
+                          const SizedBox(height: 15),
+                          BudgetTextField(
+                            controller: controller.amountController,
+                            keyboardType: const TextInputType.numberWithOptions(
+                                decimal: true),
+                            textInputFormatterList: <
+                                FilteringTextInputFormatter>[
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'^\d+\.?\d{0,2}')),
+                            ],
+                            hintText: 'Enter Amount',
+                            validator: controller.textFieldValidator,
+                          ),
+                          const SizedBox(height: 30),
+                          const BudgetFieldLabel(label: 'Add Remarks'),
+                          const SizedBox(height: 15),
+                          BudgetTextField(
+                              controller: controller.remarksController,
+                              hintText: 'Enter Add Remarks'),
+                          const SizedBox(height: 30),
+                          const SizedBox(height: 30),
+                          BudgetButton(() async {
+                            if (await controller.save()) {
+                              showAddTransactionSuccessDialog(
+                                  context: context,
+                                  close: () {
+                                    Navigator.of(context, rootNavigator: true)
+                                        .pop();
+                                    Navigator.pop(context);
+                                  },
+                                  addAnother: () =>
+                                      Navigator.of(context, rootNavigator: true)
+                                          .pop(),
+                                  title: controller.selectedAccount.title,
+                                  amount: controller.amountController.text,
+                                  remarks: controller.remarksController.text);
+                              controller.resetFields();
+                            }
+                          }, 'Save'),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+        });
   }
 }

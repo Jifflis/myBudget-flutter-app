@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mybudget/controller/add_transaction_controller.dart';
+import 'package:mybudget/repository/acount_repository.dart';
+import 'package:mybudget/repository/transaction_repository.dart';
 import 'package:mybudget/view/widget/add_transaction_dropdown.dart';
 import 'package:get/get.dart';
 
@@ -22,7 +24,10 @@ class AddTransactionScreen extends TemplateScreen {
   @override
   Widget buildBody(BuildContext context) {
     final AddTransactionController controller =
-        Get.put(AddTransactionController());
+        Get.put(AddTransactionController(
+      transactionRepository: TransactionRepository(),
+      accountRepository: AccountRepository(),
+    ));
     return Padding(
       padding: const EdgeInsets.fromLTRB(40, 0.0, 40, 10),
       child: SingleChildScrollView(
@@ -32,10 +37,14 @@ class AddTransactionScreen extends TemplateScreen {
             const SizedBox(height: 58),
             const BudgetFieldLabel(label: 'Budget Account'),
             const SizedBox(height: 15),
-            AddTransactionDropdown((Account value) {
-              FocusScope.of(context).requestFocus(FocusNode());
-              controller.selectedCurrency = value;
-            }),
+            AddTransactionDropdown<Account>(
+              list: controller.accountList,
+              selected: controller.selectedAccount,
+              onChange: (Account value) {
+                FocusScope.of(context).requestFocus(FocusNode());
+                controller.selectedAccount = value;
+              },
+            ),
             const SizedBox(height: 15),
             const BudgetFieldLabel(label: 'Amount'),
             const SizedBox(height: 15),

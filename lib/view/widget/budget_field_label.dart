@@ -12,7 +12,7 @@ class BudgetFieldLabel extends StatelessWidget {
       style: const TextStyle(
         fontSize: 16,
         color: Colors.black87,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w400,
       ),
     );
   }

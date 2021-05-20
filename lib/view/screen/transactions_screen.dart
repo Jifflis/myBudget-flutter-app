@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
 
 import '../../constant/custom_colors.dart';
+import '../../controller/home_controller.dart';
 import '../../controller/transactions_controller.dart';
+import '../../enum/status.dart';
 import '../../model/transaction.dart';
+import '../../repository/transaction_repository.dart';
 import '../../routes.dart';
 import '../../util/date_util.dart';
 import '../../util/number_util.dart';
@@ -25,22 +29,31 @@ class TransactionsScreen extends TemplateScreen {
               color: Colors.purple[100],
               size: 38,
             ),
-            onPressed: () {
-              //
-            },
+            onPressed: () => Routes.pushNamed(Routes.SCREEN_ADD_TRANSACTION,
+                    navigator: Routes.transactionNavigator)
+                .then((_) {
+              final TransactionsController controller = Get.find();
+              controller.getTransactionList();
+
+              final HomeController homeController = Get.find();
+              homeController.updateCurrentMonthlyBudgetList();
+            }),
           ),
         )
       ];
 
   @override
   Widget buildBody(BuildContext context) {
-    final TransactionsController _controller =
-        Get.put(TransactionsController());
+    final TransactionsController controller = Get.put(
+        TransactionsController(transactionRepository: TransactionRepository()));
+
     return Column(
       children: <Widget>[
         _buildHeader(context),
         _buildDivider(),
-        _buildItems(_controller.transactionList),
+        GetBuilder<TransactionsController>(
+          builder: (_) => _buildItems(controller),
+        ),
       ],
     );
   }
@@ -106,7 +119,9 @@ class TransactionsScreen extends TemplateScreen {
           height: 50,
           decoration: const BoxDecoration(
             color: Colors.purple,
-            borderRadius: BorderRadius.all(Radius.circular(15)),
+            borderRadius: BorderRadius.all(
+              Radius.circular(15),
+            ),
           ),
           child: const Icon(
             Icons.filter_alt_outlined,
@@ -119,18 +134,31 @@ class TransactionsScreen extends TemplateScreen {
   /// Details section
   ///
   ///
-  Widget _buildItems(List<Transaction> transactions) => Expanded(
-        child: Container(
-          padding: EdgeInsets.zero,
-          margin: EdgeInsets.zero,
-          child: ListView.builder(
-              itemBuilder: (BuildContext context, int index) {
-                return TransactionItem(
-                    index: index, transaction: transactions[index]);
-              },
-              itemCount: transactions.length),
-        ),
-      );
+  Widget _buildItems(TransactionsController controller) {
+    return Expanded(
+      child: Stack(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.zero,
+            margin: EdgeInsets.zero,
+            child: ListView.builder(
+                itemBuilder: (BuildContext context, int index) {
+                  return TransactionItem(
+                    index: index,
+                    transaction: controller.transactions[index],
+                    currency: controller.getCurrency(),
+                  );
+                },
+                itemCount: controller.transactions.length),
+          ),
+          if (controller.status == Status.LOADING)
+            const Center(
+              child: CircularProgressIndicator(),
+            ),
+        ],
+      ),
+    );
+  }
 }
 
 /// Transaction Item
@@ -141,12 +169,14 @@ class TransactionItem extends StatelessWidget {
       {Key key,
       @required this.index,
       @required this.transaction,
+      @required this.currency,
       this.isLoading})
       : super(key: key);
 
   final int index;
   final bool isLoading;
   final Transaction transaction;
+  final String currency;
 
   @override
   Widget build(BuildContext context) {
@@ -189,18 +219,18 @@ class TransactionItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              dateSimplified(transaction.date)['MM'],
+              dateSimplified(transaction.updatedAT.toString())['MM'],
               style: TextStyle(
                 color: Colors.purple[800],
                 fontSize: 12,
               ),
             ),
             Text(
-              dateSimplified(transaction.date)['DD'],
+              dateSimplified(transaction.updatedAT.toString())['DD'],
               style: TextStyle(
                   color: Colors.purple[800],
                   fontSize: 18,
-                  fontWeight: FontWeight.bold),
+                  fontWeight: FontWeight.w400),
             ),
           ],
         ),
@@ -209,13 +239,18 @@ class TransactionItem extends StatelessWidget {
   /// title
   ///
   ///
-  Widget _buildTitle() => Container(
-        child: Text(transaction.title,
-            style: const TextStyle(
-                color: Colors.black87,
-                fontSize: 16,
-                fontWeight: FontWeight.bold)),
-      );
+  Widget _buildTitle() {
+    return Container(
+      child: Text(
+        transaction.account.title,
+        style: const TextStyle(
+          color: Colors.black87,
+          fontSize: 18,
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+    );
+  }
 
   /// subtitle
   ///
@@ -231,11 +266,12 @@ class TransactionItem extends StatelessWidget {
           ),
           Container(
             child: Text(
-              '₱ ${amountFormatter(transaction.amount)}',
+              '$currency ${amountFormatter(transaction.amount)}',
               style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.blue[600],
-                  fontWeight: FontWeight.bold),
+                fontSize: 12,
+                color: Colors.blue[600],
+                fontWeight: FontWeight.w400,
+              ),
             ),
           ),
         ],
@@ -260,16 +296,28 @@ class TransactionItem extends StatelessWidget {
   ///
   Widget _buildAction() => InkWell(
         onTap: () {
-          Routes.pushNamed(Routes.SCREEN_ADD_TRANSACTION,
-              navigator: Routes.homeNavigator);
+          Routes.pushNamed(
+            Routes.SCREEN_VIEW_TRANSACTION,
+            navigator: Routes.transactionNavigator,
+            arguments: transaction,
+          ).then((_) {
+            final TransactionsController controller = Get.find();
+            controller.updateItem(transaction);
+
+            final HomeController homeController = Get.find();
+            homeController.updateCurrentMonthlyBudgetList();
+          });
         },
         child: Container(
-            width: 25,
-            height: 25,
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey),
-              borderRadius: const BorderRadius.all(Radius.circular(20)),
+          width: 25,
+          height: 25,
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey),
+            borderRadius: const BorderRadius.all(
+              Radius.circular(20),
             ),
-            child: const Icon(Icons.chevron_right_rounded)),
+          ),
+          child: const Icon(Icons.chevron_right_rounded),
+        ),
       );
 }
