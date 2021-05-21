@@ -5,6 +5,8 @@ import 'package:mybudget/controller/transactions_controller.dart';
 import 'package:mybudget/enum/status.dart';
 import 'package:mybudget/util/color_util.dart';
 import 'package:mybudget/util/date_util.dart';
+import 'package:mybudget/view/dialog/image_selector_dialog.dart';
+import 'package:mybudget/view/dialog/success_dialog.dart';
 
 import '../../constant/custom_colors.dart';
 import '../../controller/home_controller.dart';
@@ -233,9 +235,11 @@ class HomePageTemplate extends TemplateScreen {
                               navigator: Routes.homeNavigator,
                               arguments: monthlyBudgetModel.accountList[index])
                           .then((_) {
-                        final TransactionsController transactionController =
-                            Get.find();
-                        transactionController.getTransactionList();
+                        if (Get.isRegistered<TransactionsController>()) {
+                          final TransactionsController transactionController =
+                              Get.find();
+                          transactionController.getTransactionList();
+                        }
 
                         final HomeController controller = Get.find();
                         controller.updateCurrentMonthlyBudgetList();
@@ -296,7 +300,7 @@ class BudgetItem extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              _buildLeading(),
+              _buildLeading(context),
               const SizedBox(width: 10),
               _buildContent(),
             ],
@@ -315,11 +319,41 @@ class BudgetItem extends StatelessWidget {
   /// leading
   ///
   ///
-  Widget _buildLeading() => Container(
-        height: 60,
-        width: 60,
-        decoration: BoxDecoration(
-            color: Colors.grey[200], borderRadius: BorderRadius.circular(20)),
+  Widget _buildLeading(BuildContext context) => InkWell(
+        onTap: () {
+          showImageSelectorDialog(
+            context: context,
+            cancel: () {},
+            save: () {},
+          );
+        },
+        child: Container(
+          height: 60,
+          width: 60,
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Stack(
+            alignment: AlignmentDirectional.center,
+            children: const <Widget>[
+              Text(
+                'b',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.purple,
+                  fontSize: 25,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              Icon(
+                Icons.crop_free_rounded,
+                size: 50,
+                color: Colors.purple,
+              )
+            ],
+          ),
+        ),
       );
 
   /// title
