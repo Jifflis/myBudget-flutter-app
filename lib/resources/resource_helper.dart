@@ -104,6 +104,7 @@ class ResourceHelper {
         LocalProvider localProvider,
       ) async {
         final List<Account> accounts = await localProvider.list<Account>(
+          orderBy: 'id desc',
           where: '${DBKey.MONTHLY_SUMMARY_ID}=?',
           whereArgs: <dynamic>[
             json[DBKey.MONTHLY_SUMMARY_ID] ?? monthlySummaryID(),

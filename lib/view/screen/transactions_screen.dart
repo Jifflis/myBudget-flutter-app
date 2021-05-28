@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
-import 'package:mybudget/view/widget/budget_date_selector_button.dart';
 
 import '../../constant/custom_colors.dart';
 import '../../controller/home_controller.dart';
@@ -13,6 +12,7 @@ import '../../repository/transaction_repository.dart';
 import '../../routes.dart';
 import '../../util/date_util.dart';
 import '../../util/number_util.dart';
+import '../widget/budget_date_selector_button.dart';
 import '../widget/budget_text_field_icon_button.dart';
 import '../widget/radio_label.dart';
 import 'template_screen.dart';
@@ -20,7 +20,8 @@ import 'template_screen.dart';
 class TransactionsScreen extends TemplateScreen {
   @override
   Widget get title => GetBuilder<TransactionsController>(
-        builder: (TransactionsController controller) =>  BudgetDateSelectorButton(
+        builder: (TransactionsController controller) =>
+            BudgetDateSelectorButton(
           text: controller.getTitle(),
           fontSize: 20,
           selectedDate: controller.selectedDate,
@@ -79,19 +80,20 @@ class TransactionsScreen extends TemplateScreen {
   Widget _buildHeader(
           BuildContext context, TransactionsController controller) =>
       Container(
-        padding: const EdgeInsets.fromLTRB(0, 20.0, 0, 0.0),
-        height: 155,
+        padding: const EdgeInsets.fromLTRB(0, 14.0, 0, 0.0),
+        height: 170,
         child: Column(
           children: <Widget>[
-            _buildSearchBar(),
-            _buildMenu(),
+            _buildSwitcherMenu(),
+            _buildSearchBar(controller),
+            _buildDetailsMenu(),
           ],
         ),
       );
 
-  Widget _buildMenu() => GetBuilder<TransactionsController>(
+  Widget _buildSwitcherMenu() => GetBuilder<TransactionsController>(
         builder: (TransactionsController controller) => Container(
-          margin: const EdgeInsets.only(left: 8, top: 10),
+          margin: const EdgeInsets.only(left: 8, right: 12),
           child: Row(
             children: <Widget>[
               RadioLabel<TransactionViewType>(
@@ -112,6 +114,55 @@ class TransactionsScreen extends TemplateScreen {
                 onChange: (TransactionViewType value) {
                   controller.transactionViewType = TransactionViewType.month;
                 },
+              ),
+              if (!controller.isCurrentDay)
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          controller.viewTodayTransaction();
+                        },
+                        child: const Text('Today'),
+                      ),
+                    ],
+                  ),
+                )
+            ],
+          ),
+        ),
+      );
+
+  /// search bar
+  ///
+  ///
+  Widget _buildSearchBar(TransactionsController controller) => Container(
+        padding: const EdgeInsets.only(right: 14, left: 16, top: 5),
+        child: BudgetTextFieldIconButton(
+          onChanged: controller.search,
+          hintText: 'Search',
+          iconData: Icons.search,
+          onPressed: () {
+            print('search test');
+          },
+        ),
+      );
+
+  Widget _buildDetailsMenu() => GetBuilder<TransactionsController>(
+        builder: (TransactionsController controller) => Container(
+          margin: const EdgeInsets.only(left: 24, top: 5),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text('total ${controller.getCurrency().toLowerCase()}'),
+              const SizedBox(
+                width: 8,
+              ),
+              Text(
+                amountFormatter(controller.totalAmount),
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
               ),
               Expanded(
                 child: Row(
@@ -167,46 +218,41 @@ class TransactionsScreen extends TemplateScreen {
         ),
       );
 
-  /// search bar
-  ///
-  ///
-  Widget _buildSearchBar() => Container(
-        padding: const EdgeInsets.only(right: 14, left: 16, top: 20),
-        child: BudgetTextFieldIconButton(
-          hintText: 'Search',
-          iconData: Icons.search,
-          onPressed: () {
-            print('search test');
-          },
-        ),
-      );
-
   /// Details section
   ///
   ///
   Widget _buildItems(TransactionsController controller) {
     return Expanded(
-      child: Stack(
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.zero,
-            margin: EdgeInsets.zero,
-            child: ListView.builder(
-                itemBuilder: (BuildContext context, int index) {
-                  return TransactionItem(
-                    index: index,
-                    transaction: controller.transactions[index],
-                    currency: controller.getCurrency(),
-                  );
-                },
-                itemCount: controller.transactions.length),
-          ),
-          if (controller.status == Status.LOADING)
-            const Center(
-              child: CircularProgressIndicator(),
+      child: controller.filteredTransaction.isEmpty
+          ? Container(
+              child: const Center(
+                child: Text(
+                  'No data...',
+                  style: TextStyle(color: CustomColors.gray3),
+                ),
+              ),
+            )
+          : Stack(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.zero,
+                  margin: EdgeInsets.zero,
+                  child: ListView.builder(
+                      itemBuilder: (BuildContext context, int index) {
+                        return TransactionItem(
+                          index: index,
+                          transaction: controller.filteredTransaction[index],
+                          currency: controller.getCurrency(),
+                        );
+                      },
+                      itemCount: controller.filteredTransaction.length),
+                ),
+                if (controller.status == Status.LOADING)
+                  const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+              ],
             ),
-        ],
-      ),
     );
   }
 }
@@ -310,7 +356,9 @@ class TransactionItem extends StatelessWidget {
         children: <Widget>[
           Container(
             child: Text(
-              transaction.remarks,
+              transaction.remarks == null || transaction.remarks.isEmpty
+                  ? 'No remarks available'
+                  : transaction.remarks,
               style: const TextStyle(fontSize: 12),
             ),
           ),
@@ -335,7 +383,7 @@ class TransactionItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             _buildTitle(),
-            const SizedBox(height: 10),
+            const SizedBox(height: 8),
             _buildSubtitle(),
           ],
         ),

@@ -38,7 +38,7 @@ class AccountRepository {
   }
 
   Future<List<Account>> getAccounts() async {
-    return await _localProvider.list<Account>();
+    return await _localProvider.list<Account>(orderBy: 'id desc');
   }
 
   Future<Account> getAccount(String accountID) async {

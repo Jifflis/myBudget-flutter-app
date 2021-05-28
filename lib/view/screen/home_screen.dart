@@ -233,10 +233,6 @@ class HomePageTemplate extends TemplateScreen {
                               navigator: Routes.homeNavigator,
                               arguments: monthlyBudgetModel.accountList[index])
                           .then((_) {
-                        final TransactionsController transactionController =
-                            Get.find();
-                        transactionController.getTransactionList();
-
                         final HomeController controller = Get.find();
                         controller.updateCurrentMonthlyBudgetList();
                       });

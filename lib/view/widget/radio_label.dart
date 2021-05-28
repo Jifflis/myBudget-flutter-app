@@ -29,8 +29,6 @@ class RadioLabel<T> extends StatelessWidget {
             label,
             style: const TextStyle(
               fontFamily: 'Hiragino Kaku Gothic ProN',
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
               color: CustomColors.gray1,
             ),
           ),

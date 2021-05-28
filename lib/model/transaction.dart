@@ -39,7 +39,7 @@ class Transaction extends BaseModel {
     transactionID = json[DBKey.TRANSACTION_ID];
     userID = json[DBKey.USER_ID];
     accountID = json[DBKey.ACCOUNT_ID];
-    remarks = json[DBKey.REMARKS];
+    remarks = json[DBKey.REMARKS]?.toString();
     amount = json[DBKey.AMOUNT];
     createdAt = DateTime.parse(json[DBKey.CREATED_AT]);
     updatedAT = DateTime.parse(json[DBKey.UPDATED_AT]);

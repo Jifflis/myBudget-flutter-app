@@ -50,43 +50,15 @@ class AddTransactionScreen extends TemplateScreen {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           const SizedBox(height: 58),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              BudgetDateSelectorButton(
-                                text: '${controller.selectedDate.month.toString().padLeft(2, "0")}/${controller.selectedDate.day.toString().padLeft(2, "0")}/${controller.selectedDate.year}',
-                                selectedDate: controller.selectedDate,
-                                dateCallBack: (DateTime dateTime) {
-                                  controller.selectedDate = dateTime;
-                                },
-                              ),
-                            ],
-                          ),
+                          _buildDatefield(controller),
                           const SizedBox(height: 32),
                           const BudgetFieldLabel(label: 'Budget Account'),
                           const SizedBox(height: 15),
-                          AddTransactionDropdown<Account>(
-                            list: controller.accountList,
-                            selected: controller.selectedAccount,
-                            onChange: (Account value) {
-                              controller.selectedAccount = value;
-                            },
-                          ),
+                          _buildDropdown(controller),
                           const SizedBox(height: 15),
                           const BudgetFieldLabel(label: 'Amount'),
                           const SizedBox(height: 15),
-                          BudgetTextField(
-                            controller: controller.amountController,
-                            keyboardType: const TextInputType.numberWithOptions(
-                                decimal: true),
-                            textInputFormatterList: <
-                                FilteringTextInputFormatter>[
-                              FilteringTextInputFormatter.allow(
-                                  RegExp(r'^\d+\.?\d{0,2}')),
-                            ],
-                            hintText: 'Enter Amount',
-                            validator: controller.textFieldValidator,
-                          ),
+                          _buildAmountField(controller),
                           const SizedBox(height: 30),
                           const BudgetFieldLabel(label: 'Add Remarks'),
                           const SizedBox(height: 15),
@@ -119,5 +91,45 @@ class AddTransactionScreen extends TemplateScreen {
                   ),
                 );
         });
+  }
+
+  BudgetTextField _buildAmountField(AddTransactionController controller) {
+    return BudgetTextField(
+      controller: controller.amountController,
+      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+      textInputFormatterList: <FilteringTextInputFormatter>[
+        FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+      ],
+      hintText: 'Enter Amount',
+      validator: controller.textFieldValidator,
+    );
+  }
+
+  AddTransactionDropdown<Account> _buildDropdown(
+      AddTransactionController controller) {
+    return AddTransactionDropdown<Account>(
+      list: controller.accountList,
+      selected: controller.selectedAccount,
+      onChange: (Account value) {
+        controller.selectedAccount = value;
+      },
+    );
+  }
+
+  Row _buildDatefield(AddTransactionController controller) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        BudgetDateSelectorButton(
+          text:
+              '${controller.selectedDate.month.toString().padLeft(2, "0")}/${controller.selectedDate.day.toString().padLeft(2, "0")}/${controller.selectedDate.year}',
+          selectedDate: controller.selectedDate,
+          dateCallBack: (DateTime dateTime) {
+            controller.selectedDate = dateTime;
+          },
+          fontSize: 18,
+        ),
+      ],
+    );
   }
 }
