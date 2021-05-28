@@ -6,33 +6,7 @@ import 'package:mybudget/model/filter.dart';
 void main() {
   group('Filter Model', () {
     group('Generate Filter', () {
-      test('should return null if filter length is less than 2', () {
-        final List<Filter> filters = <Filter>[
-          Filter('name', FilterType.month),
-        ];
-
-        expect(Filter.generateFilter(filters), null);
-      });
-
-      test('should return null if filter not contain FilterType.month', () {
-        final List<Filter> filters = <Filter>[
-          Filter('2021', FilterType.year, key: '05'),
-          Filter('01', FilterType.day, key: '05'),
-          Filter('House Bill', FilterType.account, key: '0531'),
-        ];
-        expect(Filter.generateFilter(filters), null);
-      });
-
-      test('should return null if filter not contain FilterType.year', () {
-        final List<Filter> filters = <Filter>[
-          Filter('May', FilterType.month, key: '05'),
-          Filter('01', FilterType.day, key: '05'),
-          Filter('House Bill', FilterType.account, key: '0531'),
-        ];
-
-        expect(Filter.generateFilter(filters), null);
-      });
-
+      
       test('test with filter type day', () {
         final List<Filter> filters = <Filter>[
           Filter('2021', FilterType.year, key: '05'),
