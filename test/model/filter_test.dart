@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:intl/intl.dart';
 import 'package:mybudget/constant/db_keys.dart';
 import 'package:mybudget/enum/filter_type.dart';
 import 'package:mybudget/model/filter.dart';
@@ -7,7 +6,6 @@ import 'package:mybudget/model/filter.dart';
 void main() {
   group('Filter Model', () {
     group('Generate Filter', () {
-
       test('should return null if filter length is less than 2', () {
         final List<Filter> filters = <Filter>[
           Filter('name', FilterType.month),
@@ -52,7 +50,6 @@ void main() {
         expect(whereArgs[2], '0531');
         expect(generatedFilter['where'],
             '${DBKey.UPDATED_AT} between ? and ? and ${DBKey.ACCOUNT_ID} = ?');
-
       });
 
       test('test without filter type day', () {

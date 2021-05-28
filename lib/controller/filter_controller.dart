@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:mybudget/repository/acount_repository.dart';
-import 'package:mybudget/repository/transaction_repository.dart';
 
 import '../enum/filter_type.dart';
 import '../model/filter.dart';
+import '../repository/acount_repository.dart';
 import '../util/filter_suggestions.dart';
 
 class FilterController extends GetxController {
@@ -25,7 +24,7 @@ class FilterController extends GetxController {
     super.onInit();
   }
 
-  List<Filter> get filters =>_filters;
+  List<Filter> get filters => _filters;
 
   List<Filter> getFilters() {
     final DateTime dateNow = DateTime.now();
@@ -44,7 +43,7 @@ class FilterController extends GetxController {
 
     //check if filter type year is exist
     final Filter filter = filters.firstWhere(
-            (Filter element) => element.type == FilterType.year,
+        (Filter element) => element.type == FilterType.year,
         orElse: () => null);
     if (filter == null) {
       _filters.add(
@@ -54,8 +53,6 @@ class FilterController extends GetxController {
 
     return _filters;
   }
-
-
 
   /// Add default filters
   /// default filters are
@@ -110,12 +107,11 @@ class FilterController extends GetxController {
       filterSuggestions.addAll(searchFilters<Year>(keyword));
     }
     if (!isFilterTypeExist(FilterType.account)) {
-     // filterSuggestions.addAll(await getTransactionFilter(keyword));
+      // filterSuggestions.addAll(await getTransactionFilter(keyword));
     }
     this.filterSuggestions = filterSuggestions;
     update();
   }
-
 
   /// Check if [FilterType] is already
   /// exist in [filters]
