@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:mybudget/controller/transactions_controller.dart';
-import 'package:mybudget/enum/status.dart';
-import 'package:mybudget/util/color_util.dart';
-import 'package:mybudget/util/date_util.dart';
 
 import '../../constant/custom_colors.dart';
 import '../../controller/home_controller.dart';
+import '../../enum/status.dart';
 import '../../model/account.dart';
 import '../../model/monthly_summary.dart';
 import '../../routes.dart';
+import '../../util/color_util.dart';
+import '../../util/date_util.dart';
 import '../../util/number_util.dart';
 import '../../view/screen/template_screen.dart';
 
@@ -73,7 +72,7 @@ class HomePageTemplate extends TemplateScreen {
   final int index;
 
   @override
-  String get title => _buildTitle(index, monthlyBudgetModel);
+  Widget get title => Text(_buildTitle(index, monthlyBudgetModel));
 
   @override
   List<Widget> get appBarActions => <Widget>[_buildAction(index)];
@@ -233,10 +232,6 @@ class HomePageTemplate extends TemplateScreen {
                               navigator: Routes.homeNavigator,
                               arguments: monthlyBudgetModel.accountList[index])
                           .then((_) {
-                        final TransactionsController transactionController =
-                            Get.find();
-                        transactionController.getTransactionList();
-
                         final HomeController controller = Get.find();
                         controller.updateCurrentMonthlyBudgetList();
                       });

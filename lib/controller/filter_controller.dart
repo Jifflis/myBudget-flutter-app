@@ -4,13 +4,16 @@ import 'package:intl/intl.dart';
 
 import '../enum/filter_type.dart';
 import '../model/filter.dart';
+import '../repository/acount_repository.dart';
 import '../util/filter_suggestions.dart';
 
 class FilterController extends GetxController {
   TextEditingController searchController = TextEditingController();
 
-  List<Filter> filters = <Filter>[];
+  List<Filter> _filters = <Filter>[];
   List<Filter> filterSuggestions = <Filter>[];
+
+  AccountRepository accountRepository = AccountRepository();
 
   /// Initialize default filter
   ///
@@ -21,25 +24,50 @@ class FilterController extends GetxController {
     super.onInit();
   }
 
+  List<Filter> get filters => _filters;
+
+  List<Filter> getFilters() {
+    final DateTime dateNow = DateTime.now();
+    _filters.sort();
+
+    //check if filter type month is exist
+    if (filters.isEmpty || filters[0].type != FilterType.month) {
+      _filters.add(
+        Filter(
+          DateFormat.MMMM().format(dateNow),
+          FilterType.month,
+          key: dateNow.month.toString(),
+        ),
+      );
+    }
+
+    //check if filter type year is exist
+    final Filter filter = filters.firstWhere(
+        (Filter element) => element.type == FilterType.year,
+        orElse: () => null);
+    if (filter == null) {
+      _filters.add(
+        Filter(dateNow.year.toString(), FilterType.year),
+      );
+    }
+
+    return _filters;
+  }
+
   /// Add default filters
   /// default filters are
   /// [FilterType.month],[FilterType.day],[FilterType.year]
   ///
   void _addDefaultFilter() {
-    final DateTime dateNow = DateTime.now();
-    filters = <Filter>[
-      Filter(dateNow.day.toString(), FilterType.day),
-      Filter(DateFormat.MMMM().format(dateNow), FilterType.month),
-      Filter(dateNow.year.toString(), FilterType.year),
-    ];
-    filters.sort();
+    _filters = Filter.defaultFilter();
+    _filters.sort();
   }
 
   /// Remove filter in [filters]
   /// it will update all listeners of this controller
   ///
   void removeFilter(Filter filter) {
-    filters.remove(filter);
+    _filters.remove(filter);
     update();
   }
 
@@ -49,8 +77,8 @@ class FilterController extends GetxController {
   /// it will update all listeners of this controller
   ///
   void addFilter(Filter filter) {
-    filters.add(filter);
-    filters.sort();
+    _filters.add(filter);
+    _filters.sort();
     filterSuggestions.clear();
     searchController.clear();
     update();
@@ -78,8 +106,9 @@ class FilterController extends GetxController {
     if (!isFilterTypeExist(FilterType.year)) {
       filterSuggestions.addAll(searchFilters<Year>(keyword));
     }
-    if (!isFilterTypeExist(FilterType.account)) {}
-    if (!isFilterTypeExist(FilterType.remarks)) {}
+    if (!isFilterTypeExist(FilterType.account)) {
+      // filterSuggestions.addAll(await getTransactionFilter(keyword));
+    }
     this.filterSuggestions = filterSuggestions;
     update();
   }
@@ -89,7 +118,7 @@ class FilterController extends GetxController {
   /// If exist return true otherwise false
   ///
   bool isFilterTypeExist(FilterType type) {
-    for (final Filter filter in filters) {
+    for (final Filter filter in _filters) {
       if (filter.type == type) {
         return true;
       }

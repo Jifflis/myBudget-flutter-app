@@ -7,6 +7,7 @@ class BudgetTextFieldIconButton extends StatelessWidget {
       this.controller,
       this.validator,
       this.isEnabled,
+      this.onChanged,
       @required this.onPressed,
       @required this.iconData})
       : super(key: key);
@@ -16,6 +17,7 @@ class BudgetTextFieldIconButton extends StatelessWidget {
   final Function(String) validator;
   final bool isEnabled;
   final Function onPressed;
+  final Function onChanged;
   final IconData iconData;
 
   @override
@@ -25,6 +27,7 @@ class BudgetTextFieldIconButton extends StatelessWidget {
         enabled: isEnabled ?? true,
         validator: validator,
         controller: controller,
+        onChanged: onChanged,
         decoration: InputDecoration(
             fillColor: Colors.white,
             filled: true,
@@ -36,11 +39,11 @@ class BudgetTextFieldIconButton extends StatelessWidget {
               icon: Icon(
                 iconData,
                 color: Colors.purple[800],
-                size: 35,
+                size: 24,
               ),
             ),
             focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.purple, width: 2),
+              borderSide: BorderSide(color: Colors.purple, width: 1),
               borderRadius: BorderRadius.all(Radius.circular(15)),
             ),
             enabledBorder: const OutlineInputBorder(

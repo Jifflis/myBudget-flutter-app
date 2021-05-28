@@ -26,7 +26,7 @@ class ViewTransactionScreen extends TemplateScreen {
       });
 
   @override
-  String get title => 'View Transaction';
+  Widget get title => const Text('View Transaction');
 
   @override
   Widget buildBody(BuildContext context) {
@@ -103,12 +103,7 @@ class ViewTransactionScreen extends TemplateScreen {
                       const SizedBox(height: 30),
                       const BudgetFieldLabel(label: 'Transaction Date'),
                       const SizedBox(height: 15),
-                      BudgetDateSelectorButton(
-                          enabled: controller.isEnabled,
-                          selectedDate: controller.selectedDate,
-                          dateCallBack: (DateTime dateTime) {
-                            controller.selectedDate = dateTime;
-                          }),
+                      _buildDateField(controller),
                       const SizedBox(height: 15),
                       const BudgetFieldLabel(label: 'Transaction amount'),
                       const SizedBox(height: 15),
@@ -160,6 +155,38 @@ class ViewTransactionScreen extends TemplateScreen {
           ),
         ),
       ),
+    );
+  }
+
+  Container _buildDateField(ViewTransactionController controller) {
+    return Container(
+      alignment: Alignment.centerLeft,
+      padding: const EdgeInsets.only(left: 10, right: 10),
+      height: 50,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: const BorderRadius.all(Radius.circular(15)),
+        boxShadow: const <BoxShadow>[
+          BoxShadow(
+            color: Colors.grey,
+            blurRadius: 3,
+            offset: Offset(0, 3),
+          )
+        ],
+        border: Border.all(
+            color: controller.isEnabled ?? true
+                ? Colors.purple
+                : Colors.grey[400]),
+      ),
+      child: BudgetDateSelectorButton(
+          text:
+              '${controller.selectedDate.month.toString().padLeft(2, "0")}/${controller.selectedDate.day.toString().padLeft(2, "0")}/${controller.selectedDate.year}',
+          enabled: controller.isEnabled,
+          selectedDate: controller.selectedDate,
+          dateCallBack: (DateTime dateTime) {
+            controller.selectedDate = dateTime;
+          }),
     );
   }
 }

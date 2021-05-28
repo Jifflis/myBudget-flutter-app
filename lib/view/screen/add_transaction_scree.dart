@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:mybudget/controller/add_transaction_controller.dart';
-import 'package:mybudget/repository/acount_repository.dart';
-import 'package:mybudget/repository/transaction_repository.dart';
-import 'package:mybudget/view/widget/add_transaction_dropdown.dart';
 import 'package:get/get.dart';
 
+import '../../controller/add_transaction_controller.dart';
 import '../../model/account.dart';
+import '../../repository/acount_repository.dart';
+import '../../repository/transaction_repository.dart';
+import '../widget/add_transaction_dropdown.dart';
 import '../widget/budget_button.dart';
 import '../widget/budget_field_label.dart';
 import '../widget/budget_text_field.dart';
@@ -19,7 +19,7 @@ class AddTransactionScreen extends TemplateScreen {
       );
 
   @override
-  String get title => 'Add Transaction';
+  Widget get title => const Text('Add Transaction');
 
   @override
   Widget buildBody(BuildContext context) {

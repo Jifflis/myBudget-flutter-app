@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
 import 'package:mybudget/constant/db_keys.dart';
 import 'package:mybudget/model/account.dart';
@@ -38,7 +39,7 @@ class Transaction extends BaseModel {
     transactionID = json[DBKey.TRANSACTION_ID];
     userID = json[DBKey.USER_ID];
     accountID = json[DBKey.ACCOUNT_ID];
-    remarks = json[DBKey.REMARKS];
+    remarks = json[DBKey.REMARKS]?.toString();
     amount = json[DBKey.AMOUNT];
     createdAt = DateTime.parse(json[DBKey.CREATED_AT]);
     updatedAT = DateTime.parse(json[DBKey.UPDATED_AT]);
@@ -52,8 +53,8 @@ class Transaction extends BaseModel {
     map[DBKey.ACCOUNT_ID] = accountID;
     map[DBKey.REMARKS] = remarks;
     map[DBKey.AMOUNT] = amount;
-    map[DBKey.CREATED_AT] = createdAt.toString();
-    map[DBKey.UPDATED_AT] = updatedAT.toString();
+    map[DBKey.CREATED_AT] = DateFormat('yyyy-MM-dd HH:mm:ss').format(createdAt);
+    map[DBKey.UPDATED_AT] = DateFormat('yyyy-MM-dd HH:mm:ss').format(updatedAT);
     return map;
   }
 }

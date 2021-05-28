@@ -10,7 +10,7 @@ import '../../view/widget/budget_field_label.dart';
 
 class ChangeCurrencyScreen extends TemplateScreen {
   @override
-  String get title => 'Change Currency';
+  Widget get title => const Text('Change Currency');
 
   @override
   Widget getLeading(BuildContext context) => IconButton(

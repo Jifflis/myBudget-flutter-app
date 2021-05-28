@@ -5,38 +5,24 @@ class BudgetDateSelectorButton extends StatelessWidget {
     Key key,
     @required this.selectedDate,
     @required this.dateCallBack,
+    @required this.text,
     this.enabled,
+    this.fontSize = 16,
   }) : super(key: key);
   final DateTime selectedDate;
   final Function(DateTime) dateCallBack;
   final bool enabled;
+  final String text;
+  final double fontSize;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       child: Container(
-        alignment: Alignment.centerLeft,
-        padding: const EdgeInsets.only(left: 10, right: 10),
-        height: 50,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: const BorderRadius.all(Radius.circular(15)),
-          boxShadow: const <BoxShadow>[
-            BoxShadow(
-              color: Colors.grey,
-              blurRadius: 3,
-              offset: Offset(0, 3),
-            )
-          ],
-          border: Border.all(
-              color: enabled ?? true ? Colors.purple : Colors.grey[400]),
-        ),
         child: Text(
-          '${selectedDate.month.toString().padLeft(2, "0")}/${selectedDate.day.toString().padLeft(2, "0")}/${selectedDate.year}',
-          style: const TextStyle(
-            fontSize: 16,
-            fontStyle: FontStyle.italic,
+          text,
+          style: TextStyle(
+            fontSize: fontSize,
           ),
         ),
       ),
@@ -46,7 +32,7 @@ class BudgetDateSelectorButton extends StatelessWidget {
                   context: context,
                   initialDate: selectedDate,
                   firstDate: DateTime(1900),
-                  lastDate: DateTime(9999),
+                  lastDate: DateTime.now(),
                   builder: (BuildContext context, Widget child) {
                     return Theme(
                       data: Theme.of(context).copyWith(

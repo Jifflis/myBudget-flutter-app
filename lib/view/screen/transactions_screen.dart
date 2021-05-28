@@ -6,18 +6,30 @@ import '../../constant/custom_colors.dart';
 import '../../controller/home_controller.dart';
 import '../../controller/transactions_controller.dart';
 import '../../enum/status.dart';
+import '../../enum/transaction_view_type.dart';
 import '../../model/transaction.dart';
 import '../../repository/transaction_repository.dart';
 import '../../routes.dart';
 import '../../util/date_util.dart';
 import '../../util/number_util.dart';
-import '../dialog/filter_dialog.dart';
+import '../widget/budget_date_selector_button.dart';
 import '../widget/budget_text_field_icon_button.dart';
+import '../widget/radio_label.dart';
 import 'template_screen.dart';
 
 class TransactionsScreen extends TemplateScreen {
   @override
-  String get title => 'Transaction';
+  Widget get title => GetBuilder<TransactionsController>(
+        builder: (TransactionsController controller) =>
+            BudgetDateSelectorButton(
+          text: controller.getTitle(),
+          fontSize: 20,
+          selectedDate: controller.selectedDate,
+          dateCallBack: (DateTime dateTime) {
+            controller.selectedDate = dateTime;
+          },
+        ),
+      );
 
   @override
   List<Widget> get appBarActions => <Widget>[
@@ -45,11 +57,15 @@ class TransactionsScreen extends TemplateScreen {
   @override
   Widget buildBody(BuildContext context) {
     final TransactionsController controller = Get.put(
-        TransactionsController(transactionRepository: TransactionRepository()));
+      TransactionsController(
+        transactionRepository: TransactionRepository(),
+      ),
+    );
+    controller.getTransactionList();
 
     return Column(
       children: <Widget>[
-        _buildHeader(context),
+        _buildHeader(context, controller),
         _buildDivider(),
         GetBuilder<TransactionsController>(
           builder: (_) => _buildItems(controller),
@@ -61,15 +77,125 @@ class TransactionsScreen extends TemplateScreen {
   /// header section
   ///
   ///
-  Widget _buildHeader(BuildContext context) => Container(
-        padding: const EdgeInsets.fromLTRB(30.0, 20.0, 30.0, 0.0),
-        height: 145,
-        child: Row(
+  Widget _buildHeader(
+          BuildContext context, TransactionsController controller) =>
+      Container(
+        padding: const EdgeInsets.fromLTRB(0, 14.0, 0, 0.0),
+        height: 170,
+        child: Column(
           children: <Widget>[
-            _searchBar(),
-            const SizedBox(width: 10),
-            _filter(context),
+            _buildSwitcherMenu(),
+            _buildSearchBar(controller),
+            _buildDetailsMenu(),
           ],
+        ),
+      );
+
+  Widget _buildSwitcherMenu() => GetBuilder<TransactionsController>(
+        builder: (TransactionsController controller) => Container(
+          margin: const EdgeInsets.only(left: 8, right: 12),
+          child: Row(
+            children: <Widget>[
+              RadioLabel<TransactionViewType>(
+                label: 'Day',
+                value: TransactionViewType.day,
+                groupValue: controller.transactionViewType,
+                onChange: (TransactionViewType value) {
+                  controller.transactionViewType = TransactionViewType.day;
+                },
+              ),
+              const SizedBox(
+                width: 12,
+              ),
+              RadioLabel<TransactionViewType>(
+                label: 'Month',
+                value: TransactionViewType.month,
+                groupValue: controller.transactionViewType,
+                onChange: (TransactionViewType value) {
+                  controller.transactionViewType = TransactionViewType.month;
+                },
+              ),
+              if (!controller.isCurrentDay)
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          controller.viewTodayTransaction();
+                        },
+                        child: const Text('Today'),
+                      ),
+                    ],
+                  ),
+                )
+            ],
+          ),
+        ),
+      );
+
+  /// search bar
+  ///
+  ///
+  Widget _buildSearchBar(TransactionsController controller) => Container(
+        padding: const EdgeInsets.only(right: 14, left: 16, top: 5),
+        child: BudgetTextFieldIconButton(
+          onChanged: controller.search,
+          hintText: 'Search',
+          iconData: Icons.search,
+          onPressed: () {
+            print('search test');
+          },
+        ),
+      );
+
+  Widget _buildDetailsMenu() => GetBuilder<TransactionsController>(
+        builder: (TransactionsController controller) => Container(
+          margin: const EdgeInsets.only(left: 24, top: 5),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text('total ${controller.getCurrency().toLowerCase()}'),
+              const SizedBox(
+                width: 8,
+              ),
+              Text(
+                amountFormatter(controller.totalAmount),
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
+              ),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    TextButton(
+                      onPressed: () {
+                        controller.previous();
+                      },
+                      child: const Text(
+                        'prev',
+                        style: TextStyle(color: CustomColors.gray),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: controller.isCurrentDate
+                          ? null
+                          : () {
+                              controller.next();
+                            },
+                      child: Text(
+                        'next',
+                        style: TextStyle(
+                            color: controller.isCurrentDate
+                                ? CustomColors.gray3
+                                : CustomColors.gray),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       );
 
@@ -92,71 +218,41 @@ class TransactionsScreen extends TemplateScreen {
         ),
       );
 
-  /// search bar
-  ///
-  ///
-  Widget _searchBar() => Expanded(
-        child: BudgetTextFieldIconButton(
-          hintText: 'Search',
-          iconData: Icons.search,
-          onPressed: () {
-            print('search test');
-          },
-        ),
-      );
-
-  /// filter button
-  ///
-  ///
-  Widget _filter(BuildContext context) => InkWell(
-        onTap: () {
-          showFilterDialog(context, () {
-            Routes.pop(navigator: Routes.transactionNavigator);
-          });
-        },
-        child: Container(
-          width: 50,
-          height: 50,
-          decoration: const BoxDecoration(
-            color: Colors.purple,
-            borderRadius: BorderRadius.all(
-              Radius.circular(15),
-            ),
-          ),
-          child: const Icon(
-            Icons.filter_alt_outlined,
-            color: Colors.white,
-            size: 35,
-          ),
-        ),
-      );
-
   /// Details section
   ///
   ///
   Widget _buildItems(TransactionsController controller) {
     return Expanded(
-      child: Stack(
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.zero,
-            margin: EdgeInsets.zero,
-            child: ListView.builder(
-                itemBuilder: (BuildContext context, int index) {
-                  return TransactionItem(
-                    index: index,
-                    transaction: controller.transactions[index],
-                    currency: controller.getCurrency(),
-                  );
-                },
-                itemCount: controller.transactions.length),
-          ),
-          if (controller.status == Status.LOADING)
-            const Center(
-              child: CircularProgressIndicator(),
+      child: controller.filteredTransaction.isEmpty
+          ? Container(
+              child: const Center(
+                child: Text(
+                  'No data...',
+                  style: TextStyle(color: CustomColors.gray3),
+                ),
+              ),
+            )
+          : Stack(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.zero,
+                  margin: EdgeInsets.zero,
+                  child: ListView.builder(
+                      itemBuilder: (BuildContext context, int index) {
+                        return TransactionItem(
+                          index: index,
+                          transaction: controller.filteredTransaction[index],
+                          currency: controller.getCurrency(),
+                        );
+                      },
+                      itemCount: controller.filteredTransaction.length),
+                ),
+                if (controller.status == Status.LOADING)
+                  const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+              ],
             ),
-        ],
-      ),
     );
   }
 }
@@ -260,7 +356,9 @@ class TransactionItem extends StatelessWidget {
         children: <Widget>[
           Container(
             child: Text(
-              transaction.remarks,
+              transaction.remarks == null || transaction.remarks.isEmpty
+                  ? 'No remarks available'
+                  : transaction.remarks,
               style: const TextStyle(fontSize: 12),
             ),
           ),
@@ -285,7 +383,7 @@ class TransactionItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             _buildTitle(),
-            const SizedBox(height: 10),
+            const SizedBox(height: 8),
             _buildSubtitle(),
           ],
         ),

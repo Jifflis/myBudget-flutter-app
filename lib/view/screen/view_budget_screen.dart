@@ -24,7 +24,7 @@ class ViewBudgetScreen extends TemplateScreen {
       });
 
   @override
-  String get title => 'Budget Account';
+  Widget get title => const Text('Budget Account');
 
   @override
   Widget buildBody(BuildContext context) {

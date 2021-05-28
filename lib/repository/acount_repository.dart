@@ -1,3 +1,4 @@
+import 'package:mybudget/model/filter.dart';
 import 'package:mybudget/util/id_util.dart';
 
 import '../constant/db_keys.dart';
@@ -22,8 +23,22 @@ class AccountRepository {
         where: '${DBKey.ACCOUNT_ID}=?', whereArgs: <dynamic>[accountID]);
   }
 
+  Future<List<Account>> getAccountsWithFiltr(List<Filter> filters) async {
+
+    final Map<String, dynamic> filter = Filter.generateFilter(filters);
+
+    if (filter == null) {
+      return <Account>[];
+    }
+
+    return await _localProvider.list<Account>(
+        where: filter['where'],
+        whereArgs: filter['whereArgs'],
+        orderBy: 'id desc');
+  }
+
   Future<List<Account>> getAccounts() async {
-    return await _localProvider.list<Account>();
+    return await _localProvider.list<Account>(orderBy: 'id desc');
   }
 
   Future<Account> getAccount(String accountID) async {
