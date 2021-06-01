@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -6,7 +8,6 @@ import 'package:mybudget/enum/status.dart';
 import 'package:mybudget/util/color_util.dart';
 import 'package:mybudget/util/date_util.dart';
 import 'package:mybudget/view/dialog/image_selector_dialog.dart';
-import 'package:mybudget/view/dialog/success_dialog.dart';
 
 import '../../constant/custom_colors.dart';
 import '../../controller/home_controller.dart';
@@ -90,7 +91,7 @@ class HomePageTemplate extends TemplateScreen {
       children: <Widget>[
         _buildHeader(monthlyBudgetModel, controller.getCurrency()),
         _buildDivider(),
-        _buildItems(controller.getCurrency()),
+        _buildItems(controller),
       ],
     );
   }
@@ -222,7 +223,7 @@ class HomePageTemplate extends TemplateScreen {
   /// Details section
   ///
   ///
-  Widget _buildItems(String currency) => monthlyBudgetModel.accountList != null
+  Widget _buildItems(HomeController controller) => monthlyBudgetModel.accountList != null
       ? Expanded(
           child: Container(
             padding: EdgeInsets.zero,
@@ -241,14 +242,14 @@ class HomePageTemplate extends TemplateScreen {
                           transactionController.getTransactionList();
                         }
 
-                        final HomeController controller = Get.find();
                         controller.updateCurrentMonthlyBudgetList();
                       });
                     },
                     child: BudgetItem(
                       index: index,
                       budget: monthlyBudgetModel.accountList[index],
-                      currency: currency,
+                      currency: controller.getCurrency(),
+                      image: controller.accountImageFileList[monthlyBudgetModel.accountList[index].title.replaceAll(RegExp(' '), '_')],
                       isLoading:
                           index == monthlyBudgetModel.accountList.length - 1,
                     ),
@@ -278,6 +279,7 @@ class BudgetItem extends StatelessWidget {
       {Key key,
       @required this.index,
       @required this.budget,
+      @required this.image,
       this.isLoading,
       this.currency})
       : super(key: key);
@@ -286,6 +288,7 @@ class BudgetItem extends StatelessWidget {
   final bool isLoading;
   final Account budget;
   final String currency;
+  final Image image;
 
   @override
   Widget build(BuildContext context) {
@@ -296,6 +299,7 @@ class BudgetItem extends StatelessWidget {
             height: 17,
           ),
         Container(
+          key: UniqueKey(),
           padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 5.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -323,37 +327,63 @@ class BudgetItem extends StatelessWidget {
         onTap: () {
           showImageSelectorDialog(
             context: context,
-            cancel: () {},
-            save: () {},
+            imageName: budget.title,
+            callbackPath: (String path) {
+              if(path != null){
+                final HomeController controller = Get.find();
+                controller.updateImageFile(budget.title, path);
+              }
+              Navigator.of(context, rootNavigator: true).pop();
+            },
           );
         },
-        child: Container(
-          height: 60,
-          width: 60,
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Stack(
-            alignment: AlignmentDirectional.center,
-            children: const <Widget>[
-              Text(
-                'b',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.purple,
-                  fontSize: 25,
-                  fontWeight: FontWeight.w400,
-                ),
+        child: Column(
+          children: <Widget>[
+            if(image == null)
+             Container(
+              height: 60,
+              width: 60,
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(20),
               ),
-              Icon(
-                Icons.crop_free_rounded,
-                size: 50,
-                color: Colors.purple,
-              )
-            ],
-          ),
-        ),
+              child: Stack(
+                alignment: AlignmentDirectional.center,
+                children: const <Widget>[
+                  Text(
+                    'b',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.purple,
+                      fontSize: 25,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  Icon(
+                    Icons.crop_free_rounded,
+                    size: 50,
+                    color: Colors.purple,
+                  )
+                ],
+              ),
+            ),
+            if(image != null)
+            Container(
+              height: 60,
+              width: 60,
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(20),
+                image: DecorationImage(
+                  alignment: const Alignment(-.2, 0),
+                  image: image.image,
+                  fit: BoxFit.fill
+                )
+              ),
+              
+            ),
+          ],
+        )
       );
 
   /// title
