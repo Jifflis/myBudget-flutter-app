@@ -10,7 +10,8 @@ import '../util/maintenance_util.dart';
 import 'base_controller.dart';
 
 class MainController extends BaseController with WidgetsBindingObserver {
-  MainController(this.context) : super(provideSettings: false) {
+  MainController(this.context,{bool useForTest = false}) : super(provideSettings: false) {
+    if(!useForTest)
     WidgetsBinding.instance.addObserver(this);
   }
 
