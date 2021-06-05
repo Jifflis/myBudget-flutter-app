@@ -35,7 +35,9 @@ class MaintenanceUtil {
       //extract file
       final List<Maintenance> dialogs = await extractFile(file);
 
-      if (dialogs == null) return null;
+      if (dialogs == null)
+        return null;
+
       for (final Maintenance dialog in dialogs) {
         //check target version
         final PackageInfo packageInfo = await PackageInfo.fromPlatform();

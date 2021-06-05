@@ -48,10 +48,4 @@ class Maintenance extends BaseModel {
         'Url': url,
         'UrButtonMessage': urlButtonMessage
       };
-
-  @override
-  void getValue() {}
-
-  @override
-  void setValue(dynamic value) {}
 }

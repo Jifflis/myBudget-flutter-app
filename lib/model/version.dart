@@ -44,14 +44,18 @@ class Version implements Comparable<Version> {
       throw ArgumentError.notNull('b');
     }
 
-    if (a.major > b.major) return 1;
-    if (a.major < b.major) return -1;
-
-    if (a.minor > b.minor) return 1;
-    if (a.minor < b.minor) return -1;
-
-    if (a.patch > b.patch) return 1;
-    if (a.patch < b.patch) return -1;
+    if (a.major > b.major)
+      return 1;
+    if (a.major < b.major)
+      return -1;
+    if (a.minor > b.minor)
+      return 1;
+    if (a.minor < b.minor)
+      return -1;
+    if (a.patch > b.patch)
+      return 1;
+    if (a.patch < b.patch)
+      return -1;
 
     return 0;
   }
