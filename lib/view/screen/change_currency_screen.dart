@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
+import 'package:mybudget/enum/status.dart';
+import 'package:mybudget/view/dialog/confirmation_dialog.dart';
 
 import '../../controller/change_currency_controller.dart';
 import '../../model/currency.dart';
@@ -33,7 +35,21 @@ class ChangeCurrencyScreen extends TemplateScreen {
             FocusScope.of(context).requestFocus(FocusNode());
             _controller.selectedCurrency = value;
           }),
-          BudgetButton(() {}, 'Ok'),
+          BudgetButton(() {
+            showConfirmationDialog(
+              context: context,
+              message: 'Do you want to change currency ?',
+              yes: () {
+                _controller.save().then((Status status) {
+                  if (status == Status.COMPLETED) {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  }
+                });
+              },
+              cancel: () => Navigator.pop(context),
+            );
+          }, 'Ok'),
         ],
       ),
     );
