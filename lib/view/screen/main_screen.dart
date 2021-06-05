@@ -5,6 +5,7 @@ import '../../constant/custom_colors.dart';
 import '../../controller/main_controller.dart';
 import '../../enum/status.dart';
 import '../../routes.dart';
+import '../../util/maintenance_util.dart';
 
 class MainScreen extends StatelessWidget {
   final List<Widget> _navigationScreens = <Widget>[
@@ -22,7 +23,8 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final MainController controller = Get.put(MainController());
+    final MainController controller = Get.put(MainController(context));
+    MaintenanceUtil.showMaintenanceDialog(context);
     return GetBuilder<MainController>(
       builder: (_) => controller.status == Status.LOADING
           ? Container()
