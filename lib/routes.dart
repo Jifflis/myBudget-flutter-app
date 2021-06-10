@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 import 'package:mybudget/view/screen/add_transaction_screen.dart';
+import 'package:mybudget/view/screen/set_passcode_screen.dart';
 import 'package:mybudget/view/screen/view_transaction_screen.dart';
 import 'package:mybudget/view/screen/change_currency_screen.dart';
 
@@ -31,6 +32,7 @@ class Routes {
   static const String SCREEN_ADD_TRANSACTION = '/add_transaction_screen';
   static const String SCREEN_VIEW_TRANSACTION = '/view_transaction_screen';
   static const String SCREEN_CHANGE_CURRENCY = '/change_currency_screen';
+  static const String SCREEN_SET_PASSCODE = '/set_passcode_screen';
 
   //navigator key ------------------------------------------------------------
   /// set navigators key.
@@ -115,6 +117,9 @@ class Routes {
 
       case SCREEN_CHANGE_CURRENCY:
         screen = ChangeCurrencyScreen();
+        break;
+      case SCREEN_SET_PASSCODE:
+        screen = SetPasscodeScreen();
 
         break;
     }
