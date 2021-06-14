@@ -354,12 +354,14 @@ class TransactionItem extends StatelessWidget {
   Widget _buildSubtitle() => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Container(
-            child: Text(
-              transaction.remarks == null || transaction.remarks.isEmpty
-                  ? 'No remarks available'
-                  : transaction.remarks,
-              style: const TextStyle(fontSize: 12),
+          Expanded(
+            child: Container(
+              child: Text(
+                transaction.remarks == null || transaction.remarks.isEmpty
+                    ? 'No remarks available'
+                    : transaction.remarks,
+                style: const TextStyle(fontSize: 12),
+              ),
             ),
           ),
           Container(
