@@ -25,6 +25,7 @@ class DBKey {
   static const String TRANSACTION_ID = 'transaction_id';
   static const String AMOUNT = 'amount';
   static const String REMARKS = 'remarks';
+  static const String TRANSACTION_DATE = 'transaction_date';
 
   static const String CURRENCY = 'currency';
   static const String CURRENCY_ID = 'currency_id';

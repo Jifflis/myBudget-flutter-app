@@ -43,7 +43,7 @@ class ViewTransactionController extends BaseController {
     _transaction = transaction;
     titleController.text = transaction.account.title;
     amountController.text = transaction.amount.toString();
-    _selectedDate = transaction.updatedAT;
+    _selectedDate = transaction.date;
     remarksController.text = transaction.remarks;
   }
 
@@ -74,7 +74,8 @@ class ViewTransactionController extends BaseController {
           double.parse(amountController.text) - _transaction.amount;
       _transaction.amount = double.parse(amountController.text);
       _transaction.remarks = remarksController.text;
-      _transaction.updatedAT = selectedDate;
+      _transaction.updatedAT = DateTime.now();
+      _transaction.date = selectedDate;
       transactionRepository.upsert(transaction);
 
       final Account account = _transaction.account;

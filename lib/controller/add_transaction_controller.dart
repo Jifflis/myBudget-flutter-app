@@ -69,8 +69,7 @@ class AddTransactionController extends BaseController {
         accountID: selectedAccount.accountId,
         remarks: remarksController.text,
         amount: double.parse(amountController.text),
-        createdAt: selectedDate,
-        updatedAT: selectedDate,
+        date: selectedDate,
       );
 
       transactionRepository.upsert(transaction);

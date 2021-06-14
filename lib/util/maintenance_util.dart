@@ -92,7 +92,7 @@ class MaintenanceUtil {
     String filePath = '';
 
     try {
-      final http.Response response = await http.get(url);
+      final http.Response response = await http.get(Uri.http(url, ''));
       if (response.statusCode == 200) {
         final Uint8List bytes = response.bodyBytes;
         filePath = '$dir/$fileName';

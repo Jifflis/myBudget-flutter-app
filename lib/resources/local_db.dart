@@ -43,7 +43,9 @@ class LocalDB {
       },
       // Set the version. This executes the onCreate function and provides a
       // path to perform database upgrades and downgrades.
-      version: VERSION_1,
+      // Refer to db_migration.dart for list of versions
+      // Please use db_migration.dart for version declaration.
+      version: VERSION_2,
     );
 
     return isFirstCreated;
@@ -115,6 +117,7 @@ class LocalDB {
         '${DBKey.ACCOUNT_ID} STRING,'
         '${DBKey.AMOUNT} REAL,'
         '${DBKey.REMARKS} STRING,'
+        '${DBKey.TRANSACTION_DATE} STRING,'
         '${DBKey.CREATED_AT} STRING,'
         '${DBKey.UPDATED_AT} STRING)');
   }

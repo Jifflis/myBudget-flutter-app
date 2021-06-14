@@ -315,14 +315,14 @@ class TransactionItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              dateSimplified(transaction.updatedAT.toString())['MM'],
+              dateSimplified(transaction.date.toString())['MM'],
               style: TextStyle(
                 color: Colors.purple[800],
                 fontSize: 12,
               ),
             ),
             Text(
-              dateSimplified(transaction.updatedAT.toString())['DD'],
+              dateSimplified(transaction.date.toString())['DD'],
               style: TextStyle(
                   color: Colors.purple[800],
                   fontSize: 18,
