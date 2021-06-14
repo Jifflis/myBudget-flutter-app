@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import '../enum/status.dart';
+import '../environment.dart';
 import '../model/monthly_summary.dart';
 import '../model/settings.dart';
 import '../model/user.dart';
@@ -47,6 +48,9 @@ class InitialController extends BaseController {
   Future<void> init() async {
     //set loading status
     status = Status.LOADING;
+
+    //initialize environment
+    await Env.initEnv();
 
     //initialize local db
     _isFirstLaunch = await LocalDB().initialize();

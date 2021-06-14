@@ -1,18 +1,34 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import '../enum/status.dart';
 import '../provider/settings_provider.dart';
 import '../repository/settings_repository.dart';
+import '../util/maintenance_util.dart';
 import 'base_controller.dart';
 
-class MainController extends BaseController {
-  MainController() : super(provideSettings: false);
+class MainController extends BaseController with WidgetsBindingObserver {
+  MainController(this.context,{bool useForTest = false}) : super(provideSettings: false) {
+    if(!useForTest)
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  BuildContext context;
+
   final RxInt _selectedBottomIndex = 0.obs;
 
   StreamController<int> onTabPageChange = StreamController<int>.broadcast();
   SettingsRepository settingsRepository = SettingsRepository();
+
+  @override
+  Future<void> didChangeAppLifecycleState(final AppLifecycleState state) async {
+    if (state == AppLifecycleState.resumed &&
+        MaintenanceUtil.isAbleToRequest(DateTime.now())) {
+      MaintenanceUtil.showMaintenanceDialog(context);
+    }
+  }
 
   @override
   Future<void> onInit() async {
@@ -28,4 +44,10 @@ class MainController extends BaseController {
   }
 
   RxInt get selectedBottomIndex => _selectedBottomIndex;
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
 }
