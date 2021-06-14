@@ -359,7 +359,7 @@ class TransactionItem extends StatelessWidget {
             child: Container(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   Text(
                     transaction.remarks == null || transaction.remarks.isEmpty
                         ? 'No remarks available'
