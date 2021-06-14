@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_pin_code_fields/flutter_pin_code_fields.dart';
 import 'package:get/get.dart';
 import 'package:mybudget/controller/set_passcode_controller.dart';
+import 'package:mybudget/routes.dart';
 import 'package:mybudget/view/screen/template_screen.dart';
 import 'package:mybudget/view/widget/budget_button.dart';
 import 'package:mybudget/view/widget/budget_text_field.dart';
@@ -37,7 +38,9 @@ class SetPasscodeScreen extends TemplateScreen {
                 _pinContainer(controller),
                 _recoveryEmailContainer(controller),
                 const SizedBox(height: 40),
-                BudgetButton(() {}, 'Save'),
+                BudgetButton(() {
+                  Routes.pushNamed(Routes.SCREEN_SIGN_IN);
+                }, 'Save'),
               ],
             ),
           ),

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'package:mybudget/view/screen/add_transaction_screen.dart';
 import 'package:mybudget/view/screen/set_passcode_screen.dart';
+import 'package:mybudget/view/screen/sign_in_screen.dart';
 import 'package:mybudget/view/screen/view_transaction_screen.dart';
 import 'package:mybudget/view/screen/change_currency_screen.dart';
 
@@ -33,6 +34,7 @@ class Routes {
   static const String SCREEN_VIEW_TRANSACTION = '/view_transaction_screen';
   static const String SCREEN_CHANGE_CURRENCY = '/change_currency_screen';
   static const String SCREEN_SET_PASSCODE = '/set_passcode_screen';
+  static const String SCREEN_SIGN_IN = '/sign_in_screen';
 
   //navigator key ------------------------------------------------------------
   /// set navigators key.
@@ -121,6 +123,10 @@ class Routes {
       case SCREEN_SET_PASSCODE:
         screen = SetPasscodeScreen();
 
+        break;
+
+      case SCREEN_SIGN_IN:
+        screen = SignInScreen();
         break;
     }
 
