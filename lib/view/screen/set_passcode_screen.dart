@@ -183,8 +183,9 @@ class SetPasscodeScreen extends TemplateScreen {
                     enabled: enabled ?? true,
                     autoHideKeyboard: false,
                     keyboardType: TextInputType.number,
-                    activeBorderColor: Colors.purple,
-                    borderColor: (enabled ?? true) ? Colors.black : Colors.grey,
+                    activeBorderColor: Colors.black,
+                    borderColor:
+                        (enabled ?? true) ? Colors.purple : Colors.grey,
                     padding: EdgeInsets.zero,
                     textStyle: const TextStyle(
                       color: Colors.purple,
