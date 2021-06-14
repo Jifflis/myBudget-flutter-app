@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
+import 'package:intl/intl.dart';
 
 import '../../constant/custom_colors.dart';
 import '../../controller/home_controller.dart';
@@ -356,11 +357,23 @@ class TransactionItem extends StatelessWidget {
         children: <Widget>[
           Expanded(
             child: Container(
-              child: Text(
-                transaction.remarks == null || transaction.remarks.isEmpty
-                    ? 'No remarks available'
-                    : transaction.remarks,
-                style: const TextStyle(fontSize: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    transaction.remarks == null || transaction.remarks.isEmpty
+                        ? 'No remarks available'
+                        : transaction.remarks,
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                  const SizedBox(
+                    height: 3,
+                  ),
+                  Text(
+                    'Time ${DateFormat.Hm().format(transaction.date)}',
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                ],
               ),
             ),
           ),
