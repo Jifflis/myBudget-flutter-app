@@ -14,7 +14,11 @@ class SetPasscodeScreen extends TemplateScreen {
 
   @override
   Widget getLeading(BuildContext context) => IconButton(
-      onPressed: () => Navigator.pop(context),
+      onPressed: () {
+        final SetPasscodeController controller = Get.find();
+        controller.reset();
+        Navigator.pop(context);
+      },
       icon: const Icon(Icons.arrow_back_ios_rounded));
 
   @override
@@ -67,7 +71,6 @@ class SetPasscodeScreen extends TemplateScreen {
         children: <Widget>[
           _pin(
             label: 'Current Pin',
-            controller: controller.currentPinController,
             isShow: controller.isShowCurrentPin,
             onShow: (bool val) => controller.isShowCurrentPin = val,
             validation: controller.currentPinValidation,
@@ -75,19 +78,17 @@ class SetPasscodeScreen extends TemplateScreen {
           ),
           _pin(
               label: 'New Pin',
-              controller: controller.newPinController,
               isShow: controller.isShowNewPin,
               onShow: (bool val) => controller.isShowNewPin = val,
               validation: controller.newPinValidation,
               onChange: controller.newPinOnChange),
           _pin(
-            label: 'Verify',
-            controller: controller.verifyPinController,
-            isShow: controller.isShowVerifyPin,
-            onShow: (bool val) => controller.isShowVerifyPin = val,
-            validation: controller.verifyPinValidation,
-            onChange: controller.verifyPinOnChange,
-          ),
+              label: 'Verify',
+              isShow: controller.isShowVerifyPin,
+              onShow: (bool val) => controller.isShowVerifyPin = val,
+              validation: controller.verifyPinValidation,
+              onChange: controller.verifyPinOnChange,
+              enabled: controller.newPinValue.length == 4),
           const SizedBox(height: 20),
           const Text(
             'Set-up passcode for this device',
@@ -148,11 +149,11 @@ class SetPasscodeScreen extends TemplateScreen {
   ///
   Widget _pin({
     @required String label,
-    @required TextEditingController controller,
     @required bool isShow,
     @required Function(bool) onShow,
     @required PinValidation validation,
     @required Function(String) onChange,
+    bool enabled,
   }) =>
       Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -171,7 +172,7 @@ class SetPasscodeScreen extends TemplateScreen {
                 ),
               if (validation == PinValidation.error)
                 const Icon(
-                  Icons.error,
+                  Icons.cancel_outlined,
                   color: Colors.red,
                 ),
               if (validation == PinValidation.nutral) const SizedBox(width: 20),
@@ -179,10 +180,11 @@ class SetPasscodeScreen extends TemplateScreen {
                 alignment: Alignment.center,
                 width: 100,
                 child: PinCodeFields(
-                    controller: controller,
+                    enabled: enabled ?? true,
                     autoHideKeyboard: false,
                     keyboardType: TextInputType.number,
                     activeBorderColor: Colors.purple,
+                    borderColor: (enabled ?? true) ? Colors.black : Colors.grey,
                     padding: EdgeInsets.zero,
                     textStyle: const TextStyle(
                       color: Colors.purple,

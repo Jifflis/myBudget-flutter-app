@@ -18,11 +18,11 @@ class SetPasscodeController extends BaseController {
   PinValidation _newPinValidation = PinValidation.nutral;
   PinValidation _verifyPinValidation = PinValidation.nutral;
 
-  final TextEditingController currentPinController = TextEditingController();
-  final TextEditingController newPinController = TextEditingController();
-  final TextEditingController verifyPinController = TextEditingController();
+  String _currentPinValue = '';
+  String _newPinValue = '';
+  String _verifyPinValue = '';
 
-  final TextEditingController emailRecoveryController = TextEditingController();
+  TextEditingController emailRecoveryController;
 
   /// get data [_currentPinValidation]
   ///
@@ -67,11 +67,8 @@ class SetPasscodeController extends BaseController {
   ///
   ///
   void currentPinOnChange(String value) {
-    if (currentPinController.text.length < 4) {
-      currentPinValidation = PinValidation.nutral;
-    } else {
-      currentPinValidation = PinValidation.success;
-    }
+    _currentPinValue = value;
+    _validationChecker();
     update();
   }
 
@@ -79,13 +76,8 @@ class SetPasscodeController extends BaseController {
   ///
   ///
   void newPinOnChange(String value) {
-    if (newPinController.text.length < 4) {
-      newPinValidation = PinValidation.nutral;
-    } else {
-      newPinValidation = PinValidation.success;
-    }
-
-    verifyPinOnChange(null);
+    _newPinValue = value;
+    _validationChecker();
     update();
   }
 
@@ -93,21 +85,48 @@ class SetPasscodeController extends BaseController {
   ///
   ///
   void verifyPinOnChange(String value) {
-    if (newPinController.text.length < 4 ||
-        verifyPinController.text.length < 4) {
+    _verifyPinValue = value;
+    _validationChecker();
+    update();
+  }
+
+  /// get data [_newPinValue]
+  ///
+  ///
+  String get newPinValue => _newPinValue;
+
+  /// validation checker
+  ///
+  ///
+  void _validationChecker() {
+    ///! currentPin
+    if (_currentPinValue.length < 4) {
+      currentPinValidation = PinValidation.nutral;
+    } else {
+      currentPinValidation = PinValidation.success;
+    }
+
+    ///! verifyPin
+    if (_newPinValue.length < 4 || _verifyPinValue.length < 4) {
       verifyPinValidation = PinValidation.nutral;
     }
 
-    if (newPinController.text == verifyPinController.text &&
-        newPinController.text.length == 4 &&
-        verifyPinController.text.length == 4) {
+    if (_newPinValue == _verifyPinValue &&
+        _newPinValue.length == 4 &&
+        _verifyPinValue.length == 4) {
       verifyPinValidation = PinValidation.success;
-    } else if (newPinController.text != verifyPinController.text &&
-        newPinController.text.length == 4 &&
-        verifyPinController.text.length == 4) {
+    } else if (_newPinValue != _verifyPinValue &&
+        _newPinValue.length == 4 &&
+        _verifyPinValue.length == 4) {
       verifyPinValidation = PinValidation.error;
     }
-    update();
+
+    ///! newPin
+    if (_newPinValue.length < 4) {
+      newPinValidation = PinValidation.nutral;
+    } else {
+      newPinValidation = PinValidation.success;
+    }
   }
 
   /// get data [_isEnabled]
@@ -162,21 +181,33 @@ class SetPasscodeController extends BaseController {
     update();
   }
 
-  bool pinVerifyValidation() {
-    // if (newPinController.text.length < 4 ||
-    //     verifyPinController.text.length < 4) {
-    //   return null;
-    // }
-
-    return newPinController.text == verifyPinController.text;
+  @override
+  void onInit() {
+    super.onInit();
+    emailRecoveryController = TextEditingController();
   }
 
   @override
   void dispose() {
     super.dispose();
-    currentPinController.dispose();
-    newPinController.dispose();
-    verifyPinController.dispose();
     emailRecoveryController.dispose();
+  }
+
+  void reset() {
+    _isEnabled = false;
+
+    _isShowCurrentPin = false;
+    _isShowNewPin = false;
+    _isShowVerifyPin = false;
+
+    _currentPinValidation = PinValidation.nutral;
+    _newPinValidation = PinValidation.nutral;
+    _verifyPinValidation = PinValidation.nutral;
+
+    _currentPinValue = '';
+    _newPinValue = '';
+    _verifyPinValue = '';
+
+    emailRecoveryController.clear();
   }
 }
