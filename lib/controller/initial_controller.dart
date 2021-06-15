@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:mybudget/repository/transaction_repository.dart';
 
 import '../enum/status.dart';
 import '../environment.dart';
@@ -27,6 +28,7 @@ class InitialController extends BaseController {
   UserRepository _userRepository;
   MonthlySummaryRepository _monthlyRepository;
   AccountRepository _accountRepository;
+  TransactionRepository _transactionRepository;
 
   Settings _settings;
 
@@ -96,6 +98,7 @@ class InitialController extends BaseController {
     _userRepository = UserRepository();
     _monthlyRepository = MonthlySummaryRepository();
     _accountRepository = AccountRepository();
+    _transactionRepository = TransactionRepository();
   }
 
   /// Initialize user
@@ -142,6 +145,8 @@ class InitialController extends BaseController {
       await _accountRepository.monthlyRefresh(
         monthlySummaryID(date: settings.refreshDate),
         monthlySummaryID(date: newRefreshDate),
+        user,
+        _transactionRepository,
       );
 
       //update monthly summary table

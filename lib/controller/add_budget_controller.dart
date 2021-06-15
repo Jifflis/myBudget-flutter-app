@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 
 import '../model/account.dart';
+import '../model/transaction.dart';
 import '../repository/acount_repository.dart';
+import '../repository/transaction_repository.dart';
 import '../util/id_util.dart';
 import 'base_controller.dart';
 
@@ -11,6 +13,7 @@ class AddBudgetController extends BaseController {
   TextEditingController amountController = TextEditingController();
 
   final AccountRepository _accountRepository = AccountRepository();
+  final TransactionRepository _transactionRepository = TransactionRepository();
 
   bool _isAutoDeduct = false;
 
@@ -42,6 +45,17 @@ class AddBudgetController extends BaseController {
       if (isAutoDeduct) {
         account.expense = account.budget;
         account.balance = 0.0;
+
+        //A transaction
+        final Transaction transaction = Transaction(
+          transactionID: randomID(),
+          userID: userProvider.user.userId,
+          accountID: account.accountId,
+          remarks: 'System generated.',
+          amount: account.expense,
+          date: DateTime.now(),
+        );
+        _transactionRepository.upsert(transaction);
       }
 
       await _accountRepository.upsert(account);
