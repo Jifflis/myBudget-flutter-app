@@ -1,27 +1,18 @@
-package com.kddi.PocketHealthcareDemo.channel
+package com.sakayta.mybudget.channel
 
 import android.content.Context
-import com.amazonaws.mobile.config.AWSConfiguration
-import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoDevice
-import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool
-import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserSession
-import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.AuthenticationContinuation
-import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.AuthenticationDetails
-import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.ChallengeContinuation
-import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.MultiFactorAuthenticationContinuation
-import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.AuthenticationHandler
-import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GenericHandler
+import android.content.Intent
+import android.os.Build
+import android.provider.Settings
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
-import org.json.JSONObject
 
-class SettingsChannel {
+
+class SettingsChannel private constructor(context: Context) {
 
     companion object {
-        // FROM native actions.
-        val ACTION_FROM_CHECK_SETTINGS_DATE = "ACTION_FROM_CHECK_SETTINGS_DATE"
 
-        private var _instance: SettingsChannel? = null
+        private var instance: SettingsChannel? = null
 
         /**
          * Get singleton instance of this class.
@@ -29,29 +20,25 @@ class SettingsChannel {
          * @return [SettingsChannel] instance.
          */
         @Synchronized
-        fun instance(context: Context) : SettingsChannel {
-            if (_instance == null) {
-                _instance = SettingsChannel(context)
+        fun instance(context: Context): SettingsChannel {
+            if (instance == null) {
+                instance = SettingsChannel(context)
             }
-            return _instance!!
+            return instance!!
         }
     }
 
-    private val CHANNEL = "com.kddi.PocketHealthcareDemo/cognitoaccount"
+    private val channel = "com.sakayta.mybudget/settings"
 
     // TO native actions.
-    private val ACTION_TO_CHECK_DATE_SETTINGS = "ACTION_TO_CHECK_DATE_SETTINGS"
-
-    private val RESULT_SUCCESS = 1
-    private val RESULT_FAILED = 0
+    private val actionToCheckDateSettings = "ACTION_TO_CHECK_DATE_SETTINGS"
+    private val actionToGotoSettings = "ACTION_TO_GO_TO_SETTINGS"
 
     private lateinit var _methodChannel: MethodChannel
 
-    private val _context: Context
+    private val _context: Context = context
 
-    private constructor(context: Context) {
-        _context = context
-    }
+    private val result = 1
 
     /**
      * Setup method channel for communicating with flutter.
@@ -59,20 +46,41 @@ class SettingsChannel {
      * @param flutterEngine
      */
     fun setupMethodChannel(flutterEngine: FlutterEngine) {
-        _methodChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL)
+        _methodChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, channel)
 
         _methodChannel.setMethodCallHandler { call, result ->
             when (call.method) {
-                ACTION_TO_CHECK_DATE_SETTINGS -> {
-                    _userPool = CognitoUserPool(
-                        _context,
-                        AWSConfiguration(JSONObject(call.arguments as String))
-                    )
-                    result.success(RESULT_SUCCESS)
+                actionToCheckDateSettings -> {
+                    result.success(isNetworkProvidedTime(_context))
+                }
+
+                actionToGotoSettings -> {
+                    gotoDateSettings(_context)
+                    result.success(result)
                 }
 
                 else -> result.notImplemented()
             }
         }
+    }
+
+    /**
+     * Check if time is network provided in settings.
+     *
+     * return 1 if true else 0
+     */
+    private fun isNetworkProvidedTime(c: Context): Int {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            Settings.Global.getInt(c.contentResolver, Settings.Global.AUTO_TIME, 0)
+        } else {
+            Settings.System.getInt(c.contentResolver, Settings.System.AUTO_TIME, 0)
+        }
+    }
+
+    /**
+     * Navigate to date settings
+     */
+    private fun gotoDateSettings(c: Context) {
+        c.startActivity(Intent(Settings.ACTION_DATE_SETTINGS));
     }
 }

@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-class MaintenanceDialogController extends GetxController{
+class ErrorDateDialogController extends GetxController{
   bool dialogVisible = false;
 
   void toggleDialog() {
