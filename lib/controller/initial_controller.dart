@@ -136,8 +136,7 @@ class InitialController extends BaseController {
       return;
     }
 
-    while (DateTime.now().isAtSameMomentAs(settings.refreshDate) ||
-        DateTime.now().isAfter(settings.refreshDate)) {
+    while (resetTime(DateTime.now()).isAfter(settings.refreshDate)) {
       final DateTime newRefreshDate =
           getNextMonthLastDate(settings.refreshDate);
 

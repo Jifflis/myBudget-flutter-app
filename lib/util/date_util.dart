@@ -11,6 +11,14 @@ DateTime getNextMonthLastDate(DateTime date) {
   return DateTime(date.year, date.month + 2, 0);
 }
 
+/// Return a date with a time of `00:00:00`
+/// according to the given parameter [date]
+///
+DateTime resetTime(DateTime date) {
+  return DateTime(date.year, date.month, 0);
+}
+
+
 /// Simplify Date
 /// expected date format YYYY-MM-DD
 ///
