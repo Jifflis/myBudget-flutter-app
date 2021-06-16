@@ -1,5 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mybudget/repository/transaction_repository.dart';
+import 'package:mybudget/view/screen/introduction_screen.dart';
+import 'package:mybudget/view/screen/main_screen.dart';
 
 import '../enum/status.dart';
 import '../environment.dart';
@@ -84,9 +87,17 @@ class InitialController extends BaseController {
   ///
   void _navigateDestination() {
     if (_settings == null || _settings.firstInstall) {
-      Routes.pushReplacementNamed(Routes.SCREEN_INTRODUCTION);
+      Routes.rootNavigator.pushReplacement(
+        MaterialPageRoute<Widget>(
+          builder: (_) => IntroductionScreen(),
+        ),
+      );
     } else {
-      Routes.pushReplacementNamed(Routes.SCREEN_MAIN);
+      Routes.rootNavigator.pushReplacement(
+        MaterialPageRoute<Widget>(
+          builder: (_) => MainScreen(),
+        ),
+      );
     }
   }
 
