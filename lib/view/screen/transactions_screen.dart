@@ -398,7 +398,7 @@ class TransactionItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             _buildTitle(),
-            const SizedBox(height: 8),
+            const SizedBox(height: 3),
             _buildSubtitle(),
           ],
         ),

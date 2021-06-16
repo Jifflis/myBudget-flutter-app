@@ -1,3 +1,5 @@
+import 'package:mybudget/constant/general.dart';
+
 import '../constant/db_keys.dart';
 import '../model/filter.dart';
 import '../model/transaction.dart';
@@ -55,6 +57,13 @@ class TransactionRepository {
     await _localProvider.delete<Transaction>(
       where: '${DBKey.ACCOUNT_ID}=?',
       whereArgs: <dynamic>[accountID],
+    );
+  }
+
+  Future<void> deleteSystemGeneratedTransaction(String accountID) async {
+    await _localProvider.delete<Transaction>(
+      where: '${DBKey.ACCOUNT_ID}=? and ${DBKey.REMARKS}=? ',
+      whereArgs: <dynamic>[accountID,SYSTEM_GEN],
     );
   }
 }

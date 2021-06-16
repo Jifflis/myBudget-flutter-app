@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:mybudget/constant/general.dart';
 
 import '../model/account.dart';
 import '../model/transaction.dart';
@@ -46,12 +47,12 @@ class AddBudgetController extends BaseController {
         account.expense = account.budget;
         account.balance = 0.0;
 
-        //A transaction
+        //Add system generated transaction
         final Transaction transaction = Transaction(
           transactionID: randomID(),
           userID: userProvider.user.userId,
           accountID: account.accountId,
-          remarks: 'System generated.',
+          remarks: SYSTEM_GEN,
           amount: account.expense,
           date: DateTime.now(),
         );

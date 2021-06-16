@@ -1,3 +1,4 @@
+import 'package:mybudget/constant/general.dart';
 import 'package:mybudget/model/filter.dart';
 import 'package:mybudget/model/transaction.dart';
 import 'package:mybudget/model/user.dart';
@@ -76,7 +77,7 @@ class AccountRepository {
           transactionID: randomID(),
           userID: user.userId,
           accountID: account.accountId,
-          remarks: 'System generated.',
+          remarks: SYSTEM_GEN,
           amount: account.expense,
           date: DateTime.now(),
         );

@@ -1,6 +1,8 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:mybudget/constant/general.dart';
+import 'package:oktoast/oktoast.dart';
 
 import '../controller/base_controller.dart';
 import '../enum/status.dart';
@@ -62,6 +64,11 @@ class AddTransactionController extends BaseController {
   ///
   ///
   Future<bool> save() async {
+    if(remarksController.text==SYSTEM_GEN){
+      showToast('Invalid remarks!');
+      return false;
+    }
+
     if (formKey.currentState.validate()) {
       final Transaction transaction = Transaction(
         transactionID: randomID(),

@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
+import 'package:mybudget/view/dialog/budget_dialog.dart';
 import 'package:mybudget/view/dialog/confirmation_dialog.dart';
 import 'package:mybudget/view/dialog/success_dialog.dart';
 
 import '../../controller/view_budget_controller.dart';
 import '../../model/account.dart';
+import '../../routes.dart';
 import '../widget/budget_button.dart';
 import '../widget/budget_field_label.dart';
 import '../widget/budget_text_button.dart';
@@ -42,18 +44,18 @@ class ViewBudgetScreen extends TemplateScreen {
         height: MediaQuery.of(context).size.height,
         color: Colors.purple[800],
         child: Container(
-            padding: const EdgeInsets.fromLTRB(40, 0.0, 40, 10),
-            height: MediaQuery.of(context).size.height,
-            width: double.infinity,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(40),
-                topRight: Radius.circular(40),
-              ),
+          padding: const EdgeInsets.fromLTRB(40, 0.0, 40, 10),
+          height: MediaQuery.of(context).size.height,
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(40),
+              topRight: Radius.circular(40),
             ),
-            child: SingleChildScrollView(
-                child: GetBuilder<ViewBudgetController>(
+          ),
+          child: SingleChildScrollView(
+            child: GetBuilder<ViewBudgetController>(
               init: controller,
               builder: (_) {
                 return Form(
@@ -117,7 +119,7 @@ class ViewBudgetScreen extends TemplateScreen {
                       const SizedBox(height: 30),
                       Row(
                         children: <Widget>[
-                          const BudgetFieldLabel(label: 'Auto deduct'),
+                          const BudgetFieldLabel(label: 'Auto-deduction'),
                           Checkbox(
                               value: controller.isAutoDeduct,
                               onChanged: (bool value) =>
@@ -128,13 +130,25 @@ class ViewBudgetScreen extends TemplateScreen {
                       BudgetButton(
                           controller.isEnabled
                               ? () async {
-                                  if (await controller.updateAccount()) {
-                                    const String message =
-                                        'Account has been updated!';
-                                    showSuccessDialog(
-                                        context: context,
-                                        close: () => Navigator.pop(context),
-                                        message: message);
+                                  if (controller.isAutoDeduct) {
+                                    showBudgetDialog(
+                                      context: context,
+                                      title: 'Confirmation Dialog',
+                                      description:
+                                          'Are you sure you want to update with auto-deduction? This will erase all your transaction under this account for the current month.',
+                                      showButton1: true,
+                                      showButton2: true,
+                                      button1Title: 'Cancel',
+                                      button2Title: 'Yes',
+                                      onButton1Press: () => Navigator.pop(context),
+                                      onButton2Press: () async{
+                                        Navigator.pop(context);
+                                        await update(context, controller);
+                                      }
+
+                                    );
+                                  } else {
+                                    await update(context, controller);
                                   }
                                 }
                               : null,
@@ -143,8 +157,24 @@ class ViewBudgetScreen extends TemplateScreen {
                   ),
                 );
               },
-            ))),
+            ),
+          ),
+        ),
       ),
     );
+  }
+
+  Future<void> update(
+      BuildContext context, ViewBudgetController controller) async {
+    if (await controller.updateAccount()) {
+      const String message = 'Account has been updated!';
+      showSuccessDialog(
+          context: context,
+          close: () {
+            Navigator.pop(context);
+            Routes.pop(navigator:Routes.homeNavigator);
+          },
+          message: message);
+    }
   }
 }

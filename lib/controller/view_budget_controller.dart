@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/state_manager.dart';
-import 'package:mybudget/repository/transaction_repository.dart';
+import 'package:mybudget/constant/general.dart';
 
 import '../model/account.dart';
+import '../model/transaction.dart';
 import '../repository/acount_repository.dart';
+import '../repository/transaction_repository.dart';
+import '../util/id_util.dart';
 import '../util/number_util.dart';
+import 'base_controller.dart';
 
-class ViewBudgetController extends GetxController {
+class ViewBudgetController extends BaseController {
   bool _isFieldEnabled = false;
   bool _isAutoDeduct = false;
   Account _account;
@@ -53,6 +55,8 @@ class ViewBudgetController extends GetxController {
   ///
   Future<bool> updateAccount() async {
     if (isEnabled && formKey.currentState.validate()) {
+      final double oldBudget = _account.budget;
+
       _account.title = accountNameController.text;
       _account.budget = double.parse(budgetAmountController.text);
       _account.autoDeduct = isAutoDeduct;
@@ -61,6 +65,24 @@ class ViewBudgetController extends GetxController {
       if (isAutoDeduct) {
         _account.expense = _account.budget;
         _account.balance = 0.0;
+
+        // Delete all transaction under this account
+        await _transactionRepository.deleteAll(_account.accountId);
+
+        // Add system generated transaction
+        final Transaction transaction = Transaction(
+          transactionID: randomID(),
+          userID: userProvider.user.userId,
+          accountID: _account.accountId,
+          remarks: SYSTEM_GEN,
+          amount: _account.expense,
+          date: DateTime.now(),
+        );
+        _transactionRepository.upsert(transaction);
+      }else{
+        _account.expense = _account.expense - oldBudget;
+        _account.balance = _account.budget - _account.expense;
+        await _transactionRepository.deleteSystemGeneratedTransaction(_account.accountId);
       }
 
       await _accountRepository.upsert(_account);

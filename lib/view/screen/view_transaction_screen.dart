@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:mybudget/view/dialog/confirmation_dialog.dart';
-import 'package:mybudget/view/dialog/success_dialog.dart';
-import 'package:mybudget/view/widget/budget_date_selector_button.dart';
-import 'package:mybudget/view/widget/budget_field_label.dart';
 
 import '../../controller/view_transaction_controller.dart';
 import '../../model/transaction.dart';
 import '../../repository/acount_repository.dart';
 import '../../repository/transaction_repository.dart';
+import '../../routes.dart';
+import '../dialog/confirmation_dialog.dart';
+import '../dialog/success_dialog.dart';
 import '../widget/budget_button.dart';
+import '../widget/budget_date_selector_button.dart';
+import '../widget/budget_field_label.dart';
 import '../widget/budget_text_button.dart';
 import '../widget/budget_text_field.dart';
 import 'template_screen.dart';
@@ -139,7 +140,12 @@ class ViewTransactionScreen extends TemplateScreen {
                                         'Transaction has been updated!';
                                     showSuccessDialog(
                                         context: context,
-                                        close: () => Navigator.pop(context),
+                                        close: () {
+                                          Navigator.pop(context);
+                                          Routes.pop(
+                                              navigator:
+                                                  Routes.transactionNavigator);
+                                        },
                                         message: message);
                                     controller.resetFields();
                                   }
