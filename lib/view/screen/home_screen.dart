@@ -170,25 +170,16 @@ class HomePageTemplate extends TemplateScreen {
   Widget _buildHeader(MonthlySummary model, String currency) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          const SizedBox(height: 20),
-          Text(
-            '${amountFormatter(model.budget)}  / ${amountFormatter(model.expense)}',
-            style: const TextStyle(
-              fontSize: 20,
-            ),
-          ),
-          const SizedBox(height: 5),
-          const Text(
-            'Budget / Expense',
-            style: TextStyle(fontSize: 12),
-          ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
                 currency,
-                style: const TextStyle(fontSize: 12),
+                style: const TextStyle(
+                  fontSize: 10,
+                  letterSpacing: 2,
+                ),
               ),
               const SizedBox(
                 width: 12,
@@ -196,20 +187,77 @@ class HomePageTemplate extends TemplateScreen {
               Text(
                 amountFormatter(model.balance),
                 style: TextStyle(
-                    fontSize: 42,
-                    fontWeight: FontWeight.w400,
-                    color: balanceColorIndicator(
-                      budget: model.budget,
-                      balance: model.balance,
-                    )),
+                  fontSize: 32,
+                  fontWeight: FontWeight.w400,
+                  letterSpacing: 1,
+                  color: balanceColorIndicator(
+                    budget: model.budget,
+                    balance: model.balance,
+                  ),
+                ),
               ),
             ],
           ),
-          const SizedBox(height: 5),
           const Text(
             'Balance',
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 10,
+              letterSpacing: 1,
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 45),
+            child: Divider(
+              color: CustomColors.gray5,
+              thickness: 2,
+            ),
+          ),
+          const SizedBox(height: 3),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                currency,
+                style: const TextStyle(
+                  fontSize: 10,
+                  letterSpacing: 1,
+                ),
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              Text(
+                amountFormatter(model.budget),
+                style: const TextStyle(fontSize: 18, letterSpacing: 1),
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              const Text(
+                'budget',
+                style: TextStyle(
+                  fontSize: 10,
+                  letterSpacing: 1,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Text(
+            '30,000.00  / ${amountFormatter(model.expense)}',
+            style: const TextStyle(
+              fontSize: 18,
+              letterSpacing: 1,
+            ),
+          ),
+          const SizedBox(height: 5),
+          const Text(
+            'Income / Expense',
+            style: TextStyle(
+              fontSize: 10,
+              letterSpacing: 1,
             ),
           ),
           const SizedBox(height: 15),
@@ -287,7 +335,7 @@ class BudgetItem extends StatelessWidget {
             height: 17,
           ),
         Container(
-          padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 5.0),
+          padding: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -329,9 +377,11 @@ class BudgetItem extends StatelessWidget {
               child: Text(
                 budget.title,
                 style: TextStyle(
-                    color: Colors.purple[800],
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400),
+                  color: Colors.purple[800],
+                  fontSize: 18,
+                  fontWeight: FontWeight.w400,
+                  letterSpacing: 1,
+                ),
               ),
             ),
           ),
@@ -347,12 +397,13 @@ class BudgetItem extends StatelessWidget {
                   controller.updateCurrentMonthlyBudgetList();
                 }),
                 child: const Text(
-                  'Details',
+                  'View',
                   textAlign: TextAlign.right,
                   style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.normal,
-                  ),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 1,
+                      color: CustomColors.gray),
                 ),
               ),
             ),
@@ -369,9 +420,19 @@ class BudgetItem extends StatelessWidget {
         children: <Widget>[
           Text(
             'Budget: ${amountFormatter(budget.budget)}',
-            style: const TextStyle(fontSize: 12),
+            style: const TextStyle(
+              fontSize: 12,
+              letterSpacing: .5,
+            ),
           ),
-          //EXP
+          const SizedBox(height: 3),
+          const Text(
+            'Income: 0.0',
+            style: TextStyle(
+              fontSize: 12,
+              letterSpacing: .5,
+            ),
+          ),
           const SizedBox(height: 3),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -379,14 +440,18 @@ class BudgetItem extends StatelessWidget {
               Container(
                 child: Text(
                   'Expenses: ${amountFormatter(budget.expense)}',
-                  style: const TextStyle(fontSize: 12),
+                  style: const TextStyle(
+                    fontSize: 12,
+                    letterSpacing: .5,
+                  ),
                 ),
               ),
               Container(
                 child: Text(
-                  'Bal: ${amountFormatter(budget.budget - budget.expense)}',
+                  'Bal. ${amountFormatter(budget.budget - budget.expense)}',
                   style: TextStyle(
                       fontSize: 12,
+                      letterSpacing: 1,
                       color: balanceColorIndicator(
                         budget: budget.budget,
                         balance: budget.balance,

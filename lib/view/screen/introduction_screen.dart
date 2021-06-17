@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mybudget/controller/introduction_controller.dart';
-import 'package:mybudget/enum/status.dart';
-import 'package:mybudget/model/currency.dart';
-import 'package:mybudget/view/screen/template_screen.dart';
-import 'package:mybudget/view/widget/budget_button.dart';
 
+import '../../controller/introduction_controller.dart';
+import '../../enum/status.dart';
+import '../../model/currency.dart';
 import '../../routes.dart';
+import '../widget/budget_button.dart';
+import 'template_screen.dart';
 
 class IntroductionScreen extends TemplateScreen {
   @override

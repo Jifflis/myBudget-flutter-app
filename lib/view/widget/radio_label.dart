@@ -10,6 +10,7 @@ class RadioLabel<T> extends StatelessWidget {
     @required this.groupValue,
     @required this.onChange,
     this.gapBetween=0,
+    this.alignTop=0,
   }) : super(key: key);
 
   final String label;
@@ -17,6 +18,7 @@ class RadioLabel<T> extends StatelessWidget {
   final T groupValue;
   final Function onChange;
   final double gapBetween;
+  final double alignTop;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -24,7 +26,7 @@ class RadioLabel<T> extends StatelessWidget {
     child: Stack(
       children: <Widget>[
         Padding(
-          padding: EdgeInsets.fromLTRB(35 + gapBetween, 10, 0, 0),
+          padding: EdgeInsets.fromLTRB(35 + gapBetween, 10+alignTop, 0, 0),
           child: Text(
             label,
             style: const TextStyle(

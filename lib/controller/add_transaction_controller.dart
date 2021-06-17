@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:mybudget/constant/general.dart';
+import 'package:mybudget/enum/transaction_type.dart';
 import 'package:oktoast/oktoast.dart';
 
 import '../controller/base_controller.dart';
@@ -26,6 +27,18 @@ class AddTransactionController extends BaseController {
   DateTime _selectedDate = DateTime.now();
   List<Account> _accountList = <Account>[];
   Account _selectedAccount;
+  TransactionType _transactionType = TransactionType.expense;
+
+  /// A getter for [_transactionViewType]
+  ///
+  TransactionType get transactionType => _transactionType;
+
+  /// A setter for [_transactionType]
+  ///
+  set transactionType(TransactionType transactionType) {
+    _transactionType = transactionType;
+    update();
+  }
 
   /// get data [_selectedDate]
   ///
