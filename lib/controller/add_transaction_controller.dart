@@ -1,9 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:oktoast/oktoast.dart';
 
-import '../constant/general.dart';
 import '../controller/base_controller.dart';
 import '../enum/status.dart';
 import '../enum/transaction_type.dart';
@@ -91,12 +89,13 @@ class AddTransactionController extends BaseController {
     transactionRepository.upsert(transaction);
 
     // update account
-    if(_transactionType==TransactionType.expense){
+    if (_transactionType == TransactionType.expense) {
       selectedAccount.expense += double.parse(amountController.text);
-      selectedAccount.balance = selectedAccount.budget - selectedAccount.expense;
+      selectedAccount.balance =
+          selectedAccount.budget - selectedAccount.expense;
     }
-    if(_transactionType==TransactionType.income){
-      selectedAccount.income +=double.parse(amountController.text);
+    if (_transactionType == TransactionType.income) {
+      selectedAccount.income += double.parse(amountController.text);
     }
     await accountRepository.upsert(selectedAccount);
 

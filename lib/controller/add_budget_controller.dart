@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:mybudget/constant/general.dart';
 
+import '../constant/general.dart';
+import '../enum/transaction_type.dart';
 import '../model/account.dart';
 import '../model/transaction.dart';
 import '../repository/acount_repository.dart';
@@ -54,6 +55,7 @@ class AddBudgetController extends BaseController {
           accountID: account.accountId,
           remarks: SYSTEM_GEN,
           amount: account.expense,
+          transactionType: TransactionType.expense.valueString,
           date: DateTime.now(),
         );
         _transactionRepository.upsert(transaction);

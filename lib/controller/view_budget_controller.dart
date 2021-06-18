@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mybudget/constant/general.dart';
+import 'package:mybudget/enum/transaction_type.dart';
 
+import '../constant/general.dart';
 import '../model/account.dart';
 import '../model/transaction.dart';
 import '../repository/acount_repository.dart';
@@ -76,13 +77,15 @@ class ViewBudgetController extends BaseController {
           accountID: _account.accountId,
           remarks: SYSTEM_GEN,
           amount: _account.expense,
+          transactionType: TransactionType.expense.valueString,
           date: DateTime.now(),
         );
         _transactionRepository.upsert(transaction);
-      }else{
+      } else {
         _account.expense = _account.expense - oldBudget;
         _account.balance = _account.budget - _account.expense;
-        await _transactionRepository.deleteSystemGeneratedTransaction(_account.accountId);
+        await _transactionRepository
+            .deleteSystemGeneratedTransaction(_account.accountId);
       }
 
       await _accountRepository.upsert(_account);
