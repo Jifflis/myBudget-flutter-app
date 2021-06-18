@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:mybudget/util/number_util.dart';
+
 import '../controller/base_controller.dart';
+import '../enum/transaction_type.dart';
 import '../model/account.dart';
 import '../model/transaction.dart';
 import '../repository/acount_repository.dart';
 import '../repository/transaction_repository.dart';
+import '../util/number_util.dart';
 
 class ViewTransactionController extends BaseController {
   ViewTransactionController({
     @required this.transactionRepository,
     @required this.accountRepository,
   });
+
   final TransactionRepository transactionRepository;
   final AccountRepository accountRepository;
 
@@ -22,6 +25,18 @@ class ViewTransactionController extends BaseController {
   final TextEditingController amountController = TextEditingController();
   final TextEditingController remarksController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
+  TransactionType _transactionType = TransactionType.expense;
+
+  /// A getter for [_transactionViewType]
+  ///
+  TransactionType get transactionType => _transactionType;
+
+  /// A setter for [_transactionType]
+  ///
+  set transactionType(TransactionType transactionType) {
+    _transactionType = transactionType;
+    update();
+  }
 
   /// get data [_selectedDate]
   ///
@@ -45,6 +60,12 @@ class ViewTransactionController extends BaseController {
     amountController.text = transaction.amount.toString();
     _selectedDate = transaction.date;
     remarksController.text = transaction.remarks;
+
+    if (transaction.transactionType == TransactionType.income.valueString) {
+      _transactionType = TransactionType.income;
+    } else {
+      _transactionType = TransactionType.expense;
+    }
   }
 
   /// get data [_transaction]
@@ -69,23 +90,60 @@ class ViewTransactionController extends BaseController {
   ///
   ///
   Future<bool> updateTransaction() async {
-    if (formKey.currentState.validate()) {
-      final double difference =
-          double.parse(amountController.text) - _transaction.amount;
-      _transaction.amount = double.parse(amountController.text);
-      _transaction.remarks = remarksController.text;
-      _transaction.updatedAT = DateTime.now();
-      _transaction.date = selectedDate;
-      transactionRepository.upsert(transaction);
+    final double difference =
+        double.parse(amountController.text) - _transaction.amount;
 
-      final Account account = _transaction.account;
+    final Transaction originalTransaction = Transaction(
+      transactionID: null,
+      userID: null,
+      accountID: null,
+      remarks: null,
+      amount: _transaction.amount,
+      transactionType: _transaction.transactionType,
+    );
+
+    _transaction.amount = double.parse(amountController.text);
+    _transaction.remarks = remarksController.text;
+    _transaction.updatedAT = DateTime.now();
+    _transaction.date = selectedDate;
+    _transaction.transactionType = _transactionType.valueString;
+    transactionRepository.upsert(transaction);
+
+    final Account account = _transaction.account;
+    //if there is no changes in transaction type
+    //and transaction type is equal to expense.
+    if (originalTransaction.transactionType ==
+            TransactionType.expense.valueString &&
+        originalTransaction.transactionType == _transaction.transactionType) {
       account.expense += difference;
-      account.balance = account.budget - account.expense;
-      accountRepository.upsert(account);
-
-      return true;
     }
-    return false;
+    //if there is no changes in transaction type
+    //and transaction type is equal to income.
+    if (originalTransaction.transactionType ==
+            TransactionType.income.valueString &&
+        originalTransaction.transactionType == _transaction.transactionType) {
+      account.income += difference;
+    }
+    //if there's changes in transaction type
+    //and the changes is from expense to income
+    if (originalTransaction.transactionType ==
+            TransactionType.expense.valueString &&
+        originalTransaction.transactionType != _transaction.transactionType) {
+      account.expense -= originalTransaction.amount;
+      account.income += _transaction.amount;
+    }
+    //if there's changes in transaction type
+    //and the changes is from income to expense
+    if (originalTransaction.transactionType ==
+            TransactionType.income.valueString &&
+        originalTransaction.transactionType != _transaction.transactionType) {
+      account.income -= originalTransaction.amount;
+      account.expense += _transaction.amount;
+    }
+    account.balance = account.budget - account.expense;
+    accountRepository.upsert(account);
+
+    return true;
   }
 
   /// delete transaction

@@ -185,7 +185,7 @@ class HomePageTemplate extends TemplateScreen {
                 width: 12,
               ),
               Text(
-                amountFormatter(model.balance),
+                '${amountFormatter(model.balance)}   ',
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.w400,
@@ -246,7 +246,7 @@ class HomePageTemplate extends TemplateScreen {
             height: 5,
           ),
           Text(
-            '30,000.00  / ${amountFormatter(model.expense)}',
+            '${amountFormatter(model.income)}  / ${amountFormatter(model.expense)}',
             style: const TextStyle(
               fontSize: 18,
               letterSpacing: 1,
@@ -426,9 +426,9 @@ class BudgetItem extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 3),
-          const Text(
-            'Income: 0.0',
-            style: TextStyle(
+          Text(
+            'Income: ${amountFormatter(budget.income)}',
+            style: const TextStyle(
               fontSize: 12,
               letterSpacing: .5,
             ),

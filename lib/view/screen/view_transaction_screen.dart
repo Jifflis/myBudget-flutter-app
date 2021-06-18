@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:mybudget/constant/general.dart';
+import 'package:oktoast/oktoast.dart';
 
 import '../../controller/view_transaction_controller.dart';
+import '../../enum/transaction_type.dart';
 import '../../model/transaction.dart';
 import '../../repository/acount_repository.dart';
 import '../../repository/transaction_repository.dart';
@@ -14,6 +17,7 @@ import '../widget/budget_date_selector_button.dart';
 import '../widget/budget_field_label.dart';
 import '../widget/budget_text_button.dart';
 import '../widget/budget_text_field.dart';
+import '../widget/radio_label.dart';
 import 'template_screen.dart';
 
 class ViewTransactionScreen extends TemplateScreen {
@@ -73,7 +77,10 @@ class ViewTransactionScreen extends TemplateScreen {
         children: <Widget>[
           const SizedBox(height: 28),
           _buildMenuButton(controller, context),
-          const SizedBox(height: 30),
+          const SizedBox(height: 24),
+          const BudgetFieldLabel(label: 'Transaction Type', fontSize: 18),
+          _buildSwitcherMenu(),
+          const SizedBox(height: 15),
           const BudgetFieldLabel(label: 'Account name'),
           const SizedBox(height: 15),
           _buildAccountNameField(controller),
@@ -97,6 +104,39 @@ class ViewTransactionScreen extends TemplateScreen {
     );
   }
 
+  /// Build transaction type section
+  ///
+  Widget _buildSwitcherMenu() => GetBuilder<ViewTransactionController>(
+        builder: (ViewTransactionController controller) => Container(
+          margin: const EdgeInsets.only(right: 12),
+          child: Row(
+            children: <Widget>[
+              RadioLabel<TransactionType>(
+                label: 'Expense',
+                alignTop: 2,
+                value: TransactionType.expense,
+                groupValue: controller.transactionType,
+                onChange: (TransactionType value) {
+                  controller.transactionType = TransactionType.expense;
+                },
+              ),
+              const SizedBox(
+                width: 12,
+              ),
+              RadioLabel<TransactionType>(
+                label: 'Income',
+                alignTop: 2,
+                value: TransactionType.income,
+                groupValue: controller.transactionType,
+                onChange: (TransactionType value) {
+                  controller.transactionType = TransactionType.income;
+                },
+              ),
+            ],
+          ),
+        ),
+      );
+
   /// Build button
   ///
   Widget _buildButton(
@@ -104,6 +144,15 @@ class ViewTransactionScreen extends TemplateScreen {
     return BudgetButton(
         controller.isEnabled
             ? () async {
+                if (!controller.formKey.currentState.validate()) {
+                  return false;
+                }
+
+                if (controller.remarksController.text == SYSTEM_GEN) {
+                  showToast('Invalid remarks!');
+                  return false;
+                }
+
                 if (await controller.updateTransaction()) {
                   const String message = 'Transaction has been updated!';
                   showSuccessDialog(

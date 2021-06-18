@@ -12,6 +12,7 @@ class Transaction extends BaseModel {
     @required this.accountID,
     @required this.remarks,
     @required this.amount,
+    @required this.transactionType,
     this.date,
     this.title,
     this.account,
@@ -31,6 +32,7 @@ class Transaction extends BaseModel {
   String userID;
   String accountID;
   String remarks;
+  String transactionType;
   DateTime date;
   double amount;
   Account account;
@@ -45,7 +47,15 @@ class Transaction extends BaseModel {
     createdAt = DateTime.parse(json[DBKey.CREATED_AT]);
     updatedAT = DateTime.parse(json[DBKey.UPDATED_AT]);
 
-    //add transaction date
+    //set transaction type
+    if (json[DBKey.TRANSACTION_TYPE] == null ||
+        json[DBKey.TRANSACTION_TYPE].toString().isEmpty) {
+      transactionType = 'expense';
+    }else{
+      transactionType = json[DBKey.TRANSACTION_TYPE];
+    }
+
+    //set transaction date
     if (json[DBKey.TRANSACTION_DATE] == null ||
         json[DBKey.TRANSACTION_DATE].toString().isEmpty) {
       date = updatedAT;
@@ -62,9 +72,11 @@ class Transaction extends BaseModel {
     map[DBKey.ACCOUNT_ID] = accountID;
     map[DBKey.REMARKS] = remarks;
     map[DBKey.AMOUNT] = amount;
+    map[DBKey.TRANSACTION_TYPE] = transactionType;
     map[DBKey.CREATED_AT] = DateFormat('yyyy-MM-dd HH:mm:ss').format(createdAt);
     map[DBKey.UPDATED_AT] = DateFormat('yyyy-MM-dd HH:mm:ss').format(updatedAT);
-    map[DBKey.TRANSACTION_DATE] = DateFormat('yyyy-MM-dd HH:mm:ss').format(date);
+    map[DBKey.TRANSACTION_DATE] =
+        DateFormat('yyyy-MM-dd HH:mm:ss').format(date);
     return map;
   }
 }

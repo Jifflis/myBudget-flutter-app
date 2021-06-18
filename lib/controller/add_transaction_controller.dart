@@ -1,12 +1,12 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:mybudget/constant/general.dart';
-import 'package:mybudget/enum/transaction_type.dart';
 import 'package:oktoast/oktoast.dart';
 
+import '../constant/general.dart';
 import '../controller/base_controller.dart';
 import '../enum/status.dart';
+import '../enum/transaction_type.dart';
 import '../model/account.dart';
 import '../model/transaction.dart';
 import '../repository/acount_repository.dart';
@@ -18,6 +18,7 @@ class AddTransactionController extends BaseController {
     @required this.transactionRepository,
     @required this.accountRepository,
   });
+
   final TransactionRepository transactionRepository;
   final AccountRepository accountRepository;
 
@@ -77,32 +78,29 @@ class AddTransactionController extends BaseController {
   ///
   ///
   Future<bool> save() async {
-    if(remarksController.text==SYSTEM_GEN){
-      showToast('Invalid remarks!');
-      return false;
-    }
+    // save transaction
+    final Transaction transaction = Transaction(
+      transactionID: randomID(),
+      userID: userProvider.user.userId,
+      accountID: selectedAccount.accountId,
+      remarks: remarksController.text,
+      amount: double.parse(amountController.text),
+      date: selectedDate,
+      transactionType: _transactionType.valueString,
+    );
+    transactionRepository.upsert(transaction);
 
-    if (formKey.currentState.validate()) {
-      final Transaction transaction = Transaction(
-        transactionID: randomID(),
-        userID: userProvider.user.userId,
-        accountID: selectedAccount.accountId,
-        remarks: remarksController.text,
-        amount: double.parse(amountController.text),
-        date: selectedDate,
-      );
-
-      transactionRepository.upsert(transaction);
-
-      // update account
+    // update account
+    if(_transactionType==TransactionType.expense){
       selectedAccount.expense += double.parse(amountController.text);
-      selectedAccount.balance =
-          selectedAccount.budget - selectedAccount.expense;
-      await accountRepository.upsert(selectedAccount);
-
-      return true;
+      selectedAccount.balance = selectedAccount.budget - selectedAccount.expense;
     }
-    return false;
+    if(_transactionType==TransactionType.income){
+      selectedAccount.income +=double.parse(amountController.text);
+    }
+    await accountRepository.upsert(selectedAccount);
+
+    return true;
   }
 
   /// reset fields

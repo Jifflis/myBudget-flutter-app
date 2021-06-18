@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
 import 'package:intl/intl.dart';
+import 'package:mybudget/enum/transaction_type.dart';
 
 import '../../constant/custom_colors.dart';
 import '../../controller/home_controller.dart';
@@ -88,7 +89,7 @@ class TransactionsScreen extends TemplateScreen {
           BuildContext context, TransactionsController controller) =>
       Container(
         padding: const EdgeInsets.fromLTRB(0, 14.0, 0, 0.0),
-        height: 170,
+        height: 165,
         child: Column(
           children: <Widget>[
             _buildSwitcherMenu(),
@@ -179,7 +180,7 @@ class TransactionsScreen extends TemplateScreen {
                         ),
                       ),
                       Text(
-                        ': ${amountFormatter(controller.totalAmount)}',
+                        ': ${controller.getCurrency().toLowerCase()} ${amountFormatter(controller.totalIncome)}',
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
@@ -188,7 +189,9 @@ class TransactionsScreen extends TemplateScreen {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 1,),
+                  const SizedBox(
+                    height: 1,
+                  ),
                   Row(
                     children: <Widget>[
                       Container(
@@ -199,7 +202,7 @@ class TransactionsScreen extends TemplateScreen {
                         ),
                       ),
                       Text(
-                        ': ${amountFormatter(controller.totalAmount)}',
+                        ': ${controller.getCurrency().toLowerCase()} ${amountFormatter(controller.totalExpense)}',
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
@@ -330,7 +333,7 @@ class TransactionItem extends StatelessWidget {
             height: 17,
           ),
         Container(
-          padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 5.0),
+          padding: const EdgeInsets.fromLTRB(15.0, 1.0, 15.0, 1.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
@@ -411,14 +414,14 @@ class TransactionItem extends StatelessWidget {
                     transaction.remarks == null || transaction.remarks.isEmpty
                         ? 'No remarks available'
                         : transaction.remarks,
-                    style: const TextStyle(fontSize: 12,letterSpacing: .5),
+                    style: const TextStyle(fontSize: 12, letterSpacing: .5),
                   ),
                   const SizedBox(
                     height: 3,
                   ),
                   Text(
                     'Time ${DateFormat.Hm().format(transaction.date)}',
-                    style: const TextStyle(fontSize: 12,letterSpacing: .5),
+                    style: const TextStyle(fontSize: 12, letterSpacing: .5),
                   ),
                 ],
               ),
@@ -472,13 +475,21 @@ class TransactionItem extends StatelessWidget {
               ),
               child: const Icon(Icons.chevron_right_rounded),
             ),
-            const SizedBox(height: 18,),
+            const SizedBox(
+              height: 18,
+            ),
             Container(
               child: Text(
-                '( ${currency.toLowerCase()} ${amountFormatter(transaction.amount)} )',
-                style: const TextStyle(
+                transaction.transactionType ==
+                        TransactionType.expense.valueString
+                    ? '( ${currency.toLowerCase()} ${amountFormatter(transaction.amount)} )'
+                    : '${currency.toLowerCase()} ${amountFormatter(transaction.amount)}',
+                style: TextStyle(
                   fontSize: 12,
-                  color: Colors.red,
+                  color: transaction.transactionType ==
+                          TransactionType.expense.valueString
+                      ? Colors.red
+                      : CustomColors.gray,
                   fontWeight: FontWeight.w400,
                 ),
               ),

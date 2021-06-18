@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
+import 'package:mybudget/enum/transaction_type.dart';
 
 import '../constant/db_keys.dart';
 import '../enum/status.dart';
@@ -30,7 +31,11 @@ class TransactionsController extends BaseController {
 
   /// Holds the data for the total amount expenses
   ///
-  double totalAmount = 0.0;
+  double totalExpense = 0.0;
+
+  /// Holds the data for the total amount income
+  ///
+  double totalIncome = 0.0;
 
   /// Holds the data for the selected viewing type either [day] or [month]
   ///
@@ -63,12 +68,18 @@ class TransactionsController extends BaseController {
     update();
   }
 
-  void setTotalAmount(){
-    double total = 0.0;
+  void setTotalValues(){
+    double overAllExpense = 0.0;
+    double overAllIncome = 0.0;
     for(final Transaction transaction in filteredTransaction){
-      total +=transaction.amount;
+      if(transaction.transactionType == TransactionType.income.valueString){
+        overAllIncome +=transaction.amount;
+      }else{
+        overAllExpense +=transaction.amount;
+      }
     }
-    totalAmount = total;
+    totalExpense = overAllExpense;
+    totalIncome = overAllIncome;
   }
 
   /// Get unmodifiable [_filteredTransactions]
@@ -79,7 +90,7 @@ class TransactionsController extends BaseController {
 
   set filteredTransaction(List<Transaction> transactions) {
     _filteredTransactions = transactions;
-    setTotalAmount();
+    setTotalValues();
   }
 
   /// A setter for [_transactions]

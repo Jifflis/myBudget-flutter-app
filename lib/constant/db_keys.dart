@@ -13,6 +13,7 @@ class DBKey {
   static const String BUDGET = 'budget';
   static const String EXPENSE = 'expense';
   static const String BALANCE = 'balance';
+  static const String INCOME = 'income';
   static const String ADJUSTED = 'adjusted';
   static const String AUTO_DEDUCT = 'auto_deduct';
 
@@ -26,6 +27,7 @@ class DBKey {
   static const String AMOUNT = 'amount';
   static const String REMARKS = 'remarks';
   static const String TRANSACTION_DATE = 'transaction_date';
+  static const String TRANSACTION_TYPE = 'transaction_type';
 
   static const String CURRENCY = 'currency';
   static const String CURRENCY_ID = 'currency_id';

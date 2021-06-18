@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:mybudget/enum/transaction_type.dart';
-import 'package:mybudget/view/widget/radio_label.dart';
+import 'package:oktoast/oktoast.dart';
 
+import '../../constant/general.dart';
 import '../../controller/add_transaction_controller.dart';
 import '../../enum/status.dart';
+import '../../enum/transaction_type.dart';
 import '../../model/account.dart';
 import '../../repository/acount_repository.dart';
 import '../../repository/transaction_repository.dart';
@@ -15,6 +16,7 @@ import '../widget/budget_button.dart';
 import '../widget/budget_date_selector_button.dart';
 import '../widget/budget_field_label.dart';
 import '../widget/budget_text_field.dart';
+import '../widget/radio_label.dart';
 import 'template_screen.dart';
 
 class AddTransactionScreen extends TemplateScreen {
@@ -64,10 +66,7 @@ class AddTransactionScreen extends TemplateScreen {
               const SizedBox(height: 32),
               _buildDatefield(controller),
               const SizedBox(height: 24),
-              const BudgetFieldLabel(
-                label: 'Transaction Type',
-                fontSize: 18,
-              ),
+              const BudgetFieldLabel(label: 'Transaction Type', fontSize: 18),
               _buildSwitcherMenu(),
               const SizedBox(height: 15),
               const BudgetFieldLabel(label: 'Budget Account'),
@@ -91,12 +90,16 @@ class AddTransactionScreen extends TemplateScreen {
     );
   }
 
+  /// Build remarks field
+  ///
   BudgetTextField _buildRemarksField(AddTransactionController controller) {
     return BudgetTextField(
         controller: controller.remarksController,
         hintText: 'e.g. Electric bill payment');
   }
 
+  /// Build transaction type section
+  ///
   Widget _buildSwitcherMenu() => GetBuilder<AddTransactionController>(
         builder: (AddTransactionController controller) => Container(
           margin: const EdgeInsets.only(right: 12),
@@ -133,6 +136,13 @@ class AddTransactionScreen extends TemplateScreen {
   BudgetButton _buildButton(
       AddTransactionController controller, BuildContext context) {
     return BudgetButton(() async {
+      if (!controller.formKey.currentState.validate()) {
+        return false;
+      }
+      if (controller.remarksController.text == SYSTEM_GEN) {
+        showToast('Invalid remarks!');
+        return false;
+      }
       if (await controller.save()) {
         showAddTransactionSuccessDialog(
             context: context,
