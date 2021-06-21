@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
-import 'package:mybudget/view/screen/add_transaction_screen.dart';
-import 'package:mybudget/view/screen/view_transaction_screen.dart';
-import 'package:mybudget/view/screen/change_currency_screen.dart';
-
+import 'controller/view_budget_controller.dart';
+import 'model/account.dart';
 import 'view/screen/add_budget_screen.dart';
+import 'view/screen/add_transaction_screen.dart';
+import 'view/screen/change_currency_screen.dart';
 import 'view/screen/home_screen.dart';
 import 'view/screen/initial_screen.dart';
 import 'view/screen/introduction_screen.dart';
@@ -13,6 +14,7 @@ import 'view/screen/main_screen.dart';
 import 'view/screen/settings_screen.dart';
 import 'view/screen/transactions_screen.dart';
 import 'view/screen/view_budget_screen.dart';
+import 'view/screen/view_transaction_screen.dart';
 
 class Routes {
   Routes._();
@@ -102,7 +104,10 @@ class Routes {
         break;
 
       case SCREEN_VIEW_BUDGET:
-        screen = ViewBudgetScreen();
+        final Account account = settings.arguments as Account;
+        final ViewBudgetController controller = Get.put(ViewBudgetController());
+        controller.initAccount(account);
+        screen = ViewBudgetScreen(controller);
         break;
 
       case SCREEN_ADD_TRANSACTION:

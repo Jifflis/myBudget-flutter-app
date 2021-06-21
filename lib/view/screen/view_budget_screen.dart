@@ -16,6 +16,10 @@ import '../widget/budget_text_field.dart';
 import 'template_screen.dart';
 
 class ViewBudgetScreen extends TemplateScreen {
+  ViewBudgetScreen(this.controller,);
+
+  final ViewBudgetController controller;
+
   @override
   Widget getLeading(BuildContext context) => IconButton(
       icon: const Icon(Icons.arrow_back_ios_rounded),
@@ -32,11 +36,6 @@ class ViewBudgetScreen extends TemplateScreen {
   ///
   @override
   Widget buildBody(BuildContext context) {
-    final Account account =
-        ModalRoute.of(context).settings.arguments as Account;
-
-    final ViewBudgetController controller = Get.put(ViewBudgetController());
-    controller.getParams(account);
 
     return _buildContent(controller, context);
   }
@@ -116,6 +115,7 @@ class ViewBudgetScreen extends TemplateScreen {
   /// Build auto-deduct field
   ///
   Row _buildAutoDeductionField(ViewBudgetController controller) {
+    print('from screen:${controller.isAutoDeduct}');
     return Row(
       children: <Widget>[
         const BudgetFieldLabel(label: 'Auto-deduction'),

@@ -2,10 +2,10 @@ import 'dart:collection';
 
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
-import 'package:mybudget/enum/transaction_type.dart';
 
 import '../constant/db_keys.dart';
 import '../enum/status.dart';
+import '../enum/transaction_type.dart';
 import '../enum/transaction_view_type.dart';
 import '../model/transaction.dart';
 import '../repository/transaction_repository.dart';
@@ -68,14 +68,14 @@ class TransactionsController extends BaseController {
     update();
   }
 
-  void setTotalValues(){
+  void setTotalValues() {
     double overAllExpense = 0.0;
     double overAllIncome = 0.0;
-    for(final Transaction transaction in filteredTransaction){
-      if(transaction.transactionType == TransactionType.income.valueString){
-        overAllIncome +=transaction.amount;
-      }else{
-        overAllExpense +=transaction.amount;
+    for (final Transaction transaction in filteredTransaction) {
+      if (transaction.transactionType == TransactionType.income.valueString) {
+        overAllIncome += transaction.amount;
+      } else {
+        overAllExpense += transaction.amount;
       }
     }
     totalExpense = overAllExpense;
@@ -95,7 +95,7 @@ class TransactionsController extends BaseController {
 
   /// A setter for [_transactions]
   ///
-  set transactions(List<Transaction> transactions){
+  set transactions(List<Transaction> transactions) {
     _transactions = transactions;
     filteredTransaction = _transactions;
   }
@@ -106,9 +106,9 @@ class TransactionsController extends BaseController {
   Future<void> getTransactionList() async {
     status = Status.LOADING;
     transactions = await transactionRepository.getTransactions(
-      where: '${DBKey.UPDATED_AT} between ? and ?',
-      whereArgs: _getWhereArgs(),
-    ) ??
+          where: '${DBKey.TRANSACTION_DATE} between ? and ?',
+          whereArgs: _getWhereArgs(),
+        ) ??
         <Transaction>[];
     status = Status.COMPLETED;
   }
@@ -223,7 +223,6 @@ class TransactionsController extends BaseController {
       );
     }
   }
-
 
   /// Generate where args according to [_selectedDate]
   /// and [_transactionViewType]
