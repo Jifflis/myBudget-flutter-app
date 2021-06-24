@@ -8,38 +8,22 @@ import 'package:mybudget/model/transaction.dart';
 import 'package:mybudget/repository/acount_repository.dart';
 import 'package:mybudget/repository/transaction_repository.dart';
 
+import 'mock_object.dart';
 import 'view_transaction_controller_test.mocks.dart';
 
 @GenerateMocks(<Type>[TransactionRepository, AccountRepository])
 void main() {
+  final TransactionRepository transactionRepository =
+      MockTransactionRepository();
+  final AccountRepository accountRepository = MockAccountRepository();
+  final ViewTransactionController controller = ViewTransactionController(
+    transactionRepository: transactionRepository,
+    accountRepository: accountRepository,
+  );
+
   group('View Transaction Controller', () {
-    final TransactionRepository transactionRepository =
-        MockTransactionRepository();
-    final AccountRepository accountRepository = MockAccountRepository();
-
-    final ViewTransactionController controller = ViewTransactionController(
-      transactionRepository: transactionRepository,
-      accountRepository: accountRepository,
-    );
-
-    final Account account = Account(
-      accountId: 'accountid',
-      title: 'accountTitle',
-      summaryId: 'summaryId',
-      userId: 'userid',
-      budget: 1000,
-      expense: 500,
-      income: 2000,
-    );
-
-    final Transaction transaction = Transaction(
-        transactionID: 'transactionId',
-        userID: 'userId',
-        accountID: 'accountId',
-        remarks: 'remarks',
-        amount: 100,
-        transactionType: TransactionType.expense.valueString,
-        account: account);
+    final Account account = mockObjectAccount;
+    final Transaction transaction = mockObjectTransaction;
 
     controller.getParams(transaction);
 
