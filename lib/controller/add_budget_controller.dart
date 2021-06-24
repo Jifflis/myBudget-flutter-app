@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:mybudget/constant/general.dart';
 
+import '../constant/general.dart';
+import '../enum/transaction_type.dart';
 import '../model/account.dart';
 import '../model/transaction.dart';
 import '../repository/acount_repository.dart';
@@ -33,36 +34,38 @@ class AddBudgetController extends BaseController {
   ///
   ///
   Future<bool> save() async {
-    if (formKey.currentState.validate()) {
-      final Account account = Account(
-          summaryId: monthlySummaryID(),
-          accountId: randomID(),
-          title: accountController.text,
-          budget: double.parse(amountController.text),
-          balance: double.parse(amountController.text),
-          autoDeduct: isAutoDeduct,
-          userId: userProvider.user.userId);
-
-      if (isAutoDeduct) {
-        account.expense = account.budget;
-        account.balance = 0.0;
-
-        //Add system generated transaction
-        final Transaction transaction = Transaction(
-          transactionID: randomID(),
-          userID: userProvider.user.userId,
-          accountID: account.accountId,
-          remarks: SYSTEM_GEN,
-          amount: account.expense,
-          date: DateTime.now(),
-        );
-        _transactionRepository.upsert(transaction);
-      }
-
-      await _accountRepository.upsert(account);
-      return true;
+    if (!formKey.currentState.validate()) {
+      return false;
     }
-    return false;
+
+    final Account account = Account(
+        summaryId: monthlySummaryID(),
+        accountId: randomID(),
+        title: accountController.text,
+        budget: double.parse(amountController.text),
+        balance: double.parse(amountController.text),
+        autoDeduct: isAutoDeduct,
+        userId: userProvider.user.userId);
+
+    if (isAutoDeduct) {
+      account.expense = account.budget;
+      account.balance = 0.0;
+
+      //Add system generated transaction
+      final Transaction transaction = Transaction(
+        transactionID: randomID(),
+        userID: userProvider.user.userId,
+        accountID: account.accountId,
+        remarks: SYSTEM_GEN,
+        amount: account.expense,
+        transactionType: TransactionType.expense.valueString,
+        date: DateTime.now(),
+      );
+      _transactionRepository.upsert(transaction);
+    }
+
+    await _accountRepository.upsert(account);
+    return true;
   }
 
   Future<void> getList() async {

@@ -12,6 +12,7 @@ class Account extends BaseModel {
     this.budget = 0.0,
     this.expense = 0.0,
     this.balance = 0.0,
+    this.income = 0.0,
     this.adjusted,
     this.autoDeduct = false,
     DateTime createdAt,
@@ -31,6 +32,7 @@ class Account extends BaseModel {
   double expense;
   double balance;
   double adjusted;
+  double income;
   bool autoDeduct;
   String userId;
   String summaryId;
@@ -48,6 +50,14 @@ class Account extends BaseModel {
     updatedAT = DateTime.parse(json[DBKey.UPDATED_AT]);
     summaryId = json[DBKey.MONTHLY_SUMMARY_ID];
     userId = json[DBKey.USER_ID];
+
+    //set income
+    if (json[DBKey.INCOME] == null ||
+        json[DBKey.INCOME].toString().isEmpty) {
+      income = 0.0;
+    }else{
+      income = json[DBKey.INCOME];
+    }
   }
 
   @override
@@ -59,6 +69,7 @@ class Account extends BaseModel {
     map[DBKey.EXPENSE] = expense;
     map[DBKey.BALANCE] = balance;
     map[DBKey.ADJUSTED] = adjusted;
+    map[DBKey.INCOME] = income;
     map[DBKey.AUTO_DEDUCT] = autoDeduct ? 1 : 0;
     map[DBKey.CREATED_AT] = createdAt.toString();
     map[DBKey.UPDATED_AT] = updatedAT.toString();

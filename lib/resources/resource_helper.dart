@@ -33,6 +33,7 @@ class ResourceHelper {
           title: null,
           remarks: null,
           amount: null,
+          transactionType:null,
           account: account,
           json: json,
         );

@@ -16,6 +16,10 @@ import '../widget/budget_text_field.dart';
 import 'template_screen.dart';
 
 class ViewBudgetScreen extends TemplateScreen {
+  ViewBudgetScreen(this.controller,);
+
+  final ViewBudgetController controller;
+
   @override
   Widget getLeading(BuildContext context) => IconButton(
       icon: const Icon(Icons.arrow_back_ios_rounded),
@@ -28,142 +32,160 @@ class ViewBudgetScreen extends TemplateScreen {
   @override
   Widget get title => const Text('Budget Account');
 
+  /// Build body
+  ///
   @override
   Widget buildBody(BuildContext context) {
-    // catch args from route pushNamed
-    //
-    //
-    final Account account =
-        ModalRoute.of(context).settings.arguments as Account;
 
-    final ViewBudgetController controller = Get.put(ViewBudgetController());
-    controller.getParams(account);
+    return _buildContent(controller, context);
+  }
 
-    return SingleChildScrollView(
-      child: Container(
-        height: MediaQuery.of(context).size.height,
-        color: Colors.purple[800],
-        child: Container(
-          padding: const EdgeInsets.fromLTRB(40, 0.0, 40, 10),
-          height: MediaQuery.of(context).size.height,
-          width: double.infinity,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(40),
-              topRight: Radius.circular(40),
-            ),
-          ),
-          child: SingleChildScrollView(
-            child: GetBuilder<ViewBudgetController>(
-              init: controller,
-              builder: (_) {
-                return Form(
-                  key: controller.formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      const SizedBox(height: 28),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          BudgetTextButton(
-                              label: controller.isEnabled ? 'Cancel' : 'Edit',
-                              onPressed: () {
-                                FocusScope.of(context).unfocus();
-                                controller.edit();
-                              }),
-                          const SizedBox(width: 20),
-                          BudgetTextButton(
-                              label: 'Delete',
-                              onPressed: () {
-                                const String message =
-                                    'Are you sure you want to delete?';
-                                showConfirmationDialog(
-                                  context: context,
-                                  message: message,
-                                  yes: () {
-                                    controller.deleteAccount();
-                                    controller.resetPage();
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                  },
-                                  cancel: () => Navigator.pop(context),
-                                );
-                              }),
-                        ],
-                      ),
-                      const SizedBox(height: 30),
-                      const BudgetFieldLabel(label: 'Account name'),
-                      const SizedBox(height: 15),
-                      BudgetTextField(
-                          isEnabled: controller.isEnabled,
-                          hintText: 'Enter account name',
-                          validator: controller.textFieldValidator,
-                          controller: controller.accountNameController),
-                      const SizedBox(height: 30),
-                      const BudgetFieldLabel(label: 'Budget amount'),
-                      const SizedBox(height: 15),
-                      BudgetTextField(
-                          keyboardType: const TextInputType.numberWithOptions(
-                              decimal: true),
-                          textInputFormatterList: <FilteringTextInputFormatter>[
-                            if (controller.isEnabled)
-                              FilteringTextInputFormatter.allow(
-                                  RegExp(r'^\d+\.?\d{0,2}')),
-                          ],
-                          isEnabled: controller.isEnabled,
-                          hintText: 'Enter budget amount',
-                          validator: controller.textFieldValidator,
-                          controller: controller.formattedBudgetAmount()),
-                      const SizedBox(height: 30),
-                      Row(
-                        children: <Widget>[
-                          const BudgetFieldLabel(label: 'Auto-deduction'),
-                          Checkbox(
-                              value: controller.isAutoDeduct,
-                              onChanged: (bool value) =>
-                                  controller.isAutoDeduct = value),
-                        ],
-                      ),
-                      const SizedBox(height: 30),
-                      BudgetButton(
-                          controller.isEnabled
-                              ? () async {
-                                  if (controller.isAutoDeduct) {
-                                    showBudgetDialog(
-                                      context: context,
-                                      title: 'Confirmation Dialog',
-                                      description:
-                                          'Are you sure you want to update with auto-deduction? This will erase all your transaction under this account for the current month.',
-                                      showButton1: true,
-                                      showButton2: true,
-                                      button1Title: 'Cancel',
-                                      button2Title: 'Yes',
-                                      onButton1Press: () => Navigator.pop(context),
-                                      onButton2Press: () async{
-                                        Navigator.pop(context);
-                                        await update(context, controller);
-                                      }
-
-                                    );
-                                  } else {
-                                    await update(context, controller);
-                                  }
-                                }
-                              : null,
-                          'Update'),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
+  /// Build content
+  ///
+  Widget _buildContent(ViewBudgetController controller, BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(40, 0.0, 40, 10),
+      child: SingleChildScrollView(
+        child: GetBuilder<ViewBudgetController>(
+          init: controller,
+          builder: (_) {
+            return _buildForm(controller, context);
+          },
         ),
       ),
     );
   }
 
+  /// Build form
+  ///
+  Widget _buildForm(ViewBudgetController controller, BuildContext context) {
+    return Form(
+      key: controller.formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          const SizedBox(height: 28),
+          _buildMenuButton(controller, context),
+          const SizedBox(height: 30),
+          const BudgetFieldLabel(label: 'Account name'),
+          const SizedBox(height: 15),
+          _buildAccountField(controller),
+          const SizedBox(height: 30),
+          const BudgetFieldLabel(label: 'Budget amount'),
+          const SizedBox(height: 15),
+          _buildAmountField(controller),
+          const SizedBox(height: 30),
+          _buildAutoDeductionField(controller),
+          const SizedBox(height: 30),
+          _buildButton(controller, context),
+        ],
+      ),
+    );
+  }
+
+  /// Build button
+  ///
+  Widget _buildButton(ViewBudgetController controller, BuildContext context) {
+    return BudgetButton(
+        controller.isEnabled
+            ? () async {
+                if (controller.isAutoDeduct) {
+                  showBudgetDialog(
+                      context: context,
+                      title: 'Confirmation Dialog',
+                      description:
+                          'Are you sure you want to update with auto-deduction? This will erase all your transaction under this account for the current month.',
+                      showButton1: true,
+                      showButton2: true,
+                      button1Title: 'Cancel',
+                      button2Title: 'Yes',
+                      onButton1Press: () => Navigator.pop(context),
+                      onButton2Press: () async {
+                        Navigator.pop(context);
+                        await update(context, controller);
+                      });
+                } else {
+                  await update(context, controller);
+                }
+              }
+            : null,
+        'Update');
+  }
+
+  /// Build auto-deduct field
+  ///
+  Row _buildAutoDeductionField(ViewBudgetController controller) {
+    print('from screen:${controller.isAutoDeduct}');
+    return Row(
+      children: <Widget>[
+        const BudgetFieldLabel(label: 'Auto-deduction'),
+        Checkbox(
+            value: controller.isAutoDeduct,
+            onChanged: (bool value) => controller.isAutoDeduct = value),
+      ],
+    );
+  }
+
+  /// Build amount field
+  ///
+  BudgetTextField _buildAmountField(ViewBudgetController controller) {
+    return BudgetTextField(
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        textInputFormatterList: <FilteringTextInputFormatter>[
+          if (controller.isEnabled)
+            FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+        ],
+        isEnabled: controller.isEnabled,
+        hintText: 'e.g. 1000',
+        validator: controller.textFieldValidator,
+        controller: controller.formattedBudgetAmount());
+  }
+
+  /// Build account field
+  ///
+  BudgetTextField _buildAccountField(ViewBudgetController controller) {
+    return BudgetTextField(
+        isEnabled: controller.isEnabled,
+        hintText: 'e.g Electric bill',
+        validator: controller.textFieldValidator,
+        controller: controller.accountNameController);
+  }
+
+  /// Build menu button
+  ///
+  Row _buildMenuButton(ViewBudgetController controller, BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        BudgetTextButton(
+            label: controller.isEnabled ? 'Cancel' : 'Edit',
+            onPressed: () {
+              FocusScope.of(context).unfocus();
+              controller.edit();
+            }),
+        const SizedBox(width: 20),
+        BudgetTextButton(
+            label: 'Delete',
+            onPressed: () {
+              const String message = 'Are you sure you want to delete?';
+              showConfirmationDialog(
+                context: context,
+                message: message,
+                yes: () {
+                  controller.deleteAccount();
+                  controller.resetPage();
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+                cancel: () => Navigator.pop(context),
+              );
+            }),
+      ],
+    );
+  }
+
+  /// A function for updating record
+  ///
   Future<void> update(
       BuildContext context, ViewBudgetController controller) async {
     if (await controller.updateAccount()) {
@@ -172,7 +194,7 @@ class ViewBudgetScreen extends TemplateScreen {
           context: context,
           close: () {
             Navigator.pop(context);
-            Routes.pop(navigator:Routes.homeNavigator);
+            Routes.pop(navigator: Routes.homeNavigator);
           },
           message: message);
     }

@@ -9,7 +9,7 @@ import 'migrations_script.dart';
 ///
 const int VERSION_1 = 1;
 const int VERSION_2 = 2;
-
+const int VERSION_3 = 3;
 
 /// List of migrations script
 ///
@@ -20,6 +20,7 @@ const int VERSION_2 = 2;
 ///
 final Map<int, dynamic> _migrationScript = <int, List<String>>{
   VERSION_2: migrationScript2,
+  VERSION_3: migrationScript3,
 };
 
 /// A logic for updating the database schema.

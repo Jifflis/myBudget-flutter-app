@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mybudget/constant/custom_colors.dart';
 
 class BudgetTextField extends StatelessWidget {
   const BudgetTextField({
@@ -48,7 +49,7 @@ class BudgetTextField extends StatelessWidget {
                 filled: true,
                 contentPadding: const EdgeInsets.all(10),
                 hintText: hintText,
-                hintStyle: const TextStyle(fontStyle: FontStyle.italic),
+                hintStyle: const TextStyle(fontStyle: FontStyle.italic,color: CustomColors.gray2),
                 focusedBorder: const OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.purple, width: 2),
                   borderRadius: BorderRadius.all(Radius.circular(15)),

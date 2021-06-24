@@ -30,6 +30,7 @@ class MonthlySummaryRepository {
       updatedSummary.balance = 0;
       updatedSummary.expense = 0;
       updatedSummary.budget = 0;
+      updatedSummary.income=0;
       updatedSummary.monthlySummaryId = monthlySummaryID();
     }
 
@@ -57,6 +58,7 @@ class MonthlySummaryRepository {
         columns: <String>[
           'sum(${DBKey.BALANCE}) as ${DBKey.BALANCE}',
           'sum(${DBKey.EXPENSE}) as ${DBKey.EXPENSE}',
+          'sum(${DBKey.INCOME}) as ${DBKey.INCOME}',
           'sum(${DBKey.BUDGET}) as ${DBKey.BUDGET}',
           DBKey.MONTHLY_SUMMARY_ID,
           DBKey.USER_ID,
