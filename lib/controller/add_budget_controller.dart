@@ -1,16 +1,26 @@
 import 'package:flutter/cupertino.dart';
 
+import '../constant/general.dart';
+import '../enum/transaction_type.dart';
 import '../model/account.dart';
+import '../model/transaction.dart';
 import '../repository/acount_repository.dart';
+import '../repository/transaction_repository.dart';
 import '../util/id_util.dart';
 import 'base_controller.dart';
 
 class AddBudgetController extends BaseController {
+  AddBudgetController(
+    this._accountRepository,
+    this._transactionRepository,
+  );
+
+  final AccountRepository _accountRepository;
+  final TransactionRepository _transactionRepository;
+
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   TextEditingController accountController = TextEditingController();
   TextEditingController amountController = TextEditingController();
-
-  final AccountRepository _accountRepository = AccountRepository();
 
   bool _isAutoDeduct = false;
 
@@ -29,25 +39,38 @@ class AddBudgetController extends BaseController {
   ///
   ///
   Future<bool> save() async {
-    if (formKey.currentState.validate()) {
-      final Account account = Account(
-          summaryId: monthlySummaryID(),
-          accountId: randomID(),
-          title: accountController.text,
-          budget: double.parse(amountController.text),
-          balance: double.parse(amountController.text),
-          autoDeduct: isAutoDeduct,
-          userId: userProvider.user.userId);
-
-      if (isAutoDeduct) {
-        account.expense = account.budget;
-        account.balance = 0.0;
-      }
-
-      await _accountRepository.upsert(account);
-      return true;
+    if (!formKey.currentState.validate()) {
+      return false;
     }
-    return false;
+
+    final Account account = Account(
+        summaryId: monthlySummaryID(),
+        accountId: randomID(),
+        title: accountController.text,
+        budget: double.parse(amountController.text),
+        balance: double.parse(amountController.text),
+        autoDeduct: isAutoDeduct,
+        userId: userProvider.user.userId);
+
+    if (isAutoDeduct) {
+      account.expense = account.budget;
+      account.balance = 0.0;
+
+      //Add system generated transaction
+      final Transaction transaction = Transaction(
+        transactionID: randomID(),
+        userID: userProvider.user.userId,
+        accountID: account.accountId,
+        remarks: SYSTEM_GEN,
+        amount: account.expense,
+        transactionType: TransactionType.expense.valueString,
+        date: DateTime.now(),
+      );
+      _transactionRepository.upsert(transaction);
+    }
+
+    await _accountRepository.upsert(account);
+    return true;
   }
 
   Future<void> getList() async {

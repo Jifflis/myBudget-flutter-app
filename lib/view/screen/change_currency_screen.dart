@@ -4,6 +4,7 @@ import 'package:get/instance_manager.dart';
 
 import '../../controller/change_currency_controller.dart';
 import '../../model/currency.dart';
+import '../../repository/currency_repository.dart';
 import '../../view/screen/template_screen.dart';
 import '../../view/widget/budget_button.dart';
 import '../../view/widget/budget_field_label.dart';
@@ -20,8 +21,12 @@ class ChangeCurrencyScreen extends TemplateScreen {
 
   @override
   Widget buildBody(BuildContext context) {
-    final ChangeCurrencyController _controller =
-        Get.put(ChangeCurrencyController());
+    final ChangeCurrencyController _controller = Get.put(
+      ChangeCurrencyController(
+        CurrencyRepository(),
+      ),
+    );
+
     return Container(
       margin: const EdgeInsets.fromLTRB(40, 5, 40, 80),
       child: Column(

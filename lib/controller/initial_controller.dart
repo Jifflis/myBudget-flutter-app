@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../enum/status.dart';
@@ -9,11 +10,14 @@ import '../provider/user_provider.dart';
 import '../repository/acount_repository.dart';
 import '../repository/monthly_repository.dart';
 import '../repository/settings_repository.dart';
+import '../repository/transaction_repository.dart';
 import '../repository/user_repository.dart';
 import '../resources/local_db.dart';
 import '../routes.dart';
 import '../util/date_util.dart';
 import '../util/id_util.dart';
+import '../view/screen/introduction_screen.dart';
+import '../view/screen/main_screen.dart';
 import 'base_controller.dart';
 
 class InitialController extends BaseController {
@@ -27,6 +31,7 @@ class InitialController extends BaseController {
   UserRepository _userRepository;
   MonthlySummaryRepository _monthlyRepository;
   AccountRepository _accountRepository;
+  TransactionRepository _transactionRepository;
 
   Settings _settings;
 
@@ -82,9 +87,17 @@ class InitialController extends BaseController {
   ///
   void _navigateDestination() {
     if (_settings == null || _settings.firstInstall) {
-      Routes.pushReplacementNamed(Routes.SCREEN_INTRODUCTION);
+      Routes.rootNavigator.pushReplacement(
+        MaterialPageRoute<Widget>(
+          builder: (_) => IntroductionScreen(),
+        ),
+      );
     } else {
-      Routes.pushReplacementNamed(Routes.SCREEN_MAIN);
+      Routes.rootNavigator.pushReplacement(
+        MaterialPageRoute<Widget>(
+          builder: (_) => MainScreen(),
+        ),
+      );
     }
   }
 
@@ -96,6 +109,7 @@ class InitialController extends BaseController {
     _userRepository = UserRepository();
     _monthlyRepository = MonthlySummaryRepository();
     _accountRepository = AccountRepository();
+    _transactionRepository = TransactionRepository();
   }
 
   /// Initialize user
@@ -133,8 +147,7 @@ class InitialController extends BaseController {
       return;
     }
 
-    while (DateTime.now().isAtSameMomentAs(settings.refreshDate) ||
-        DateTime.now().isAfter(settings.refreshDate)) {
+    while (resetTime(DateTime.now()).isAfter(settings.refreshDate)) {
       final DateTime newRefreshDate =
           getNextMonthLastDate(settings.refreshDate);
 
@@ -142,6 +155,8 @@ class InitialController extends BaseController {
       await _accountRepository.monthlyRefresh(
         monthlySummaryID(date: settings.refreshDate),
         monthlySummaryID(date: newRefreshDate),
+        user,
+        _transactionRepository,
       );
 
       //update monthly summary table

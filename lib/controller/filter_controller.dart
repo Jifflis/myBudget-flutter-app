@@ -8,12 +8,12 @@ import '../repository/acount_repository.dart';
 import '../util/filter_suggestions.dart';
 
 class FilterController extends GetxController {
-  TextEditingController searchController = TextEditingController();
+  FilterController(this.accountRepository);
 
+  AccountRepository accountRepository;
+  TextEditingController searchController = TextEditingController();
   List<Filter> _filters = <Filter>[];
   List<Filter> filterSuggestions = <Filter>[];
-
-  AccountRepository accountRepository = AccountRepository();
 
   /// Initialize default filter
   ///

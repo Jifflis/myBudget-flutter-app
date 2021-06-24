@@ -1,9 +1,13 @@
-import 'package:mybudget/model/filter.dart';
-import 'package:mybudget/util/id_util.dart';
-
 import '../constant/db_keys.dart';
+import '../constant/general.dart';
+import '../enum/transaction_type.dart';
 import '../model/account.dart';
+import '../model/filter.dart';
+import '../model/transaction.dart';
+import '../model/user.dart';
 import '../resources/local_provider.dart';
+import '../util/id_util.dart';
+import 'transaction_repository.dart';
 
 class AccountRepository {
   factory AccountRepository() => _instance;
@@ -24,7 +28,6 @@ class AccountRepository {
   }
 
   Future<List<Account>> getAccountsWithFiltr(List<Filter> filters) async {
-
     final Map<String, dynamic> filter = Filter.generateFilter(filters);
 
     if (filter == null) {
@@ -49,7 +52,11 @@ class AccountRepository {
   }
 
   Future<void> monthlyRefresh(
-      String oldMonthlySummaryID, String newMonthlySummaryID) async {
+    String oldMonthlySummaryID,
+    String newMonthlySummaryID,
+    User user,
+    TransactionRepository transactionRepository,
+  ) async {
     final List<Account> previousAccounts = await _localProvider.list<Account>(
         where: '${DBKey.MONTHLY_SUMMARY_ID}=?',
         whereArgs: <dynamic>[oldMonthlySummaryID]);
@@ -63,6 +70,18 @@ class AccountRepository {
       if (account.autoDeduct) {
         account.expense = account.budget;
         account.balance = 0.0;
+
+        //A transaction
+        final Transaction transaction = Transaction(
+          transactionID: randomID(),
+          userID: user.userId,
+          accountID: account.accountId,
+          remarks: SYSTEM_GEN,
+          amount: account.expense,
+          date: DateTime.now(),
+          transactionType: TransactionType.expense.valueString,
+        );
+        transactionRepository.upsert(transaction);
       }
       await upsert(account);
     }

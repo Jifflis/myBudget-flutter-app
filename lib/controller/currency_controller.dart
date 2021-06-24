@@ -5,8 +5,8 @@ import '../repository/currency_repository.dart';
 import 'base_controller.dart';
 
 class CurrencyController extends BaseController {
-  CurrencyController():super(provideSettings: false);
-  final CurrencyRepository _currencyRepository = CurrencyRepository();
+  CurrencyController(this._currencyRepository) : super(provideSettings: false);
+  final CurrencyRepository _currencyRepository;
 
   List<Currency> _currencyList = <Currency>[];
 

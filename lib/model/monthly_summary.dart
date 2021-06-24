@@ -10,6 +10,7 @@ class MonthlySummary extends BaseModel {
     this.balance = 0.0,
     this.expense = 0.0,
     this.adjusted = 0.0,
+    this.income = 0.0,
     this.year,
     this.month,
     this.userId,
@@ -32,6 +33,7 @@ class MonthlySummary extends BaseModel {
   double expense;
   double balance;
   double adjusted;
+  double income;
   String userId;
 
   @override
@@ -46,6 +48,14 @@ class MonthlySummary extends BaseModel {
     createdAt = DateTime.tryParse(json[DBKey.CREATED_AT] ?? 'null');
     updatedAT = DateTime.tryParse(json[DBKey.UPDATED_AT] ?? 'null');
     userId = json[DBKey.USER_ID];
+
+    //set income
+    if (json[DBKey.INCOME] == null ||
+        json[DBKey.INCOME].toString().isEmpty) {
+      income = 0.0;
+    }else{
+      income = json[DBKey.INCOME];
+    }
   }
 
   @override
@@ -58,6 +68,7 @@ class MonthlySummary extends BaseModel {
     json[DBKey.EXPENSE] = expense;
     json[DBKey.BALANCE] = balance;
     json[DBKey.ADJUSTED] = adjusted;
+    json[DBKey.INCOME] = income;
     json[DBKey.CREATED_AT] = createdAt?.toString();
     json[DBKey.UPDATED_AT] = updatedAT?.toString();
     json[DBKey.USER_ID] = userId;

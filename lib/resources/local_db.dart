@@ -7,12 +7,13 @@ import '../constant/db_keys.dart';
 import 'db_migration.dart';
 
 class LocalDB {
-
   ///set singleton instance of this class
   ///
   ///
-  factory LocalDB()=>_instance;
+  factory LocalDB() => _instance;
+
   LocalDB._();
+
   static final LocalDB _instance = LocalDB._();
 
   Database db;
@@ -43,7 +44,9 @@ class LocalDB {
       },
       // Set the version. This executes the onCreate function and provides a
       // path to perform database upgrades and downgrades.
-      version: VERSION_1,
+      // Refer to db_migration.dart for list of versions
+      // Please use db_migration.dart for version declaration.
+      version: VERSION_3,
     );
 
     return isFirstCreated;
@@ -63,6 +66,7 @@ class LocalDB {
       '${DBKey.EXPENSE} REAL DEFAULT 0.0,'
       '${DBKey.BALANCE} REAL DEFAULT 0.0,'
       '${DBKey.ADJUSTED} REAL DEFAULT 0.0,'
+      '${DBKey.INCOME} REAL DEFAULT 0.0,'
       '${DBKey.AUTO_DEDUCT} NUMERIC,'
       '${DBKey.CREATED_AT} STRING,'
       '${DBKey.UPDATED_AT} STRING,'
@@ -99,6 +103,7 @@ class LocalDB {
         '${DBKey.EXPENSE} REAL DEFAULT 0.0,'
         '${DBKey.BUDGET} REAL DEFAULT 0.0,'
         '${DBKey.ADJUSTED} REAL DEFAULT 0.0,'
+        '${DBKey.INCOME} REAL DEFAULT 0.0,'
         '${DBKey.BALANCE} REAL DEFAULT 0.0,'
         '${DBKey.CREATED_AT} STRING NOT NULL,'
         '${DBKey.UPDATED_AT} STRING NOT NULL)');
@@ -115,6 +120,8 @@ class LocalDB {
         '${DBKey.ACCOUNT_ID} STRING,'
         '${DBKey.AMOUNT} REAL,'
         '${DBKey.REMARKS} STRING,'
+        '${DBKey.TRANSACTION_DATE} STRING,'
+        '${DBKey.TRANSACTION_TYPE} STRING,'
         '${DBKey.CREATED_AT} STRING,'
         '${DBKey.UPDATED_AT} STRING)');
   }

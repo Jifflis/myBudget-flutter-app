@@ -1,22 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/state_manager.dart';
-import 'package:mybudget/repository/transaction_repository.dart';
 
+import '../constant/general.dart';
+import '../enum/transaction_type.dart';
 import '../model/account.dart';
+import '../model/transaction.dart';
 import '../repository/acount_repository.dart';
+import '../repository/transaction_repository.dart';
+import '../util/id_util.dart';
 import '../util/number_util.dart';
+import 'base_controller.dart';
 
-class ViewBudgetController extends GetxController {
+class ViewBudgetController extends BaseController {
+  ViewBudgetController(
+    this._accountRepository,
+    this._transactionRepository,
+  );
+
+  final AccountRepository _accountRepository;
+  final TransactionRepository _transactionRepository;
+
   bool _isFieldEnabled = false;
   bool _isAutoDeduct = false;
   Account _account;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController accountNameController = TextEditingController();
   final TextEditingController budgetAmountController = TextEditingController();
-
-  final AccountRepository _accountRepository = AccountRepository();
-  final TransactionRepository _transactionRepository = TransactionRepository();
 
   /// set data [_isFieldEnabled]
   ///
@@ -33,6 +41,7 @@ class ViewBudgetController extends GetxController {
   ///
   set isAutoDeduct(bool val) {
     _isAutoDeduct = val;
+    print(_isAutoDeduct);
     update();
   }
 
@@ -42,33 +51,65 @@ class ViewBudgetController extends GetxController {
 
   /// get params from route
   ///
-  void getParams(Account account) {
+  void initAccount(Account account) {
     _account = account;
     accountNameController.text = account.title;
     budgetAmountController.text = amountFormatter(account.budget);
-    isAutoDeduct = account.autoDeduct;
+    _isAutoDeduct = account.autoDeduct;
   }
 
   /// update budget account
   ///
   Future<bool> updateAccount() async {
-    if (isEnabled && formKey.currentState.validate()) {
-      _account.title = accountNameController.text;
-      _account.budget = double.parse(budgetAmountController.text);
-      _account.autoDeduct = isAutoDeduct;
-      _account.balance = _account.budget - _account.expense;
-
-      if (isAutoDeduct) {
-        _account.expense = _account.budget;
-        _account.balance = 0.0;
-      }
-
-      await _accountRepository.upsert(_account);
-
-      isEnabled = !isEnabled;
-      return true;
+    if (!isEnabled && !formKey.currentState.validate()) {
+      return false;
     }
-    return false;
+
+    final Account currentAccount = Account(
+        accountId: _account.accountId,
+        title: _account.title,
+        summaryId: _account.summaryId,
+        userId: _account.userId,
+        budget: _account.budget,
+        autoDeduct: _account.autoDeduct,
+        expense: _account.expense);
+
+    _account.title = accountNameController.text;
+    _account.budget = double.parse(budgetAmountController.text);
+    _account.autoDeduct = _isAutoDeduct;
+    _account.balance = _account.budget - _account.expense;
+
+    if (isAutoDeduct) {
+      _account.expense = _account.budget;
+      _account.balance = 0.0;
+
+      // Delete all transaction under this account
+      await _transactionRepository.deleteAll(_account.accountId);
+
+      // Add system generated transaction
+      final Transaction transaction = Transaction(
+        transactionID: randomID(),
+        userID: userProvider.user.userId,
+        accountID: _account.accountId,
+        remarks: SYSTEM_GEN,
+        amount: _account.budget,
+        transactionType: TransactionType.expense.valueString,
+        date: DateTime.now(),
+      );
+      _transactionRepository.upsert(transaction);
+    } else {
+      _account.expense = _account.expense -
+          (currentAccount.autoDeduct ? currentAccount.budget : 0);
+      _account.balance = _account.budget - _account.expense;
+      await _transactionRepository
+          .deleteSystemGeneratedTransaction(_account.accountId);
+    }
+
+    await _accountRepository.upsert(_account);
+
+    print('the budget:${_account.budget}');
+    isEnabled = !isEnabled;
+    return true;
   }
 
   /// edit | cancel text button

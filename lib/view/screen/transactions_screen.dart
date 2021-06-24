@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
+import 'package:intl/intl.dart';
+import 'package:mybudget/enum/transaction_type.dart';
 
 import '../../constant/custom_colors.dart';
 import '../../controller/home_controller.dart';
@@ -18,6 +20,8 @@ import '../widget/radio_label.dart';
 import 'template_screen.dart';
 
 class TransactionsScreen extends TemplateScreen {
+  /// Build title section
+  ///
   @override
   Widget get title => GetBuilder<TransactionsController>(
         builder: (TransactionsController controller) =>
@@ -31,6 +35,8 @@ class TransactionsScreen extends TemplateScreen {
         ),
       );
 
+  /// Build app bar actions
+  ///
   @override
   List<Widget> get appBarActions => <Widget>[
         Padding(
@@ -54,6 +60,8 @@ class TransactionsScreen extends TemplateScreen {
         )
       ];
 
+  /// Build body
+  ///
   @override
   Widget buildBody(BuildContext context) {
     final TransactionsController controller = Get.put(
@@ -81,7 +89,7 @@ class TransactionsScreen extends TemplateScreen {
           BuildContext context, TransactionsController controller) =>
       Container(
         padding: const EdgeInsets.fromLTRB(0, 14.0, 0, 0.0),
-        height: 170,
+        height: 165,
         child: Column(
           children: <Widget>[
             _buildSwitcherMenu(),
@@ -91,6 +99,8 @@ class TransactionsScreen extends TemplateScreen {
         ),
       );
 
+  /// Radion button
+  ///
   Widget _buildSwitcherMenu() => GetBuilder<TransactionsController>(
         builder: (TransactionsController controller) => Container(
           margin: const EdgeInsets.only(left: 8, right: 12),
@@ -138,7 +148,7 @@ class TransactionsScreen extends TemplateScreen {
   ///
   ///
   Widget _buildSearchBar(TransactionsController controller) => Container(
-        padding: const EdgeInsets.only(right: 14, left: 16, top: 5),
+        padding: const EdgeInsets.only(right: 14, left: 16, top: 0),
         child: BudgetTextFieldIconButton(
           onChanged: controller.search,
           hintText: 'Search',
@@ -149,24 +159,64 @@ class TransactionsScreen extends TemplateScreen {
         ),
       );
 
+  /// Build details menu
+  ///
   Widget _buildDetailsMenu() => GetBuilder<TransactionsController>(
         builder: (TransactionsController controller) => Container(
           margin: const EdgeInsets.only(left: 24, top: 5),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Text('total ${controller.getCurrency().toLowerCase()}'),
-              const SizedBox(
-                width: 8,
-              ),
-              Text(
-                amountFormatter(controller.totalAmount),
-                style:
-                    const TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Container(
+                        width: 60,
+                        child: const Text(
+                          'Income',
+                          style: TextStyle(letterSpacing: .5),
+                        ),
+                      ),
+                      Text(
+                        ': ${controller.getCurrency().toLowerCase()} ${amountFormatter(controller.totalIncome)}',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          letterSpacing: 1,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 1,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Container(
+                        width: 60,
+                        child: const Text(
+                          'Expense',
+                          style: TextStyle(letterSpacing: .5),
+                        ),
+                      ),
+                      Text(
+                        ': ${controller.getCurrency().toLowerCase()} ${amountFormatter(controller.totalExpense)}',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          letterSpacing: 1,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
               Expanded(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     TextButton(
                       onPressed: () {
@@ -283,7 +333,7 @@ class TransactionItem extends StatelessWidget {
             height: 17,
           ),
         Container(
-          padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 5.0),
+          padding: const EdgeInsets.fromLTRB(15.0, 1.0, 15.0, 1.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
@@ -315,14 +365,14 @@ class TransactionItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              dateSimplified(transaction.updatedAT.toString())['MM'],
+              dateSimplified(transaction.date.toString())['MM'],
               style: TextStyle(
                 color: Colors.purple[800],
                 fontSize: 12,
               ),
             ),
             Text(
-              dateSimplified(transaction.updatedAT.toString())['DD'],
+              dateSimplified(transaction.date.toString())['DD'],
               style: TextStyle(
                   color: Colors.purple[800],
                   fontSize: 18,
@@ -343,6 +393,7 @@ class TransactionItem extends StatelessWidget {
           color: Colors.black87,
           fontSize: 18,
           fontWeight: FontWeight.w400,
+          letterSpacing: .5,
         ),
       ),
     );
@@ -354,21 +405,25 @@ class TransactionItem extends StatelessWidget {
   Widget _buildSubtitle() => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Container(
-            child: Text(
-              transaction.remarks == null || transaction.remarks.isEmpty
-                  ? 'No remarks available'
-                  : transaction.remarks,
-              style: const TextStyle(fontSize: 12),
-            ),
-          ),
-          Container(
-            child: Text(
-              '$currency ${amountFormatter(transaction.amount)}',
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.blue[600],
-                fontWeight: FontWeight.w400,
+          Expanded(
+            child: Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    transaction.remarks == null || transaction.remarks.isEmpty
+                        ? 'No remarks available'
+                        : transaction.remarks,
+                    style: const TextStyle(fontSize: 12, letterSpacing: .5),
+                  ),
+                  const SizedBox(
+                    height: 3,
+                  ),
+                  Text(
+                    'Time ${DateFormat.Hm().format(transaction.date)}',
+                    style: const TextStyle(fontSize: 12, letterSpacing: .5),
+                  ),
+                ],
               ),
             ),
           ),
@@ -383,7 +438,7 @@ class TransactionItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             _buildTitle(),
-            const SizedBox(height: 8),
+            const SizedBox(height: 3),
             _buildSubtitle(),
           ],
         ),
@@ -406,16 +461,40 @@ class TransactionItem extends StatelessWidget {
             homeController.updateCurrentMonthlyBudgetList();
           });
         },
-        child: Container(
-          width: 25,
-          height: 25,
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey),
-            borderRadius: const BorderRadius.all(
-              Radius.circular(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: <Widget>[
+            Container(
+              width: 25,
+              height: 25,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(20),
+                ),
+              ),
+              child: const Icon(Icons.chevron_right_rounded),
             ),
-          ),
-          child: const Icon(Icons.chevron_right_rounded),
+            const SizedBox(
+              height: 18,
+            ),
+            Container(
+              child: Text(
+                transaction.transactionType ==
+                        TransactionType.expense.valueString
+                    ? '( ${currency.toLowerCase()} ${amountFormatter(transaction.amount)} )'
+                    : '${currency.toLowerCase()} ${amountFormatter(transaction.amount)}',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: transaction.transactionType ==
+                          TransactionType.expense.valueString
+                      ? Colors.red
+                      : CustomColors.gray,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ),
+          ],
         ),
       );
 }

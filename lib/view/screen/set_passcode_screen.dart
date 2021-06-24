@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_pin_code_fields/flutter_pin_code_fields.dart';
 import 'package:get/get.dart';
-import 'package:mybudget/controller/set_passcode_controller.dart';
-import 'package:mybudget/routes.dart';
-import 'package:mybudget/view/screen/template_screen.dart';
-import 'package:mybudget/view/widget/budget_button.dart';
-import 'package:mybudget/view/widget/budget_text_field.dart';
+
+import '../../controller/set_passcode_controller.dart';
+import '../../enum/pin_validation.dart';
+import '../../routes.dart';
+import '../widget/budget_button.dart';
+import '../widget/budget_text_field.dart';
+import 'template_screen.dart';
 
 class SetPasscodeScreen extends TemplateScreen {
   @override
