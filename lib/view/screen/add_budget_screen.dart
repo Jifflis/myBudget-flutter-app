@@ -112,7 +112,12 @@ class AddBudgetScreen extends TemplateScreen {
   Widget _buildButton(BuildContext context, AddBudgetController controller) {
     return BudgetButton(() async {
       FocusScope.of(context).unfocus();
-      if (await controller.save()) {
+
+      if (!controller.formKey.currentState.validate()) {
+        return false;
+      }
+
+      if (await controller.save(controller.getAccount())) {
         showAddAccountSuccessDialog(
             context: context,
             close: () {

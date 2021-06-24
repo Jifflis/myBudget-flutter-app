@@ -38,12 +38,23 @@ class AddBudgetController extends BaseController {
   /// Save account
   ///
   ///
-  Future<bool> save() async {
-    if (!formKey.currentState.validate()) {
-      return false;
+  Future<bool> save(Account account) async {
+    if (isAutoDeduct) {
+      account.expense = account.budget;
+      account.balance = 0.0;
+
+      //Add system generated transaction
+      await _transactionRepository.upsert(getSystemGeneratedTransaction(account));
     }
 
-    final Account account = Account(
+    await _accountRepository.upsert(account);
+    return true;
+  }
+
+  /// Create account object
+  ///
+  Account getAccount(){
+    return Account(
         summaryId: monthlySummaryID(),
         accountId: randomID(),
         title: accountController.text,
@@ -51,32 +62,20 @@ class AddBudgetController extends BaseController {
         balance: double.parse(amountController.text),
         autoDeduct: isAutoDeduct,
         userId: userProvider.user.userId);
-
-    if (isAutoDeduct) {
-      account.expense = account.budget;
-      account.balance = 0.0;
-
-      //Add system generated transaction
-      final Transaction transaction = Transaction(
-        transactionID: randomID(),
-        userID: userProvider.user.userId,
-        accountID: account.accountId,
-        remarks: SYSTEM_GEN,
-        amount: account.expense,
-        transactionType: TransactionType.expense.valueString,
-        date: DateTime.now(),
-      );
-      _transactionRepository.upsert(transaction);
-    }
-
-    await _accountRepository.upsert(account);
-    return true;
   }
 
-  Future<void> getList() async {
-    final List<Account> accounts = await _accountRepository.getAccounts();
-
-    accounts.forEach(print);
+  /// Create a system generated transaction
+  ///
+  Transaction getSystemGeneratedTransaction(Account account){
+    return Transaction(
+      transactionID: randomID(),
+      userID: userProvider?.user?.userId,
+      accountID: account.accountId,
+      remarks: SYSTEM_GEN,
+      amount: account.expense,
+      transactionType: TransactionType.expense.valueString,
+      date: DateTime.now(),
+    );
   }
 
   /// Reset fields
