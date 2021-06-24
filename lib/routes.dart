@@ -11,7 +11,9 @@ import 'view/screen/home_screen.dart';
 import 'view/screen/initial_screen.dart';
 import 'view/screen/introduction_screen.dart';
 import 'view/screen/main_screen.dart';
+import 'view/screen/set_passcode_screen.dart';
 import 'view/screen/settings_screen.dart';
+import 'view/screen/sign_in_screen.dart';
 import 'view/screen/transactions_screen.dart';
 import 'view/screen/view_budget_screen.dart';
 import 'view/screen/view_transaction_screen.dart';
@@ -33,6 +35,8 @@ class Routes {
   static const String SCREEN_ADD_TRANSACTION = '/add_transaction_screen';
   static const String SCREEN_VIEW_TRANSACTION = '/view_transaction_screen';
   static const String SCREEN_CHANGE_CURRENCY = '/change_currency_screen';
+  static const String SCREEN_SET_PASSCODE = '/set_passcode_screen';
+  static const String SCREEN_SIGN_IN = '/sign_in_screen';
 
   //navigator key ------------------------------------------------------------
   /// set navigators key.
@@ -120,7 +124,12 @@ class Routes {
 
       case SCREEN_CHANGE_CURRENCY:
         screen = ChangeCurrencyScreen();
-
+        break;
+      case SCREEN_SET_PASSCODE:
+        screen = SetPasscodeScreen();
+        break;
+      case SCREEN_SIGN_IN:
+        screen = SignInScreen();
         break;
     }
 
