@@ -18,6 +18,9 @@ class SettingsScreen extends TemplateScreen {
           const SizedBox(height: 20),
           _button('Change currency',
               () => Routes.pushNamed(Routes.SCREEN_CHANGE_CURRENCY)),
+          const SizedBox(height: 20),
+          _button('Set Passcode',
+              () => Routes.pushNamed(Routes.SCREEN_SET_PASSCODE)),
         ],
       ),
     );
