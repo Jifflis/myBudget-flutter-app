@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../controller/add_budget_controller.dart';
+import '../../repository/acount_repository.dart';
+import '../../repository/transaction_repository.dart';
 import '../dialog/add_account_success_dialog.dart';
 import '../widget/budget_button.dart';
 import '../widget/budget_field_label.dart';
@@ -25,7 +27,12 @@ class AddBudgetScreen extends TemplateScreen {
 
   @override
   Widget buildBody(BuildContext context) {
-    final AddBudgetController controller = Get.put(AddBudgetController());
+    final AddBudgetController controller = Get.put(
+      AddBudgetController(
+        AccountRepository(),
+        TransactionRepository(),
+      ),
+    );
     return Padding(
       padding: const EdgeInsets.fromLTRB(40, 0.0, 40, 10),
       child: SingleChildScrollView(
@@ -65,10 +72,10 @@ class AddBudgetScreen extends TemplateScreen {
 
   BudgetTextField _buildAccountField(AddBudgetController controller) {
     return BudgetTextField(
-          controller: controller.accountController,
-          hintText: 'e.g Electric bill',
-          validator: controller.textFieldValidator,
-        );
+      controller: controller.accountController,
+      hintText: 'e.g Electric bill',
+      validator: controller.textFieldValidator,
+    );
   }
 
   /// Build budget amount field

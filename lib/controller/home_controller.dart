@@ -1,9 +1,9 @@
 import 'dart:collection';
 
-import 'package:mybudget/controller/base_controller.dart';
-import 'package:mybudget/enum/status.dart';
-import 'package:mybudget/model/monthly_summary.dart';
-import 'package:mybudget/repository/monthly_repository.dart';
+import '../enum/status.dart';
+import '../model/monthly_summary.dart';
+import '../repository/monthly_repository.dart';
+import 'base_controller.dart';
 
 class HomeController extends BaseController {
   final MonthlySummaryRepository _monthlySummaryRepository =
@@ -31,7 +31,7 @@ class HomeController extends BaseController {
     status = Status.LOADING;
     await _monthlySummaryRepository.updateMonthlySummary();
     _monthlyBudgetList =
-    await _monthlySummaryRepository.getMonthlySummaryList();
+        await _monthlySummaryRepository.getMonthlySummaryList();
     status = Status.COMPLETED;
   }
 

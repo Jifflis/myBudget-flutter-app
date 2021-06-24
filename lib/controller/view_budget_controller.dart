@@ -11,15 +11,20 @@ import '../util/number_util.dart';
 import 'base_controller.dart';
 
 class ViewBudgetController extends BaseController {
+  ViewBudgetController(
+    this._accountRepository,
+    this._transactionRepository,
+  );
+
+  final AccountRepository _accountRepository;
+  final TransactionRepository _transactionRepository;
+
   bool _isFieldEnabled = false;
   bool _isAutoDeduct = false;
   Account _account;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController accountNameController = TextEditingController();
   final TextEditingController budgetAmountController = TextEditingController();
-
-  final AccountRepository _accountRepository = AccountRepository();
-  final TransactionRepository _transactionRepository = TransactionRepository();
 
   /// set data [_isFieldEnabled]
   ///

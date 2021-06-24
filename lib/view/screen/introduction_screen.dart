@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import '../../controller/introduction_controller.dart';
 import '../../enum/status.dart';
 import '../../model/currency.dart';
+import '../../repository/currency_repository.dart';
+import '../../repository/settings_repository.dart';
 import '../../routes.dart';
 import '../widget/budget_button.dart';
 import 'template_screen.dart';
@@ -14,7 +16,13 @@ class IntroductionScreen extends TemplateScreen {
 
   @override
   Widget buildBody(BuildContext context) {
-    final IntroductionController controller = Get.put(IntroductionController());
+    final IntroductionController controller = Get.put(
+      IntroductionController(
+        CurrencyRepository(),
+        SettingsRepository(),
+      ),
+    );
+
     return Container(
       margin: const EdgeInsets.fromLTRB(40, 5, 40, 80),
       child: Column(

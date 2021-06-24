@@ -1,13 +1,18 @@
 import '../enum/status.dart';
 import '../model/settings.dart';
 import '../model/user.dart';
+import '../repository/currency_repository.dart';
 import '../repository/settings_repository.dart';
 import '../util/date_util.dart';
 import '../util/id_util.dart';
 import 'currency_controller.dart';
 
 class IntroductionController extends CurrencyController {
-  final SettingsRepository _settingsRepository = SettingsRepository();
+  IntroductionController(
+    CurrencyRepository currencyRepository,
+    this._settingsRepository,
+  ) : super(currencyRepository);
+  final SettingsRepository _settingsRepository;
 
   /// Save data into local database
   /// It will create a default user

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../constant/custom_colors.dart';
 import '../../controller/main_controller.dart';
 import '../../enum/status.dart';
+import '../../repository/settings_repository.dart';
 import '../../routes.dart';
 import '../../util/maintenance_util.dart';
 
@@ -23,7 +24,13 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final MainController controller = Get.put(MainController(context));
+    final MainController controller = Get.put(
+      MainController(
+        context,
+        SettingsRepository(),
+      ),
+    );
+
     MaintenanceUtil.showMaintenanceDialog(context);
     return GetBuilder<MainController>(
       builder: (_) => controller.status == Status.LOADING

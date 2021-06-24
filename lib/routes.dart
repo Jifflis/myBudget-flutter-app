@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 
 import 'controller/view_budget_controller.dart';
 import 'model/account.dart';
+import 'repository/acount_repository.dart';
+import 'repository/transaction_repository.dart';
 import 'view/screen/add_budget_screen.dart';
 import 'view/screen/add_transaction_screen.dart';
 import 'view/screen/change_currency_screen.dart';
@@ -109,7 +111,12 @@ class Routes {
 
       case SCREEN_VIEW_BUDGET:
         final Account account = settings.arguments as Account;
-        final ViewBudgetController controller = Get.put(ViewBudgetController());
+        final ViewBudgetController controller = Get.put(
+          ViewBudgetController(
+            AccountRepository(),
+            TransactionRepository(),
+          ),
+        );
         controller.initAccount(account);
         screen = ViewBudgetScreen(controller);
         break;

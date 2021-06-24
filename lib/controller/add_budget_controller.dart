@@ -10,12 +10,17 @@ import '../util/id_util.dart';
 import 'base_controller.dart';
 
 class AddBudgetController extends BaseController {
+  AddBudgetController(
+    this._accountRepository,
+    this._transactionRepository,
+  );
+
+  final AccountRepository _accountRepository;
+  final TransactionRepository _transactionRepository;
+
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   TextEditingController accountController = TextEditingController();
   TextEditingController amountController = TextEditingController();
-
-  final AccountRepository _accountRepository = AccountRepository();
-  final TransactionRepository _transactionRepository = TransactionRepository();
 
   bool _isAutoDeduct = false;
 

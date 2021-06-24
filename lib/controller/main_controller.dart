@@ -15,7 +15,8 @@ import 'base_controller.dart';
 import 'error_date_dialog_controller.dart';
 
 class MainController extends BaseController with WidgetsBindingObserver {
-  MainController(this.context, {bool useForTest = false})
+  MainController(this.context, this.settingsRepository,
+      {bool useForTest = false})
       : super(provideSettings: false) {
     if (!useForTest)
       WidgetsBinding.instance.addObserver(this);
@@ -26,7 +27,7 @@ class MainController extends BaseController with WidgetsBindingObserver {
   final RxInt _selectedBottomIndex = 0.obs;
 
   StreamController<int> onTabPageChange = StreamController<int>.broadcast();
-  SettingsRepository settingsRepository = SettingsRepository();
+  SettingsRepository settingsRepository;
 
   @override
   Future<void> didChangeAppLifecycleState(final AppLifecycleState state) async {

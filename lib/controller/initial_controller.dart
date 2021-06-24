@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mybudget/repository/transaction_repository.dart';
-import 'package:mybudget/view/screen/introduction_screen.dart';
-import 'package:mybudget/view/screen/main_screen.dart';
 
 import '../enum/status.dart';
 import '../environment.dart';
@@ -13,11 +10,14 @@ import '../provider/user_provider.dart';
 import '../repository/acount_repository.dart';
 import '../repository/monthly_repository.dart';
 import '../repository/settings_repository.dart';
+import '../repository/transaction_repository.dart';
 import '../repository/user_repository.dart';
 import '../resources/local_db.dart';
 import '../routes.dart';
 import '../util/date_util.dart';
 import '../util/id_util.dart';
+import '../view/screen/introduction_screen.dart';
+import '../view/screen/main_screen.dart';
 import 'base_controller.dart';
 
 class InitialController extends BaseController {

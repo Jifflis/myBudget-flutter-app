@@ -7,7 +7,6 @@ import 'package:mybudget/view/dialog/confirmation_dialog.dart';
 import 'package:mybudget/view/dialog/success_dialog.dart';
 
 import '../../controller/view_budget_controller.dart';
-import '../../model/account.dart';
 import '../../routes.dart';
 import '../widget/budget_button.dart';
 import '../widget/budget_field_label.dart';
@@ -16,7 +15,9 @@ import '../widget/budget_text_field.dart';
 import 'template_screen.dart';
 
 class ViewBudgetScreen extends TemplateScreen {
-  ViewBudgetScreen(this.controller,);
+  ViewBudgetScreen(
+    this.controller,
+  );
 
   final ViewBudgetController controller;
 
@@ -36,7 +37,6 @@ class ViewBudgetScreen extends TemplateScreen {
   ///
   @override
   Widget buildBody(BuildContext context) {
-
     return _buildContent(controller, context);
   }
 

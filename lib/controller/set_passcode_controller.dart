@@ -1,11 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:mybudget/controller/base_controller.dart';
 
-enum PinValidation {
-  nutral,
-  error,
-  success,
-}
+import '../enum/pin_validation.dart';
+import 'base_controller.dart';
 
 class SetPasscodeController extends BaseController {
   bool _isEnabled = false;

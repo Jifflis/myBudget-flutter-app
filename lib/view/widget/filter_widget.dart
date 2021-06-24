@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mybudget/repository/acount_repository.dart';
 
 import '../../constant/custom_colors.dart';
 import '../../controller/filter_controller.dart';
@@ -14,7 +15,7 @@ class FilterWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(FilterController());
+    Get.put(FilterController(AccountRepository()));
     return GetBuilder<FilterController>(
       builder: (FilterController controller) {
         return Container(
