@@ -80,7 +80,6 @@ class LocalProvider {
       return null;
     }
 
-    print(map[0].toString());
     return await def.builder(map[0], this) as T;
   }
 

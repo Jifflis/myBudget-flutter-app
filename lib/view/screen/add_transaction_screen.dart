@@ -193,6 +193,7 @@ class AddTransactionScreen extends TemplateScreen {
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         BudgetDateSelectorButton(
+          firstDate: DateTime(DateTime.now().year,DateTime.now().month,1),
           text:
               '${controller.selectedDate.month.toString().padLeft(2, "0")}/${controller.selectedDate.day.toString().padLeft(2, "0")}/${controller.selectedDate.year}',
           selectedDate: controller.selectedDate,

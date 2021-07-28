@@ -26,6 +26,8 @@ class ViewBudgetController extends BaseController {
   final TextEditingController accountNameController = TextEditingController();
   final TextEditingController budgetAmountController = TextEditingController();
 
+  Account get account =>_account;
+
   /// set data [_isFieldEnabled]
   ///
   set isEnabled(bool isEnabled) {

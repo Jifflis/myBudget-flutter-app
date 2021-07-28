@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:mybudget/util/id_util.dart';
+import 'package:oktoast/oktoast.dart';
 
 import '../../constant/custom_colors.dart';
 import '../../controller/home_controller.dart';
@@ -24,7 +26,7 @@ class HomeScreen extends StatelessWidget {
         builder: (_) {
           return controller.status == Status.LOADING
               ? Container()
-              : PageViewer(monthlyBudgetList: controller.monthlyBudgetList);
+              : PageViewer(controller: controller);
         },
       ),
     );
@@ -35,22 +37,23 @@ class HomeScreen extends StatelessWidget {
 ///
 ///
 class PageViewer extends StatelessWidget {
-  const PageViewer({Key key, @required this.monthlyBudgetList})
-      : super(key: key);
+  const PageViewer({Key key, @required this.controller}) : super(key: key);
 
-  final List<MonthlySummary> monthlyBudgetList;
+  final HomeController controller;
 
   @override
   Widget build(BuildContext context) {
     return PageView(
+      controller: controller.pageController,
       scrollDirection: Axis.horizontal,
       reverse: true,
       children: <Widget>[
-        ...monthlyBudgetList
+        ...controller.monthlyBudgetList
             .map(
               (MonthlySummary e) => HomePageTemplate(
                 monthlyBudgetModel: e,
-                index: monthlyBudgetList.indexOf(e),
+                index: controller.monthlyBudgetList.indexOf(e),
+                pageController: controller.pageController,
               ),
             )
             .toList(),
@@ -66,16 +69,19 @@ class HomePageTemplate extends TemplateScreen {
   HomePageTemplate({
     @required this.monthlyBudgetModel,
     @required this.index,
+    @required this.pageController,
   });
 
   final MonthlySummary monthlyBudgetModel;
   final int index;
+  final PageController pageController;
 
   @override
   Widget get title => Text(_buildTitle(index, monthlyBudgetModel));
 
   @override
-  List<Widget> get appBarActions => <Widget>[_buildAction(index)];
+  List<Widget> get appBarActions =>
+      <Widget>[_buildAction(index, pageController)];
 
   @override
   Widget get leading => _buildLeading(index);
@@ -95,7 +101,7 @@ class HomePageTemplate extends TemplateScreen {
   /// get appbar action icon
   ///
   ///
-  Widget _buildAction(int index) {
+  Widget _buildAction(int index, PageController controller) {
     return index == 0
         ? Padding(
             padding: const EdgeInsets.only(right: 17),
@@ -114,12 +120,19 @@ class HomePageTemplate extends TemplateScreen {
                   });
                 }),
           )
-        : const Padding(
-            padding: EdgeInsets.only(right: 17),
-            child: Icon(
-              Icons.double_arrow_rounded,
-              color: Colors.black,
-              size: 38,
+        : Padding(
+            padding: const EdgeInsets.only(right: 17),
+            child: IconButton(
+              onPressed: () {
+                pageController.animateToPage(0,
+                    duration: const Duration(milliseconds: 200),
+                    curve: const SawTooth(1));
+              },
+              icon: const Icon(
+                Icons.double_arrow,
+                color: Colors.white,
+                size: 24,
+              ),
             ),
           );
   }
@@ -276,6 +289,13 @@ class HomePageTemplate extends TemplateScreen {
                 itemBuilder: (BuildContext context, int index) {
                   return InkWell(
                     onTap: () {
+                      if (monthlyBudgetModel.monthlySummaryId !=
+                          monthlySummaryID()) {
+                        showToast(
+                            'You must be in current month to do this action!');
+                        return;
+                      }
+
                       Routes.pushNamed(Routes.SCREEN_ADD_TRANSACTION,
                               navigator: Routes.homeNavigator,
                               arguments: monthlyBudgetModel.accountList[index])

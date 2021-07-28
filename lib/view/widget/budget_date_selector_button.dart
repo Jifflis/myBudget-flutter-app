@@ -8,8 +8,10 @@ class BudgetDateSelectorButton extends StatelessWidget {
     @required this.text,
     this.enabled,
     this.fontSize = 16,
+    this.firstDate
   }) : super(key: key);
   final DateTime selectedDate;
+  final DateTime firstDate;
   final Function(DateTime) dateCallBack;
   final bool enabled;
   final String text;
@@ -31,7 +33,7 @@ class BudgetDateSelectorButton extends StatelessWidget {
               final DateTime dateTime = await showDatePicker(
                   context: context,
                   initialDate: selectedDate,
-                  firstDate: DateTime(1900),
+                  firstDate:firstDate??DateTime(1900),
                   lastDate: DateTime.now(),
                   builder: (BuildContext context, Widget child) {
                     return Theme(

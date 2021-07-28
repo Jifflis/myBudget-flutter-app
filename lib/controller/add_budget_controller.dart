@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 import '../constant/general.dart';
 import '../enum/transaction_type.dart';
+import '../exception/failure.dart';
 import '../model/account.dart';
 import '../model/transaction.dart';
 import '../repository/acount_repository.dart';
@@ -39,12 +40,17 @@ class AddBudgetController extends BaseController {
   ///
   ///
   Future<bool> save(Account account) async {
+    if (await _accountRepository.getAccountByName(account.title) != null) {
+      throw Failure('Account already exist');
+    }
+
     if (isAutoDeduct) {
       account.expense = account.budget;
       account.balance = 0.0;
 
       //Add system generated transaction
-      await _transactionRepository.upsert(getSystemGeneratedTransaction(account));
+      await _transactionRepository
+          .upsert(getSystemGeneratedTransaction(account));
     }
 
     await _accountRepository.upsert(account);
@@ -53,7 +59,7 @@ class AddBudgetController extends BaseController {
 
   /// Create account object
   ///
-  Account getAccount(){
+  Account getAccount() {
     return Account(
         summaryId: monthlySummaryID(),
         accountId: randomID(),
@@ -66,7 +72,7 @@ class AddBudgetController extends BaseController {
 
   /// Create a system generated transaction
   ///
-  Transaction getSystemGeneratedTransaction(Account account){
+  Transaction getSystemGeneratedTransaction(Account account) {
     return Transaction(
       transactionID: randomID(),
       userID: userProvider?.user?.userId,
