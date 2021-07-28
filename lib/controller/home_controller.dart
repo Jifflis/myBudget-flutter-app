@@ -1,5 +1,7 @@
 import 'dart:collection';
 
+import 'package:mybudget/util/id_util.dart';
+
 import '../enum/status.dart';
 import '../model/monthly_summary.dart';
 import '../repository/monthly_repository.dart';
@@ -29,7 +31,7 @@ class HomeController extends BaseController {
   ///
   Future<void> _initMonthlySummaryList() async {
     status = Status.LOADING;
-    await _monthlySummaryRepository.updateMonthlySummary();
+    await _monthlySummaryRepository.updateMonthlySummary(monthlySummaryID());
     _monthlyBudgetList =
         await _monthlySummaryRepository.getMonthlySummaryList();
     status = Status.COMPLETED;
@@ -39,7 +41,7 @@ class HomeController extends BaseController {
   ///
   ///
   Future<void> updateCurrentMonthlyBudgetList() async {
-    await _monthlySummaryRepository.updateMonthlySummary();
+    await _monthlySummaryRepository.updateMonthlySummary(monthlySummaryID());
     final MonthlySummary monthlySummary =
         await _monthlySummaryRepository.currentMonthlySummary();
     _monthlyBudgetList[0] = monthlySummary;

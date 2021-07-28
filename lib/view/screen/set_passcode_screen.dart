@@ -25,35 +25,83 @@ class SetPasscodeScreen extends TemplateScreen {
 
   @override
   Widget buildBody(BuildContext context) {
-    final SetPasscodeController controller = Get.put(SetPasscodeController());
 
     return GetBuilder<SetPasscodeController>(
-      init: controller,
-      builder: (_) {
-        return SingleChildScrollView(
-          child: Container(
-            margin: const EdgeInsets.fromLTRB(40, 5, 40, 80),
-            child: Column(
-              children: <Widget>[
-                _switch(controller),
-                _pinContainer(controller),
-                _recoveryEmailContainer(controller),
-                const SizedBox(height: 40),
-                BudgetButton(() {
-                  Routes.pushNamed(Routes.SCREEN_SIGN_IN);
-                }, 'Save'),
-              ],
-            ),
-          ),
-        );
+      init: SetPasscodeController(),
+      builder: (SetPasscodeController controller) {
+        switch(controller.screenType){
+          case ScreenViewType.enablePassCode:
+            return _buildEnableWidget(controller);
+          case ScreenViewType.setupPassCode:
+            return _buildShowSetupWidget(controller);
+          default:
+            return _buildFillUpPassCode(controller);
+        }
       },
     );
   }
 
+  Widget _buildFillUpPassCode(SetPasscodeController controller) =>
+      SingleChildScrollView(
+        child: Container(
+          margin: const EdgeInsets.fromLTRB(40, 5, 40, 80),
+          child: Column(
+            children: <Widget>[
+              _buildPinContainer(controller),
+              const SizedBox(height: 30),
+              _buildRecoveryEmail(controller),
+              const SizedBox(height: 40),
+              BudgetButton(() {
+                Routes.pushNamed(Routes.SCREEN_SIGN_IN);
+              }, 'Save'),
+            ],
+          ),
+        ),
+      );
+
+  /// Build enable widget
+  ///
+  Widget _buildEnableWidget(SetPasscodeController controller) => Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            _buildSwitch(controller),
+            const SizedBox(
+              height: 14,
+            ),
+            TextButton(
+              onPressed: () {},
+              child: const Text('Change Passcode'),
+            )
+          ],
+        ),
+      );
+
+  /// Build set-up widget
+  ///
+  Widget _buildShowSetupWidget(SetPasscodeController controller) => Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            TextButton(
+              onPressed: () {
+                controller.screenType = ScreenViewType.fillUpPasscode;
+              },
+              child: const Text(
+                'Set-up Passcode',
+                style: TextStyle(color: Colors.purple),
+              ),
+            )
+          ],
+        ),
+      );
+
   /// Switch widget
   ///
   ///
-  Widget _switch(SetPasscodeController controller) => Row(
+  Widget _buildSwitch(SetPasscodeController controller) => Row(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           Switch(
               activeTrackColor: Colors.black,
@@ -63,7 +111,7 @@ class SetPasscodeScreen extends TemplateScreen {
                 controller.isEnabled = val;
               }),
           Text(
-            controller.isEnabled ? 'Enabled' : 'Disabled',
+            controller.isEnabled ? 'Disabled' : 'Enabled',
             style: const TextStyle(
               fontWeight: FontWeight.bold,
             ),
@@ -71,42 +119,46 @@ class SetPasscodeScreen extends TemplateScreen {
         ],
       );
 
-  Widget _pinContainer(SetPasscodeController controller) => Column(
-        children: <Widget>[
-          _pin(
-            label: 'Current Pin',
-            isShow: controller.isShowCurrentPin,
-            onShow: (bool val) => controller.isShowCurrentPin = val,
-            validation: controller.currentPinValidation,
-            onChange: controller.currentPinOnChange,
-          ),
-          _pin(
-              label: 'New Pin',
-              isShow: controller.isShowNewPin,
-              onShow: (bool val) => controller.isShowNewPin = val,
-              validation: controller.newPinValidation,
-              onChange: controller.newPinOnChange),
-          _pin(
-              label: 'Verify',
-              isShow: controller.isShowVerifyPin,
-              onShow: (bool val) => controller.isShowVerifyPin = val,
-              validation: controller.verifyPinValidation,
-              onChange: controller.verifyPinOnChange,
-              enabled: controller.newPinValue.length == 4),
-          const SizedBox(height: 20),
-          const Text(
-            'Set-up passcode for this device',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.black45,
-              fontSize: 20,
-              fontWeight: FontWeight.w400,
+  Widget _buildPinContainer(SetPasscodeController controller) => Container(
+        margin: const EdgeInsets.only(top: 8),
+        child: Column(
+          children: <Widget>[
+            if(controller.changePassword)
+            _buildPin(
+              label: 'Current Pin',
+              isShow: controller.isShowCurrentPin,
+              onShow: (bool val) => controller.isShowCurrentPin = val,
+              validation: controller.currentPinValidation,
+              onChange: controller.currentPinOnChange,
             ),
-          ),
-        ],
+            _buildPin(
+                label: 'New Pin',
+                isShow: controller.isShowNewPin,
+                onShow: (bool val) => controller.isShowNewPin = val,
+                validation: controller.newPinValidation,
+                onChange: controller.newPinOnChange),
+            _buildPin(
+                label: 'Verify',
+                isShow: controller.isShowVerifyPin,
+                onShow: (bool val) => controller.isShowVerifyPin = val,
+                validation: controller.verifyPinValidation,
+                onChange: controller.verifyPinOnChange,
+                enabled: controller.newPinValue.length == 4),
+            const SizedBox(height: 20),
+            const Text(
+              'Set-up passcode for this device',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.black45,
+                fontSize: 20,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ],
+        ),
       );
 
-  Widget _recoveryEmailContainer(SetPasscodeController controller) => Container(
+  Widget _buildRecoveryEmail(SetPasscodeController controller) => Container(
         margin: const EdgeInsets.only(top: 20),
         child: Column(
           children: <Widget>[
@@ -119,12 +171,13 @@ class SetPasscodeScreen extends TemplateScreen {
                 ),
                 const SizedBox(width: 5),
                 Expanded(
-                    child: BudgetTextField(
-                  controller: controller.emailRecoveryController,
-                )),
+                  child: BudgetTextField(
+                    controller: controller.emailRecoveryController,
+                  ),
+                ),
               ],
             ),
-            const SizedBox(height: 5),
+            const SizedBox(height: 12),
             const Text(
               'Recovery email',
               textAlign: TextAlign.center,
@@ -151,7 +204,7 @@ class SetPasscodeScreen extends TemplateScreen {
   /// Pin Widget
   ///
   ///
-  Widget _pin({
+  Widget _buildPin({
     @required String label,
     @required bool isShow,
     @required Function(bool) onShow,
@@ -163,12 +216,8 @@ class SetPasscodeScreen extends TemplateScreen {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              const Text(
-                '*',
-                style: TextStyle(color: Colors.red),
-              ),
               if (validation == PinValidation.success)
                 const Icon(
                   Icons.check,
@@ -179,7 +228,19 @@ class SetPasscodeScreen extends TemplateScreen {
                   Icons.cancel_outlined,
                   color: Colors.red,
                 ),
-              if (validation == PinValidation.nutral) const SizedBox(width: 20),
+              const SizedBox(
+                width: 16,
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 8),
+                child: const Text(
+                  '*',
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+              const SizedBox(
+                width: 16,
+              ),
               Container(
                 alignment: Alignment.center,
                 width: 100,
@@ -187,35 +248,46 @@ class SetPasscodeScreen extends TemplateScreen {
                     enabled: enabled ?? true,
                     autoHideKeyboard: false,
                     keyboardType: TextInputType.number,
-                    activeBorderColor: Colors.black,
+                    activeBorderColor: Colors.purple,
                     borderColor:
-                        (enabled ?? true) ? Colors.purple : Colors.grey,
+                        (enabled ?? true) ? Colors.purple[300] : Colors.grey,
+                    borderWidth: 1,
                     padding: EdgeInsets.zero,
                     textStyle: const TextStyle(
                       color: Colors.purple,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
                     ),
-                    obscureCharacter: 'O',
+                    obscureCharacter: '*',
                     obscureText: !isShow,
                     onChange: onChange),
               ),
-              InkWell(
+              const SizedBox(
+                width: 16,
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 16),
+                child: InkWell(
                   onTap: () => onShow(!isShow),
                   child: Text(
                     !isShow ? 'SHOW' : 'HIDE',
                     style: const TextStyle(
                       color: Colors.grey,
                       fontWeight: FontWeight.w400,
-                      fontSize: 18,
+                      fontSize: 12,
                     ),
-                  ))
+                  ),
+                ),
+              )
             ],
           ),
-          Text(label,
-              style: const TextStyle(
-                color: Colors.grey,
-              )),
+          Text(
+            label,
+            style: const TextStyle(
+              color: Colors.grey,
+              fontSize: 12,
+            ),
+          ),
         ],
       );
 }

@@ -3,12 +3,22 @@ import 'package:flutter/cupertino.dart';
 import '../enum/pin_validation.dart';
 import 'base_controller.dart';
 
+enum ScreenViewType{
+  setupPassCode,
+  enablePassCode,
+  fillUpPasscode,
+}
+
 class SetPasscodeController extends BaseController {
   bool _isEnabled = false;
 
   bool _isShowCurrentPin = false;
   bool _isShowNewPin = false;
   bool _isShowVerifyPin = false;
+
+  ScreenViewType _screenType = ScreenViewType.setupPassCode;
+
+  bool changePassword = false;
 
   PinValidation _currentPinValidation = PinValidation.nutral;
   PinValidation _newPinValidation = PinValidation.nutral;
@@ -19,6 +29,15 @@ class SetPasscodeController extends BaseController {
   String _verifyPinValue = '';
 
   TextEditingController emailRecoveryController;
+
+  ScreenViewType get screenType=>_screenType;
+
+  /// Set screen Type
+  ///
+  set screenType(ScreenViewType type){
+    _screenType = type;
+    update();
+  }
 
   /// get data [_currentPinValidation]
   ///
@@ -179,14 +198,18 @@ class SetPasscodeController extends BaseController {
 
   @override
   void onInit() {
-    super.onInit();
     emailRecoveryController = TextEditingController();
+    print('on init gyud');
+    super.onInit();
+
   }
 
   @override
   void dispose() {
-    super.dispose();
+    print('is dipsosed');
     emailRecoveryController.dispose();
+    super.dispose();
+
   }
 
   void reset() {

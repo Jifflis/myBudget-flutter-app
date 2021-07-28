@@ -15,7 +15,7 @@ DateTime getNextMonthLastDate(DateTime date) {
 /// according to the given parameter [date]
 ///
 DateTime resetTime(DateTime date) {
-  return DateTime(date.year, date.month, 0);
+  return DateTime(date.year, date.month, date.day);
 }
 
 

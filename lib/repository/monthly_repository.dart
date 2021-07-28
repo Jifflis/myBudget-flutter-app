@@ -23,15 +23,15 @@ class MonthlySummaryRepository {
     await _localProvider.upsert<MonthlySummary>(summary);
   }
 
-  Future<void> updateMonthlySummary() async {
-    final MonthlySummary updatedSummary = await getUpdatedMonthlySummary();
+  Future<void> updateMonthlySummary(String monthlySummaryId) async {
+    final MonthlySummary updatedSummary = await getUpdatedMonthlySummary(monthlySummaryId);
 
     if (updatedSummary.monthlySummaryId == null) {
       updatedSummary.balance = 0;
       updatedSummary.expense = 0;
       updatedSummary.budget = 0;
       updatedSummary.income=0;
-      updatedSummary.monthlySummaryId = monthlySummaryID();
+      updatedSummary.monthlySummaryId = monthlySummaryId;
     }
 
     updatedSummary.notIncludeInMapping = <String>[
@@ -52,7 +52,7 @@ class MonthlySummaryRepository {
     return;
   }
 
-  Future<MonthlySummary> getUpdatedMonthlySummary() async {
+  Future<MonthlySummary> getUpdatedMonthlySummary(String monthlySummaryId) async {
     return await _localProvider.get<MonthlySummary>(
         tableName: DBKey.ACCOUNT,
         columns: <String>[
@@ -64,7 +64,7 @@ class MonthlySummaryRepository {
           DBKey.USER_ID,
         ],
         where: '${DBKey.MONTHLY_SUMMARY_ID}=?',
-        whereArgs: <dynamic>[monthlySummaryID()]);
+        whereArgs: <dynamic>[monthlySummaryId]);
   }
 
   Future<List<MonthlySummary>> getMonthlySummaryList() async {
