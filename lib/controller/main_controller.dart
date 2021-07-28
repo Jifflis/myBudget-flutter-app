@@ -42,7 +42,7 @@ class MainController extends BaseController with WidgetsBindingObserver {
   @override
   Future<void> onInit() async {
     status = Status.LOADING;
-    Get.put(SettingsProvider(await settingsRepository.getSettings()));
+    Get.put(SettingsProvider(await settingsRepository.getSettings()),permanent: true);
     status = Status.COMPLETED;
     checkTime();
     super.onInit();

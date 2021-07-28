@@ -44,23 +44,31 @@ class BudgetTextField extends StatelessWidget {
             enabled: isEnabled ?? true,
             validator: validator,
             controller: controller,
+            textAlign: TextAlign.center,
             decoration: InputDecoration(
-                fillColor: Colors.white,
-                filled: true,
-                contentPadding: const EdgeInsets.all(10),
-                hintText: hintText,
-                hintStyle: const TextStyle(fontStyle: FontStyle.italic,color: CustomColors.gray2),
-                focusedBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.purple, width: 2),
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
+              fillColor: Colors.white,
+              filled: true,
+              contentPadding: const EdgeInsets.all(10),
+              hintText: hintText,
+              hintStyle: const TextStyle(
+                  fontStyle: FontStyle.italic, color: CustomColors.gray2),
+              focusedBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.purple, width: 1),
+                borderRadius: BorderRadius.all(Radius.circular(15),),
+              ),
+              enabledBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.purple),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(15),
                 ),
-                enabledBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.purple),
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
+              ),
+              border: const OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.purple, width: 1),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(15),
                 ),
-                border: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                )),
+              ),
+            ),
           ),
         ),
       ],

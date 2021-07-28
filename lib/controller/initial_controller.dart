@@ -61,7 +61,7 @@ class InitialController extends BaseController {
     _isFirstLaunch = await LocalDB().initialize();
 
     //initialize repositories
-    _initRepositories();
+    initRepositories();
 
     //initialize settings
     _settings = await _settingsRepository.getSettings();
@@ -73,7 +73,7 @@ class InitialController extends BaseController {
     await _initMonthlySummary();
 
     //initialize account refresher
-    await _initAccountRefresher();
+    await initAccountRefresher(DateTime.now(),_settings);
 
     //set complete status
     status = Status.COMPLETED;
@@ -104,12 +104,18 @@ class InitialController extends BaseController {
   /// Initialize repositories
   ///
   ///
-  void _initRepositories() {
-    _settingsRepository = SettingsRepository();
-    _userRepository = UserRepository();
-    _monthlyRepository = MonthlySummaryRepository();
-    _accountRepository = AccountRepository();
-    _transactionRepository = TransactionRepository();
+  void initRepositories({
+    SettingsRepository settingsRepository,
+    UserRepository userRepository,
+    MonthlySummaryRepository monthlySummaryRepository,
+    AccountRepository accountRepository,
+    TransactionRepository transactionRepository,
+  }) {
+    _settingsRepository = settingsRepository ?? SettingsRepository();
+    _userRepository = userRepository ?? UserRepository();
+    _monthlyRepository = monthlySummaryRepository ?? MonthlySummaryRepository();
+    _accountRepository = accountRepository ?? AccountRepository();
+    _transactionRepository = transactionRepository ?? TransactionRepository();
   }
 
   /// Initialize user
@@ -121,7 +127,7 @@ class InitialController extends BaseController {
     } else {
       user = await _userRepository.getUser();
     }
-    Get.put(UserProvider(user));
+    Get.put(UserProvider(user), permanent: true);
   }
 
   /// Initialize monthly summary
@@ -142,12 +148,12 @@ class InitialController extends BaseController {
     }
   }
 
-  Future<void> _initAccountRefresher() async {
+  Future<void> initAccountRefresher(DateTime currentDate,Settings settings) async {
     if (settings == null || settings.refreshDate == null) {
       return;
     }
 
-    while (resetTime(DateTime.now()).isAfter(settings.refreshDate)) {
+    while (resetTime(currentDate).isAfter(settings.refreshDate)) {
       final DateTime newRefreshDate =
           getNextMonthLastDate(settings.refreshDate);
 
@@ -165,10 +171,10 @@ class InitialController extends BaseController {
           monthlySummaryId: monthlySummaryID(date: newRefreshDate),
           month: newRefreshDate.month,
           year: newRefreshDate.year,
-          userId: user.userId,
+          userId: user?.userId,
         ),
       );
-      await _monthlyRepository.updateMonthlySummary();
+      await _monthlyRepository.updateMonthlySummary(monthlySummaryID(date: newRefreshDate));
 
       //update settings refresh date
       settings.refreshDate = newRefreshDate;

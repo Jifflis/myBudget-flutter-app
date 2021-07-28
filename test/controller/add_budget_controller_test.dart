@@ -10,7 +10,7 @@ import 'add_budget_controller_test.mocks.dart';
 import 'mock_object.dart';
 
 @GenerateMocks(<Type>[AccountRepository, TransactionRepository])
-void main() {
+Future<void> main() async{
   final AccountRepository accountRepository = MockAccountRepository();
   final TransactionRepository transactionRepository =
       MockTransactionRepository();
