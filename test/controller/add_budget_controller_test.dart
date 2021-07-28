@@ -35,7 +35,11 @@ Future<void> main() async{
         when(transactionRepository
                 .upsert(any))
             .thenAnswer((dynamic realInvocation) => null);
+
         when(accountRepository.upsert(any))
+            .thenAnswer((dynamic realInvocation) => null);
+
+        when(accountRepository.getAccountByName(any))
             .thenAnswer((dynamic realInvocation) => null);
 
         await controller.save(account);

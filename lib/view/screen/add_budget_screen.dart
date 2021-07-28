@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:oktoast/oktoast.dart';
 
 import '../../controller/add_budget_controller.dart';
 import '../../repository/acount_repository.dart';
@@ -117,19 +118,23 @@ class AddBudgetScreen extends TemplateScreen {
         return false;
       }
 
-      if (await controller.save(controller.getAccount())) {
-        showAddAccountSuccessDialog(
-            context: context,
-            close: () {
-              Navigator.pop(context);
-              Navigator.pop(context);
-            },
-            addAnother: () {
-              Navigator.pop(context);
-            },
-            message: 'Account has been saved!');
-        controller.resetFields();
-      }
+      await controller.save(controller.getAccount()).then((bool result) {
+        if(result){
+          showAddAccountSuccessDialog(
+              context: context,
+              close: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+              addAnother: () {
+                Navigator.pop(context);
+              },
+              message: 'Account has been saved!');
+          controller.resetFields();
+        }
+      }).onError((dynamic error, _) {
+        showToast(error.toString());
+      });
     }, 'Save');
   }
 }

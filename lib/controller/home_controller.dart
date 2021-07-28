@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:flutter/cupertino.dart';
 import 'package:mybudget/util/id_util.dart';
 
 import '../enum/status.dart';
@@ -12,6 +13,7 @@ class HomeController extends BaseController {
       MonthlySummaryRepository();
 
   List<MonthlySummary> _monthlyBudgetList = <MonthlySummary>[];
+  PageController pageController = PageController();
 
   @override
   void onInit() {
@@ -49,4 +51,9 @@ class HomeController extends BaseController {
   }
 
   String getCurrency() => settingsProvider.settings.currency.name;
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
+  }
 }

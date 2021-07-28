@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
+import 'package:mybudget/util/id_util.dart';
 import 'package:mybudget/view/dialog/budget_dialog.dart';
 import 'package:mybudget/view/dialog/confirmation_dialog.dart';
 import 'package:mybudget/view/dialog/success_dialog.dart';
@@ -153,35 +154,37 @@ class ViewBudgetScreen extends TemplateScreen {
 
   /// Build menu button
   ///
-  Row _buildMenuButton(ViewBudgetController controller, BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: <Widget>[
-        BudgetTextButton(
-            label: controller.isEnabled ? 'Cancel' : 'Edit',
-            onPressed: () {
-              FocusScope.of(context).unfocus();
-              controller.edit();
-            }),
-        const SizedBox(width: 20),
-        BudgetTextButton(
-            label: 'Delete',
-            onPressed: () {
-              const String message = 'Are you sure you want to delete?';
-              showConfirmationDialog(
-                context: context,
-                message: message,
-                yes: () {
-                  controller.deleteAccount();
-                  controller.resetPage();
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                },
-                cancel: () => Navigator.pop(context),
-              );
-            }),
-      ],
-    );
+  Widget _buildMenuButton(ViewBudgetController controller, BuildContext context) {
+    return controller.account.summaryId != monthlySummaryID()
+        ? Container()
+        : Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              BudgetTextButton(
+                  label: controller.isEnabled ? 'Cancel' : 'Edit',
+                  onPressed: () {
+                    FocusScope.of(context).unfocus();
+                    controller.edit();
+                  }),
+              const SizedBox(width: 20),
+              BudgetTextButton(
+                  label: 'Delete',
+                  onPressed: () {
+                    const String message = 'Are you sure you want to delete?';
+                    showConfirmationDialog(
+                      context: context,
+                      message: message,
+                      yes: () {
+                        controller.deleteAccount();
+                        controller.resetPage();
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      },
+                      cancel: () => Navigator.pop(context),
+                    );
+                  }),
+            ],
+          );
   }
 
   /// A function for updating record

@@ -260,6 +260,7 @@ class ViewTransactionScreen extends TemplateScreen {
                 : Colors.grey[400]),
       ),
       child: BudgetDateSelectorButton(
+          firstDate: DateTime(DateTime.now().year, DateTime.now().month, 1),
           text:
               '${controller.selectedDate.month.toString().padLeft(2, "0")}/${controller.selectedDate.day.toString().padLeft(2, "0")}/${controller.selectedDate.year}',
           enabled: controller.isEnabled,

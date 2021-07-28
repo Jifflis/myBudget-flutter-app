@@ -44,6 +44,14 @@ class AccountRepository {
     return await _localProvider.list<Account>(orderBy: 'id desc');
   }
 
+  Future<Account> getAccountByName(String accountName) async {
+    print(accountName);
+    return await _localProvider.get<Account>(
+      where: '${DBKey.TITLE} = ? and ${DBKey.MONTHLY_SUMMARY_ID} = ?',
+      whereArgs: <dynamic>[accountName,monthlySummaryID()],
+    );
+  }
+
   Future<Account> getAccount(String accountID) async {
     return await _localProvider.get<Account>(
       where: DBKey.ACCOUNT_ID,
